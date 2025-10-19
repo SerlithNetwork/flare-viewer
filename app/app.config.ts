@@ -5,5 +5,6 @@ export default defineAppConfig({
     image: "img/logo.png",
     color: "#FD81B7",
 
+    holder: "Serlith Network",
     url: "https://flare.serlith.net/",
 })

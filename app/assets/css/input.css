@@ -3,6 +3,8 @@
 @import "tailwindcss";
 @import "tailwindcss-animated";
 
+@tailwind utilities;
+
 :root {
     --background-color: #0a0a0a;
     --surface-color: #1a1a1a;
