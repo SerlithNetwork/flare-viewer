@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "proto": "protoc --ts_out app/proto --proto_path proto proto/ProfileFile.proto --ts_opt long_type_number --ts_opt add_pb_suffix --ts_opt ts_nocheck"
   },
   "dependencies": {
     "@egoist/tailwindcss-icons": "^1.9.0",
@@ -19,6 +20,7 @@
     "@nuxt/content": "^3.7.1",
     "@nuxt/image": "^1.11.0",
     "@nuxt/ui": "^4.0.1",
+    "@protobuf-ts/plugin": "^2.11.1",
     "better-sqlite3": "^12.4.1",
     "nuxt": "^4.1.3",
     "tailwindcss-animated": "^2.0.0",
