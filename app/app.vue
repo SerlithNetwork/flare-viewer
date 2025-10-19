@@ -1,8 +1,5 @@
 <script setup lang="ts">
 
-import ProfilerHeader from "~/components/profiler-header.vue";
-import ProfilerFooter from "~/components/profiler-footer.vue";
-
 const appConfig = useAppConfig()
 
 useHead({
@@ -26,11 +23,11 @@ useSeoMeta({
 <template>
   <div class="min-h-screen" style="background-color: var(--background-color)">
     <div class="flex flex-col grow">
-      <ProfilerHeader/>
+      <WebsiteHeader/>
       <main>
         <NuxtPage/>
       </main>
-      <ProfilerFooter/>
+      <WebsiteFooter/>
     </div>
   </div>
 </template>

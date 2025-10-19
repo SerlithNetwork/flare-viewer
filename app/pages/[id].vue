@@ -6,7 +6,9 @@ const id = route.params.id
 </script>
 
 <template>
-
+<div class="flex flex-col items-center text-white">
+  <ProfilerCard />
+</div>
 </template>
 
 <style scoped>
