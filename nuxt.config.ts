@@ -2,5 +2,6 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui']
+  modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui'],
+  css: ['~/assets/css/input.css'],
 })
