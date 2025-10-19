@@ -1,8 +1,5 @@
 <script setup lang="ts">
 
-import {faDiscord, faGithub} from "@fortawesome/free-brands-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-
 const appConfig = useAppConfig();
 const route = useRoute();
 
