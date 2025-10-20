@@ -2,8 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
 @import "tailwindcss";
 @import "tailwindcss-animated";
+@import "flowbite/src/themes/default.css";
 
 @tailwind utilities;
+
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
 
 :root {
     --background-color: #0a0a0a;

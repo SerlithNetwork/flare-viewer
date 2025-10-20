@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-<footer class="border-t" style="background-color: var(--background-color); border-color: var(--border-color);">
+<footer class="border-t animate-fade-up animate-once" style="background-color: var(--background-color); border-color: var(--border-color);">
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
     <div class="text-slate-500 mb-4 sm:mb-0">
       <div class="mb-1">{{ appConfig.holder }}</div>
