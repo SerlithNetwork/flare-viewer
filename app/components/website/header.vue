@@ -24,8 +24,8 @@ const screenStore = useProfilerScreenStore()
       <span @click="screenStore.setScreen('config')" :class="['cursor-pointer duration-200', screenStore.screen === 'config' ? 'text-pink-200' : 'hover:text-white']">
         Configs
       </span>
-      <span @click="screenStore.setScreen('world')" :class="['cursor-pointer duration-200', screenStore.screen === 'world' ? 'text-pink-200' : 'hover:text-white']">
-        World
+      <span @click="screenStore.setScreen('server')" :class="['cursor-pointer duration-200', screenStore.screen === 'server' ? 'text-pink-200' : 'hover:text-white']">
+        Server
       </span>
       <span @click="screenStore.setScreen('system')" :class="['cursor-pointer duration-200', screenStore.screen === 'system' ? 'text-pink-200' : 'hover:text-white']">
         System

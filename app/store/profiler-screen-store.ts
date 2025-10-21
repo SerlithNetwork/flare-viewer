@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 
-export type ProfilerScreen = "profiler" | "config" | "world" | "system";
+export type ProfilerScreen = "profiler" | "config" | "server" | "system";
 
 export const useProfilerScreenStore = defineStore("screen", () => {
     const screen =ref<ProfilerScreen>("profiler")
