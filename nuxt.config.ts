@@ -2,6 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui'],
+  modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui', '@pinia/nuxt'],
   css: ['~/assets/css/input.css'],
+  runtimeConfig : {
+    public: {
+        apiBackendUrl: "https://jet.serlith.net",
+        apiMappingsUrl: "https://spark-mappings.lucko.me",
+    }
+  }
 })

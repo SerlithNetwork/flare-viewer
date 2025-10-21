@@ -1,7 +1,10 @@
 <script setup lang="ts">
 
+import {useProfilerScreenStore} from "~/store/profiler-screen-store";
+
 const appConfig = useAppConfig();
 const route = useRoute();
+const screenStore = useProfilerScreenStore()
 
 </script>
 
@@ -15,10 +18,18 @@ const route = useRoute();
 
     <div v-if="route.path !== '/'" class="flex items-center justify-center text-lg underline space-x-6 text-gray-400">
       <!-- Add buttons -->
-      <span class="cursor-pointer hover:text-white duration-200">Profiler</span>
-      <span class="cursor-pointer hover:text-white duration-200">Configs</span>
-      <span class="cursor-pointer hover:text-white duration-200">World</span>
-      <span class="cursor-pointer hover:text-white duration-200">System</span>
+      <span @click="screenStore.setScreen('profiler')" :class="['cursor-pointer duration-200', screenStore.screen === 'profiler' ? 'text-pink-200' : 'hover:text-white']">
+        Profiler
+      </span>
+      <span @click="screenStore.setScreen('config')" :class="['cursor-pointer duration-200', screenStore.screen === 'config' ? 'text-pink-200' : 'hover:text-white']">
+        Configs
+      </span>
+      <span @click="screenStore.setScreen('world')" :class="['cursor-pointer duration-200', screenStore.screen === 'world' ? 'text-pink-200' : 'hover:text-white']">
+        World
+      </span>
+      <span @click="screenStore.setScreen('system')" :class="['cursor-pointer duration-200', screenStore.screen === 'system' ? 'text-pink-200' : 'hover:text-white']">
+        System
+      </span>
     </div>
   </div>
 </header>
