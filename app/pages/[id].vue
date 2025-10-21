@@ -20,7 +20,7 @@ const { error, pending, data } = await useFetch<FlareProfile>(`${config.public.a
     Error: {{ error.message }}
   </div>
   <div v-else-if="data" class="flex flex-col items-center text-white">
-    <ProfilerCard v-if="screenStore.screen === 'profiler'" class="animate-fade-left" />
+    <ProfilerCard v-if="screenStore.screen === 'profiler'" :flare="data" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :flare="data" class="animate-fade-left" />
     <!-- WorldCard -->
     <SystemCard v-if="screenStore.screen === 'system'" :flare="data" class="animate-fade-left" />

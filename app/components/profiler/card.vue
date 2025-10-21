@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
-const { threads } = defineProps(["threads"])
+import type {FlareProfile} from "~/types/profiler";
+
+const { flare } = defineProps<{ flare: FlareProfile }>()
 const profilerType = ref<"cpu" | "memory">("cpu")
 
 // Get plugins from the protocol buffer
