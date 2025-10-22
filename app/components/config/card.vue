@@ -19,8 +19,8 @@ const selectedConfig = ref("server.properties")
       </button>
     </div>
 
-    <div class="flex flex-col items-center w-full">
-      <pre class="text-wrap w-full" v-html="$highlight(configs.get(selectedConfig))"></pre>
+    <div class="flex flex-col items-center w-full bg-gray-800 rounded-4xl shadow-2xl">
+      <pre class="text-wrap w-full ml-16 py-8" v-html="$highlight(configs.get(selectedConfig))"></pre>
     </div>
 
   </div>

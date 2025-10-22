@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/input.css'],
   runtimeConfig : {
     public: {
-        apiBackendUrl: "https://jet.serlith.net",
+        apiBackendUrl: "http://192.168.18.132:25633",
         apiMappingsUrl: "https://spark-mappings.lucko.me",
     }
   },
