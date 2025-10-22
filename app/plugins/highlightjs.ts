@@ -1,7 +1,12 @@
+import { defineNuxtPlugin } from '#app'
+import hljs from 'highlight.js'
 
-import { defineNuxtPlugin } from '#app';
-import hljsVuePlugin from '@highlightjs/vue-plugin';
-
+// todo: test this, nuxt is killing me
 export default defineNuxtPlugin((nuxtApp) => {
-    nuxtApp.vueApp.use(hljsVuePlugin);
-});
+  nuxtApp.provide('highlight', (code: string, lang?: string) => {
+    if (lang && hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value
+    }
+    return hljs.highlightAuto(code).value
+  })
+})
