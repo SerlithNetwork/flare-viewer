@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import type {FlareProfile} from "~/types/profiler";
+import {CreateProfile} from "~/proto/ProfileFile_pb";
 
-const { flare } = defineProps<{ flare: FlareProfile }>()
+const { flare } = defineProps<{ flare: CreateProfile }>()
 const profilerType = ref<"cpu" | "memory">("cpu")
 
 // Get plugins from the protocol buffer
