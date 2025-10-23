@@ -16,6 +16,18 @@ Features:
 3. Display system information
 4. Display jvm events and server status
 
+### Setting up the project
+
+First generate the protobuf interfaces by running
+````shell
+  npm run proto
+````
+
+Then create start the development environment by running
+````shell
+  npm run dev
+````
+
 ### Backend
 * [Jet](https://github.com/SerlithNetwork/Jet)
 
