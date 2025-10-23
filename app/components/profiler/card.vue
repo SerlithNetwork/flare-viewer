@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {AirplaneProfileFile, CreateProfile, TimelineFile} from "~/proto/ProfileFile_pb";
-import {mergeAirplaneFile} from "~/util/merge-utils";
+import {AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
+import {mergeAirplaneFile, mergeDictionarySlices} from "~/util/merge-utils";
 
 const { dataSamples, timelineSamples } = defineProps<{ dataSamples: AirplaneProfileFile[], timelineSamples: TimelineFile[] }>()
 const profilerType = ref<"cpu" | "memory">("cpu")
@@ -10,6 +10,7 @@ const profilerType = ref<"cpu" | "memory">("cpu")
 // Get mappings from spark-mappings.lucko.me
 
 const airplaneData = mergeAirplaneFile(dataSamples)
+const dictionary = mergeDictionarySlices(airplaneData.dictionary)
 
 </script>
 
@@ -34,8 +35,8 @@ const airplaneData = mergeAirplaneFile(dataSamples)
     </div>
   </div>
   <div class="flex flex-col items-center w-full rounded-lg">
-    <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" mode="cpu" :dictionary="airplaneData.dictionary" :timeProfile="thread" />
-    <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" mode="memory" :dictionary="airplaneData.dictionary" :memoryProfile="thread" />
+    <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
+    <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
   </div>
 </div>
 </template>
