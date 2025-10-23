@@ -1,7 +1,7 @@
 import {
     AirplaneProfileFile,
     type MemoryProfileV2, type MemoryProfileV2_Children,
-    type MethodDictionarySlice, MethodDictionarySlice_MethodType,
+    type MethodDictionarySlice, MethodDictionarySlice_JavaDictionaryEntry_JavaClass, MethodDictionarySlice_MethodType,
     type TimeProfileV2, type TimeProfileV2_Children
 } from "~/proto/ProfileFile_pb";
 import type {
@@ -115,10 +115,23 @@ export function getFromDictionary(dictionary: MethodDictionary, id: number): Met
     const method = dictionary.methods[id]!;
 
     if (method.methodDictionaryType.oneofKind === "javaEntry") {
+        const returnType = method.methodDictionaryType.javaEntry.returnType!
+        let returnTypeString = ""
+        switch (returnType.javaType.oneofKind) {
+            case "javaClassType":
+                returnTypeString = returnType.javaType.javaClassType.name
+                break
+            case "primitive":
+                returnTypeString = returnType.javaType.primitive
+                break
+        }
+
         return {
             javaClassName: method.methodDictionaryType.javaEntry.javaClass!.name,
             javaMethodName: method.methodDictionaryType.javaEntry.method,
             javaPackageName: dictionary.packages[method.methodDictionaryType.javaEntry.javaClass!.packageIndex]!,
+            javaArguments: "",
+            javaReturn: returnTypeString,
             methodType: "java"
         }
     } else if (method.methodDictionaryType.oneofKind === "otherEntry") {

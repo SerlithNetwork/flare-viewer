@@ -31,6 +31,10 @@ public export interface MethodDefinition {
 
     javaPackageName?: string;
 
+    javaArguments?: string;
+
+    javaReturn?: string;
+
     otherPath?: string;
 
     methodType: "java" | "native" | "kernel" | "java?";
