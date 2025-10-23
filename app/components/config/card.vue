@@ -27,7 +27,7 @@ const selectedConfig = ref("server.properties")
       </button>
     </div>
     <div class="flex flex-col items-center w-full">
-      <highlightjs class="text-wrap w-full" :code="configMap.get(selectedConfig)" autodetect="true" />
+      <highlightjs class="text-wrap w-full" :code="configMap.get(selectedConfig)" :autodetect="true" />
     </div>
   </div>
 </template>
