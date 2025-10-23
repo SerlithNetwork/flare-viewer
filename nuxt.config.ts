@@ -9,5 +9,13 @@ export default defineNuxtConfig({
         apiBackendUrl: "https://jet.serlith.net",
         apiMappingsUrl: "https://spark-mappings.lucko.me",
     }
+  },
+
+  nitro: {
+    prerender: {
+      routes:[
+        "/"
+      ]
+    }
   }
 })
