@@ -35,9 +35,9 @@ watch(data, (dataReady) => {
     <ToolLoading message="Loading..." />
   </div>
   <div v-else-if="status === 'ready'" class="flex flex-col items-center text-white">
-    <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples!" :timelineSamples="timelineSamples!" class="animate-fade-left" />
+    <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples!" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
-    <!-- ServerCard -->
+    <!-- ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples!" class="animate-fade-left" /-->
     <SystemCard v-if="screenStore.screen === 'system'" :hwInfo="profile!.hwinfo!" :os="profile!.os!" :vmOptions="profile!.vmoptions!" :v3="profile!.v3!" class="animate-fade-left" />
   </div>
 </template>

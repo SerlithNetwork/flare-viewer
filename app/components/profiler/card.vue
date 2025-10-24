@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
+import {AirplaneProfileFile} from "~/proto/ProfileFile_pb";
 import {mergeAirplaneFile, mergeDictionarySlices} from "~/util/merge-utils";
 
-const { dataSamples, timelineSamples } = defineProps<{ dataSamples: AirplaneProfileFile[], timelineSamples: TimelineFile[] }>()
+const { dataSamples } = defineProps<{ dataSamples: AirplaneProfileFile[] }>()
 const profilerType = ref<"cpu" | "memory">("cpu")
 
 // Get plugins from the protocol buffer
