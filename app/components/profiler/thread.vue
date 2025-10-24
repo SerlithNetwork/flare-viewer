@@ -46,7 +46,7 @@ function onClick() {
         <span class="text-pink-300">(100%)</span>
         <span class="text-gray-500">{{ threadUsage }}</span>
       </div>
-      <div class="min-w-24">
+      <div class="min-w-24 hidden xl:block">
         <ToolPercentageBar :percentage="1.0" :loaded="threadColor" rest="bg-gray-700" />
       </div>
     </div>

@@ -72,7 +72,7 @@ function onClick() {
         <span class="text-gray-500">{{ nodeUsage }}</span>
         <span v-if="nodePlugin !== ''" class="text-amber-500">({{ nodePlugin }})</span>
       </div>
-      <div class="min-w-24 mr-2">
+      <div class="min-w-24 mr-2 hidden xl:block">
         <ToolPercentageBar :percentage="nodePercentage" :loaded="nodeColor" rest="bg-gray-700" class="max-h-2" />
       </div>
     </div>

@@ -42,7 +42,7 @@ if (mode === "cpu") {
       <span class="text-pink-300">({{ selfPercentageString }})</span>
       <span class="text-gray-500">{{ selfUsage }}</span>
     </div>
-    <div class="min-w-24 mr-2">
+    <div class="min-w-24 mr-2 hidden xl:block">
       <ToolPercentageBar :percentage="selfPercentage" :loaded="selfColor" rest="bg-gray-700" class="max-h-2" />
     </div>
   </div>
