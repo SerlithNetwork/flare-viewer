@@ -1,7 +1,8 @@
 import {
     AirplaneProfileFile,
     type MemoryProfileV2, type MemoryProfileV2_Children,
-    type MethodDictionarySlice, MethodDictionarySlice_JavaDictionaryEntry_JavaClass, MethodDictionarySlice_MethodType,
+    type MethodDictionarySlice,
+    MethodDictionarySlice_JavaDictionaryEntry_JavaTypeValue, MethodDictionarySlice_MethodType,
     type TimeProfileV2, type TimeProfileV2_Children
 } from "~/proto/ProfileFile_pb";
 import type {
@@ -115,23 +116,12 @@ export function getFromDictionary(dictionary: MethodDictionary, id: number): Met
     const method = dictionary.methods[id]!;
 
     if (method.methodDictionaryType.oneofKind === "javaEntry") {
-        const returnType = method.methodDictionaryType.javaEntry.returnType!
-        let returnTypeString = ""
-        switch (returnType.javaType.oneofKind) {
-            case "javaClassType":
-                returnTypeString = returnType.javaType.javaClassType.name
-                break
-            case "primitive":
-                returnTypeString = returnType.javaType.primitive
-                break
-        }
-
         return {
             javaClassName: method.methodDictionaryType.javaEntry.javaClass!.name,
             javaMethodName: method.methodDictionaryType.javaEntry.method,
             javaPackageName: dictionary.packages[method.methodDictionaryType.javaEntry.javaClass!.packageIndex]!,
-            javaArguments: "",
-            javaReturn: returnTypeString,
+            javaArguments: formatTypeValues(dictionary, ...method.methodDictionaryType.javaEntry.params),
+            javaReturn: formatTypeValues(dictionary, method.methodDictionaryType.javaEntry.returnType),
             methodType: "java"
         }
     } else if (method.methodDictionaryType.oneofKind === "otherEntry") {
@@ -155,4 +145,26 @@ export function getFromDictionary(dictionary: MethodDictionary, id: number): Met
     }
 
     throw "Why it got here"
+}
+
+export function formatTypeValues(dictionary: MethodDictionary, ...values:( MethodDictionarySlice_JavaDictionaryEntry_JavaTypeValue | undefined)[]): string {
+    const types: string[] = []
+
+    for (const value of values) {
+        switch (value?.javaType.oneofKind) {
+            case "javaClassType":
+                const packageName = dictionary.packages[value.javaType.javaClassType.packageIndex]
+                if (packageName && value.javaType.javaClassType.name) {
+                    types.push(`${packageName}.${value.javaType.javaClassType.name}`)
+                }
+                break
+            case "primitive":
+                if (value.javaType.primitive !== "void") {
+                    types.push(value.javaType.primitive)
+                }
+                break
+        }
+    }
+
+    return types.filter(Boolean).join(", ")
 }

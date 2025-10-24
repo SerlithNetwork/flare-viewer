@@ -51,8 +51,8 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-gray-900 ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" mode="cpu" :dictionary="dictionary" :timeChildren="child" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" mode="memory" :dictionary="dictionary" :memoryChildren="child" />
+      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" />
+      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" />
     </div>
   </div>
 
