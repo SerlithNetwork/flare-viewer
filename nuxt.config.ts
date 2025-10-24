@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes:[
+      routes:[ // TODO: Check why this doesn't work with highlight.js
         "/"
       ]
     }
