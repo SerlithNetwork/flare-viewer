@@ -50,9 +50,9 @@ function onClick() {
 </script>
 
 <template>
-  <div class="flex flex-col min-w-full">
-    <div class="flex justify-between items-center text-sm min-w-full hover:bg-gray-800">
-      <div @click="onClick()" class="flex flex-row items-center gap-2 ml-2 cursor-pointer">
+  <div class="flex flex-col min-w-fit border-l border-gray-500 ml-2">
+    <div class="flex justify-between items-center text-sm min-w-fit hover:bg-gray-800 ml-2">
+      <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
         <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
         <div v-if="definition.methodType === 'java'" class="flex flex-row">
           <span class="text-gray-500">{{ definition.javaPackageName }}.</span>
