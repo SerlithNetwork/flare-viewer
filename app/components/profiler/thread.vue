@@ -39,7 +39,7 @@ function onClick() {
 
 <template>
   <div class="flex flex-col min-w-full">
-    <div class="flex justify-between min-w-full py-1.5 px-2 text-xs bg-gray-800 border-b-gray-400 rounded-lg">
+    <div class="flex justify-between min-w-full py-1.5 px-2 text-sm bg-gray-800 rounded-lg hover:bg-gray-700">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
         <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
         <span class="text-gray-200">{{ threadName }}</span>

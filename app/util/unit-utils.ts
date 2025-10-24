@@ -28,3 +28,14 @@ export function formatMilliseconds(ms: number): string {
     const formatted = units[i]!.unit === 'ms' ? Math.round(value).toString() : value.toFixed(2);
     return `${formatted} ${units[i]!.unit}`;
 }
+
+export function formatPercentage(percentage: number): string {
+    return `${(percentage * 100).toFixed(1)}%`;
+}
+
+export function calculatePercentage(part: number, total: number): number {
+    if (!total) {
+        return 0
+    }
+    return part / total;
+}

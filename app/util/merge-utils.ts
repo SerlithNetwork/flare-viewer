@@ -82,7 +82,7 @@ export function mergeTimeChildren(dictionary: MethodDictionary, children: TimePr
     }
 
     const sortedChildren = Array.from(childMap.values())
-    sortedChildren.sort((a, b) => a.time - b.time)
+    sortedChildren.sort((a, b) => b.time - a.time)
 
     return sortedChildren
 }
@@ -107,7 +107,7 @@ export function mergeMemoryChildren(dictionary: MethodDictionary, children: Memo
     }
 
     const sortedChildren = Array.from(childMap.values())
-    sortedChildren.sort((a, b) => a.bytes - b.bytes)
+    sortedChildren.sort((a, b) => b.bytes - a.bytes)
 
     return sortedChildren
 }
