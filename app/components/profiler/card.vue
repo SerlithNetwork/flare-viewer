@@ -15,7 +15,7 @@ const dictionary = mergeDictionarySlices(airplaneData.dictionary)
 </script>
 
 <template>
-<div class="flex flex-col items-center min-h-6 min-w-[80%] m-8 max-w-sm p-6 gap-6 rounded-lg shadow-sm" style="background-color: var(--surface-color)">
+<div class="flex flex-col items-center min-h-6 min-w-[90%] m-8 max-w-sm p-6 gap-6 rounded-lg shadow-sm" style="background-color: var(--surface-color)">
   <div class="flex flex-row flex-wrap justify-between items-center w-full px-8">
     <div class="flex gap-4">
       <button @click="profilerType = 'cpu'" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-white text-sm font-medium rounded-full group bg-gradient-to-br from-pink-400 to-purple-500 group-hover:from-pink-400 group-hover:to-purple-500">
