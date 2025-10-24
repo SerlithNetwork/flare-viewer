@@ -10,6 +10,12 @@ export default defineNuxtConfig({
         apiMappingsUrl: "https://spark-mappings.lucko.me",
     }
   },
+  io: {
+    sockets: [{
+      name: "main",
+      url: "https://jet-live.serlith.net",
+    }]
+  },
 
   nitro: {
     prerender: {
