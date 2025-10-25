@@ -116,7 +116,7 @@ function onClick() {
     </div>
     <div v-if="collapsed !== ''" class="bg-gray-900 ml-2">
       <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootTime="rootTime" />
+      <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="parentTime!" :childrenTime="nodeTimeChildren" :rootTime="rootTime" />
       <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="parentBytes!" :childrenBytes="nodeMemoryChildren" :rootBytes="rootBytes" />
     </div>
