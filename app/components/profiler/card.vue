@@ -9,8 +9,8 @@ const profilerType = ref<"cpu" | "memory">("cpu")
 // Get plugins from the protocol buffer
 // Get mappings from spark-mappings.lucko.me
 
-const airplaneData = mergeAirplaneFile(dataSamples)
-const dictionary = mergeDictionarySlices(airplaneData.dictionary)
+const airplaneData = computed(() => mergeAirplaneFile(dataSamples))
+const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dictionary))
 
 </script>
 

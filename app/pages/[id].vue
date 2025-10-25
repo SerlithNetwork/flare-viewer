@@ -3,7 +3,7 @@
 import {useProfilerScreenStore} from "~/store/profiler-screen-store";
 import type {FlareProfile} from "~/types/profiler";
 import {CreateProfile, AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
-import {b64UnzipBytes, binaryUnzipBytes} from "~/util/binary-utils";
+import {b64UnzipBytes} from "~/util/binary-utils";
 import { io } from 'socket.io-client';
 
 
@@ -39,6 +39,8 @@ onMounted(() => {
   socketUri.searchParams.set("key", id!.toString())
 
   const socket = io(socketUri.toString(), {
+    transports: ["websocket"],
+    upgrade: false,
     reconnection: false,
   });
 
@@ -56,25 +58,23 @@ onMounted(() => {
     fallbackToProfilerEnded();
   });
 
-  socket.on("airplane_profiler", async (profiler: ArrayBuffer | Blob) => {
-    const unzipped = await binaryUnzipBytes(profiler)
-    profile.value = CreateProfile.fromBinary(unzipped)
+  socket.once("airplane_profiler", async (profiler: { payload: string }) => {
+    profile.value = CreateProfile.fromBinary(b64UnzipBytes(profiler.payload));
+    status.value = "ready"
   })
 
-  socket.on("airplane_data", async (data: ArrayBuffer | Blob) => {
-    const unzipped = await binaryUnzipBytes(data)
+  socket.on("airplane_data", async (data: { payload: string }) => {
     if (dataSamples.value === null) {
       dataSamples.value = []
     }
-    dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(unzipped))
+    dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(data.payload)));
   })
 
-  socket.on("airplane_timeline", async (timeline: ArrayBuffer | Blob) => {
-    const unzipped = await binaryUnzipBytes(timeline)
+  socket.on("airplane_timeline", async (timeline: { payload: string }) => {
     if (timelineSamples.value === null) {
       timelineSamples.value = []
     }
-    timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(unzipped))
+    timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(timeline.payload)));
   })
 
 })

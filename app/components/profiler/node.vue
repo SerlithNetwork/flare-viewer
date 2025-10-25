@@ -12,31 +12,69 @@ import {mergeMemoryChildren, mergeTimeChildren} from "~/util/merge-utils";
 
 const { mode, dictionary, timeChildren, memoryChildren, parentTime, parentBytes, rootTime, rootBytes } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeChildren?: TimeProfileV2Children, memoryChildren?: MemoryProfileV2Children, parentTime?: number, parentBytes?: number, rootTime?: number, rootBytes?: number }>();
 
-let definition: MethodDefinition
-let nodeUsage: string
-let nodeColor: string
-let nodeTimeChildren: TimeProfileV2Children[]
-let nodeMemoryChildren: MemoryProfileV2Children[]
-let nodePercentage: number
-let nodePercentageString: string
-let nodePlugin: string = ""
-if (mode === "cpu") {
-  definition = timeChildren!.methodDefinition
-  nodeUsage = formatMilliseconds(timeChildren!.time)
-  nodeColor = "bg-pink-200"
-  nodeTimeChildren = mergeTimeChildren(dictionary, timeChildren!.children)
-  nodePercentage = calculatePercentage(timeChildren!.time, rootTime!)
-  nodePercentageString = formatPercentage(nodePercentage)
-  nodePlugin = timeChildren!.plugin
-} else if (mode === "memory") {
-  definition = memoryChildren!.methodDefinition
-  nodeUsage = formatBytes(memoryChildren!.bytes)
-  nodeColor = "bg-purple-300"
-  nodeMemoryChildren = mergeMemoryChildren(dictionary, memoryChildren!.children)
-  nodePercentage = calculatePercentage(memoryChildren!.bytes, rootBytes!)
-  nodePercentageString = formatPercentage(nodePercentage)
-  nodePlugin = memoryChildren!.plugin
-}
+const definition: ComputedRef<MethodDefinition> = computed(() => {
+  if (mode === "cpu" && timeChildren) {
+    return timeChildren.methodDefinition
+  } else if (mode === "memory" && memoryChildren) {
+    return memoryChildren.methodDefinition
+  }
+  throw new Error("Not properly used")
+})
+
+const nodeUsage: ComputedRef<string> = computed(() => {
+  if (mode === "cpu" && timeChildren) {
+    return formatMilliseconds(timeChildren.time)
+  } else if (mode === "memory" && memoryChildren) {
+    return formatBytes(memoryChildren.bytes)
+  }
+  throw new Error("Not properly used")
+})
+
+const nodeColor: ComputedRef<string> = computed(() => {
+  if (mode === "cpu") {
+    return "bg-pink-200"
+  } else if (mode === "memory") {
+    return "bg-purple-300"
+  }
+  throw new Error("Not properly used")
+})
+
+const nodeTimeChildren: ComputedRef<TimeProfileV2Children[]> = computed(() => {
+  if (mode === "cpu" && timeChildren) {
+    return mergeTimeChildren(dictionary, timeChildren.children)
+  }
+  return []
+})
+
+
+const nodeMemoryChildren: ComputedRef<MemoryProfileV2Children[]> = computed(() => {
+  if (mode === "memory" && memoryChildren) {
+    return mergeMemoryChildren(dictionary, memoryChildren.children)
+  }
+  return []
+})
+
+
+const nodePercentage: ComputedRef<number> = computed(() => {
+  if (mode === "cpu" && timeChildren) {
+    return calculatePercentage(timeChildren.time, rootTime!)
+  } else if (mode === "memory" && memoryChildren) {
+    return calculatePercentage(memoryChildren.bytes, rootBytes!)
+  }
+  throw new Error("Not properly used")
+})
+
+
+const nodePercentageString: ComputedRef<string> = computed(() => formatPercentage(nodePercentage.value))
+
+const nodePlugin: ComputedRef<string> = computed(() => {
+  if (mode === "cpu" && timeChildren) {
+    return timeChildren.plugin
+  } else if (mode === "memory" && memoryChildren) {
+    return memoryChildren.plugin
+  }
+  return ""
+})
 
 const collapsed = ref("")
 function onClick() {
