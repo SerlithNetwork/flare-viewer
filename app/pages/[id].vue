@@ -4,32 +4,86 @@ import {useProfilerScreenStore} from "~/store/profiler-screen-store";
 import type {FlareProfile} from "~/types/profiler";
 import {CreateProfile, AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
 import {b64UnzipBytes} from "~/util/binary-utils";
+import { io } from 'socket.io-client';
+
 
 const route = useRoute()
 const id = route.params.id
-
 const config = useRuntimeConfig()
 const screenStore = useProfilerScreenStore()
-const { error, data } = await useFetch<FlareProfile>(`${config.public.apiBackendUrl}/api/profiler/${id}`)
 
-const status = ref<"pending" | "ready">("pending")
+const status = ref<"pending" | "ready" | "error">("pending")
 const profile = ref<CreateProfile | null>(null)
 const dataSamples = ref<AirplaneProfileFile[] | null>(null)
 const timelineSamples = ref<TimelineFile[] | null>(null)
-watch(data, (dataReady) => {
-  if (dataReady) {
-    profile.value = CreateProfile.fromBinary(b64UnzipBytes(dataReady.raw));
-    dataSamples.value = dataReady.dataSamples.map(i => AirplaneProfileFile.fromBinary(b64UnzipBytes(i)))
-    timelineSamples.value = dataReady.dataSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
+
+async function fallbackToProfilerEnded() {
+
+  const { error, data } = await useFetch<FlareProfile>(`${config.public.apiBackendUrl}/api/profiler/${id}`)
+
+  if (error.value) {
+    status.value = "error"
+  } else if (!data.value) {
+    status.value = "error"
+  } else {
+    profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value.raw));
+    dataSamples.value = data.value.dataSamples.map(i => AirplaneProfileFile.fromBinary(b64UnzipBytes(i)))
+    timelineSamples.value = data.value.dataSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
     status.value = "ready"
   }
-}, { immediate: true })
+
+}
+
+onMounted(() => {
+  const socketUri = new URL(config.public.wsBackendUrl)
+  socketUri.searchParams.set("key", id!.toString())
+
+  const socket = io(socketUri.toString(), {
+    transports: ["websocket"],
+    upgrade: false,
+    reconnection: false,
+  });
+
+  socket.on("connect", () => {
+    console.log("Connected to websocket")
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Disconnected from websocket")
+  });
+
+  socket.on("connect_error", () => {
+    socket.disconnect();
+    console.log("Profiler probably done, attempting to fetch via REST")
+    fallbackToProfilerEnded();
+  });
+
+  socket.once("airplane_profiler", async (profiler: { payload: string }) => {
+    profile.value = CreateProfile.fromBinary(b64UnzipBytes(profiler.payload));
+    status.value = "ready"
+  })
+
+  socket.on("airplane_data", async (data: { payload: string }) => {
+    if (dataSamples.value === null) {
+      dataSamples.value = []
+    }
+    dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(data.payload)));
+  })
+
+  socket.on("airplane_timeline", async (timeline: { payload: string }) => {
+    if (timelineSamples.value === null) {
+      timelineSamples.value = []
+    }
+    timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(timeline.payload)));
+  })
+
+})
 
 </script>
 
 <template>
-  <div v-if="error" class="flex flex-col items-center text-white">
-    Error: {{ error.message }}
+  <div v-if="status === 'error'" class="flex flex-col items-center text-white">
+    Error: Test
   </div>
   <div v-else-if="status === 'pending'" class="flex flex-col items-center text-white">
     <ToolLoading message="Loading..." />

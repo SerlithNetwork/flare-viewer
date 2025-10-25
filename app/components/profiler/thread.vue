@@ -9,22 +9,46 @@ import type {MemoryProfileV2Children, MethodDictionary, TimeProfileV2Children} f
 
 const { mode, dictionary, timeProfile, memoryProfile } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeProfile?: TimeProfileV2, memoryProfile?: MemoryProfileV2 }>();
 
-let threadName: string
-let threadUsage: string
-let threadColor: string
-let threadTimeChildren: TimeProfileV2Children[]
-let threadMemoryChildren: MemoryProfileV2Children[]
-if (mode === "cpu") {
-  threadName = timeProfile!.thread;
-  threadUsage = formatMilliseconds(timeProfile!.time);
-  threadColor = "bg-pink-300"
-  threadTimeChildren = mergeTimeChildren(dictionary, timeProfile!.children)
-} else if (mode === "memory") {
-  threadName = memoryProfile!.thread;
-  threadUsage = formatBytes(memoryProfile!.bytes)
-  threadColor = "bg-purple-400"
-  threadMemoryChildren = mergeMemoryChildren(dictionary, memoryProfile!.children)
-}
+const threadName: ComputedRef<string> = computed(() => {
+  if (mode === "cpu" && timeProfile) {
+    return timeProfile.thread
+  } else if (mode === "memory" && memoryProfile) {
+    return memoryProfile.thread
+  }
+  return ""
+})
+
+const threadUsage: ComputedRef<string> = computed(() => {
+  if (mode === "cpu" && timeProfile) {
+    return formatMilliseconds(timeProfile.time)
+  } else if (mode === "memory" && memoryProfile) {
+    return formatBytes(memoryProfile.bytes)
+  }
+  throw new Error("Not properly used")
+})
+
+const threadColor: ComputedRef<string> = computed(() => {
+  if (mode === "cpu") {
+    return "bg-pink-300"
+  } else if (mode == "memory") {
+    return "bg-purple-400"
+  }
+  throw new Error("Not properly used")
+})
+
+const threadTimeChildren: ComputedRef<TimeProfileV2Children[]> = computed(() => {
+  if (mode === "cpu" && timeProfile) {
+    return mergeTimeChildren(dictionary, timeProfile.children)
+  }
+  return []
+})
+
+const threadMemoryChildren: ComputedRef<MemoryProfileV2Children[]> = computed(() => {
+  if (mode === "memory" && memoryProfile) {
+    return mergeMemoryChildren(dictionary, memoryProfile.children)
+  }
+  return []
+})
 
 const collapsed = ref("")
 function onClick() {
@@ -51,8 +75,8 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-gray-900 ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" />
+      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" />
+      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="timeProfile!.time" :childrenTime="timeProfile!.children" :rootTime="timeProfile!.time" />
       <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="memoryProfile!.bytes" :childrenBytes="memoryProfile!.children" :rootBytes="memoryProfile!.bytes" />
     </div>

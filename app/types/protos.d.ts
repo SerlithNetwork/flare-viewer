@@ -37,6 +37,8 @@ public export interface MethodDefinition {
 
     otherPath?: string;
 
+    fullName: string;
+
     methodType: "java" | "native" | "kernel" | "java?";
 
 }

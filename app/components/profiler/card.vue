@@ -9,8 +9,8 @@ const profilerType = ref<"cpu" | "memory">("cpu")
 // Get plugins from the protocol buffer
 // Get mappings from spark-mappings.lucko.me
 
-const airplaneData = mergeAirplaneFile(dataSamples)
-const dictionary = mergeDictionarySlices(airplaneData.dictionary)
+const airplaneData = computed(() => mergeAirplaneFile(dataSamples))
+const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dictionary))
 
 </script>
 
@@ -35,8 +35,8 @@ const dictionary = mergeDictionarySlices(airplaneData.dictionary)
     </div>
   </div>
   <div class="flex flex-col items-center w-full rounded-lg">
-    <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
-    <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
+    <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
+    <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" :key="thread.thread" mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
   </div>
 </div>
 </template>
