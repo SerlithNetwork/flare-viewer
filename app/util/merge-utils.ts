@@ -116,12 +116,16 @@ export function getFromDictionary(dictionary: MethodDictionary, id: number): Met
     const method = dictionary.methods[id]!;
 
     if (method.methodDictionaryType.oneofKind === "javaEntry") {
+        const jClassName = method.methodDictionaryType.javaEntry.javaClass!.name
+        const jMethodName = method.methodDictionaryType.javaEntry.method
+        const jPackageName = dictionary.packages[method.methodDictionaryType.javaEntry.javaClass!.packageIndex]!
         return {
-            javaClassName: method.methodDictionaryType.javaEntry.javaClass!.name,
-            javaMethodName: method.methodDictionaryType.javaEntry.method,
-            javaPackageName: dictionary.packages[method.methodDictionaryType.javaEntry.javaClass!.packageIndex]!,
+            javaClassName: jClassName,
+            javaMethodName: jMethodName,
+            javaPackageName: jPackageName,
             javaArguments: formatTypeValues(dictionary, ...method.methodDictionaryType.javaEntry.params),
             javaReturn: formatTypeValues(dictionary, method.methodDictionaryType.javaEntry.returnType),
+            fullName: `${jPackageName}.${jClassName}.${jMethodName}`,
             methodType: "java"
         }
     } else if (method.methodDictionaryType.oneofKind === "otherEntry") {
@@ -129,16 +133,19 @@ export function getFromDictionary(dictionary: MethodDictionary, id: number): Met
             case MethodDictionarySlice_MethodType.NATIVE:
                 return {
                     otherPath: method.methodDictionaryType.otherEntry.path,
+                    fullName: method.methodDictionaryType.otherEntry.path,
                     methodType: "native",
                 }
             case MethodDictionarySlice_MethodType.KERNEL:
                 return {
                     otherPath: method.methodDictionaryType.otherEntry.path,
+                    fullName: method.methodDictionaryType.otherEntry.path,
                     methodType: "kernel",
                 }
             case MethodDictionarySlice_MethodType.JAVA:
                 return {
                     otherPath: method.methodDictionaryType.otherEntry.path,
+                    fullName: method.methodDictionaryType.otherEntry.path,
                     methodType: "java?",
                 }
         }
