@@ -7,14 +7,10 @@ export default defineNuxtConfig({
   runtimeConfig : {
     public: {
         apiBackendUrl: "https://jet.serlith.net",
+        wsBackendUrl: "https://jet-live.serlith.net",
+
         apiMappingsUrl: "https://spark-mappings.lucko.me",
     }
-  },
-  io: {
-    sockets: [{
-      name: "main",
-      url: "https://jet-live.serlith.net",
-    }]
   },
 
   nitro: {

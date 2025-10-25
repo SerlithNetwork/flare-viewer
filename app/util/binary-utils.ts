@@ -12,3 +12,13 @@ export function b64UnzipBytes(b64: string) : Uint8Array<ArrayBufferLike> {
     const zipped = b64ToBytes(b64)
     return pako.inflate(zipped)
 }
+
+export async function binaryUnzipBytes(array: ArrayBuffer | Blob) : Promise<Uint8Array<ArrayBufferLike>> {
+    let buffer: ArrayBuffer
+    if (array instanceof Blob) {
+        buffer = await array.arrayBuffer()
+    } else {
+        buffer = array
+    }
+    return pako.inflate(buffer)
+}
