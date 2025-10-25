@@ -63,10 +63,18 @@ onMounted(() => {
 
   socket.on("airplane_data", async (data: ArrayBuffer | Blob) => {
     const unzipped = await binaryUnzipBytes(data)
+    if (dataSamples.value === null) {
+      dataSamples.value = []
+    }
+    dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(unzipped))
   })
 
   socket.on("airplane_timeline", async (timeline: ArrayBuffer | Blob) => {
     const unzipped = await binaryUnzipBytes(timeline)
+    if (timelineSamples.value === null) {
+      timelineSamples.value = []
+    }
+    timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(unzipped))
   })
 
 })
