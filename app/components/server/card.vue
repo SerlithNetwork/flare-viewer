@@ -18,13 +18,17 @@ const sortedEvents = computed(() => {
 const categories = new Map<string, { value: { name: string, color: string } }>()
 categories.set("airplane:tps", { value: { name: "TPS", color: "#53db75" } })
 categories.set("airplane:mspt", { value: { name: "MSPT", color: "#53dbc7" } })
-categories.set("builtin:stat:memory_used", { value: { name: "Memory Used", color: "#ffc26e" } })
+categories.set("builtin:stat:memory_used", { value: { name: "Memory Used", color: "#ffc56e" } })
 categories.set("builtin:stat:memory_total", { value: { name: "Memory Allocated", color: "#ff996e" } })
-categories.set("builtin:stat:cpu_process", { value: { name: "CPU Process", color: "#d29cff" } })
-categories.set("builtin:stat:cpu", { value: { name: "CPU System", color: "#a579f7" } })
-categories.set("builtin:gc:minor", { value: { name: "Minor GC Pause", color: "#d29cff" } })
-categories.set("builtin:gc:generic", { value: { name: "Generic GC Pause", color: "#a579f7" } })
-categories.set("builtin:gc:mejor", { value: { name: "Major GC Pause", color: "#a579f7" } })
+categories.set("builtin:stat:cpu_process", { value: { name: "CPU Process", color: "#a579f7" } })
+categories.set("builtin:stat:cpu", { value: { name: "CPU System", color: "#7b38e8" } })
+categories.set("airplane:world:playercount", { value: { name: "Players", color: "#ff66c9" } })
+categories.set("airplane:world:entitycount", { value: { name: "Entities", color: "#ff547c" } })
+categories.set("airplane:world:chunkcount", { value: { name: "Chunks", color: "#ff9ecf" } })
+categories.set("airplane:world:blockentitycount", { value: { name: "Block Entities", color: "#ff547c" } })
+categories.set("builtin:gc:minor", { value: { name: "Minor GC Pause", color: "#5476ff" } })
+categories.set("builtin:gc:generic", { value: { name: "Generic GC Pause", color: "#2954ff" } })
+categories.set("builtin:gc:major", { value: { name: "Major GC Pause", color: "#082fc9" } })
 
 const titles = new Map<string, string>()
 titles.set("airplane:tps", "TPS")
@@ -33,6 +37,10 @@ titles.set("builtin:stat:memory_used", "Memory Used")
 titles.set("builtin:stat:memory_total", "Memory Allocated")
 titles.set("builtin:stat:cpu_process", "CPU Process %")
 titles.set("builtin:stat:cpu", "CPU System %")
+titles.set("airplane:world:playercount", "Players")
+titles.set("airplane:world:entitycount", "Entities")
+titles.set("airplane:world:chunkcount", "Loaded Chunks")
+titles.set("airplane:world:blockentitycount", "Block Entities")
 titles.set("builtin:gc:minor", "Minor GC Pauses")
 titles.set("builtin:gc:generic", "Generic GC Pauses")
 titles.set("builtin:gc:major", "Major GC Pauses")
@@ -44,6 +52,10 @@ labels.set("builtin:stat:memory_used", "GB")
 labels.set("builtin:stat:memory_total", "GB")
 labels.set("builtin:stat:cpu_process", "Usage %")
 labels.set("builtin:stat:cpu", "Usage %")
+titles.set("airplane:world:playercount", "Players")
+titles.set("airplane:world:entitycount", "Entities")
+titles.set("airplane:world:chunkcount", "Chunks Loaded")
+titles.set("airplane:world:blockentitycount", "Block Entities")
 labels.set("builtin:gc:minor", "Milliseconds")
 labels.set("builtin:gc:generic", "Milliseconds")
 labels.set("builtin:gc:major", "Milliseconds")
@@ -56,21 +68,21 @@ labels.set("builtin:gc:major", "Milliseconds")
   </div>
   <div v-else class="flex flex-col items-center min-h-6 min-w-[90%] m-8 max-w-sm p-6 gap-6">
     <div v-for="entry in sortedMetrics" :key="entry[0]" class="flex flex-col justify-center items-center p-12 min-h-6 min-w-full rounded-lg shadow-sm gap-4" style="background-color: var(--surface-color)">
-      <span class="text-2xl font-bold">{{ titles.get(entry[0]) }}</span>
+      <span class="text-2xl font-bold">{{ titles.get(entry[0]) ?? entry[0] }}</span>
       <LineChart class="w-full"
           :data="entry[1]"
-          :categories="categories.get(entry[0])!"
+          :categories="categories.get(entry[0]) ?? { value: { name: entry[0], color: '#ffffff' } }"
           :height="300"
-          :yLabel="labels.get(entry[0])!"
+          :yLabel="labels.get(entry[0]) ?? entry[0]"
       />
     </div>
     <div v-for="entry in sortedEvents" :key="entry[0]" class="flex flex-col justify-center items-center p-12 min-h-6 min-w-full rounded-lg shadow-sm gap-4" style="background-color: var(--surface-color)">
-      <span class="text-2xl font-bold">{{ titles.get(entry[0]) }}</span>
+      <span class="text-2xl font-bold">{{ titles.get(entry[0]) ?? entry[0] }}</span>
       <LineChart class="w-full"
                  :data="entry[1]"
-                 :categories="categories.get(entry[0])!"
+                 :categories="categories.get(entry[0]) ?? { value: { name: entry[0], color: '#ffffff' } }"
                  :height="300"
-                 :yLabel="labels.get(entry[0])!"
+                 :yLabel="labels.get(entry[0]) ?? entry[0]"
       />
     </div>
   </div>
