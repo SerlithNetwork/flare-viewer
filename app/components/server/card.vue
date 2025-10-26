@@ -24,6 +24,7 @@ categories.set("builtin:stat:cpu_process", { value: { name: "CPU Process", color
 categories.set("builtin:stat:cpu", { value: { name: "CPU System", color: "#a579f7" } })
 categories.set("builtin:gc:minor", { value: { name: "Minor GC Pause", color: "#d29cff" } })
 categories.set("builtin:gc:generic", { value: { name: "Generic GC Pause", color: "#a579f7" } })
+categories.set("builtin:gc:mejor", { value: { name: "Major GC Pause", color: "#a579f7" } })
 
 const titles = new Map<string, string>()
 titles.set("airplane:tps", "TPS")
@@ -34,6 +35,7 @@ titles.set("builtin:stat:cpu_process", "CPU Process %")
 titles.set("builtin:stat:cpu", "CPU System %")
 titles.set("builtin:gc:minor", "Minor GC Pauses")
 titles.set("builtin:gc:generic", "Generic GC Pauses")
+titles.set("builtin:gc:major", "Major GC Pauses")
 
 const labels = new Map<string, string>()
 labels.set("airplane:tps", "Ticks")
@@ -44,6 +46,7 @@ labels.set("builtin:stat:cpu_process", "Usage %")
 labels.set("builtin:stat:cpu", "Usage %")
 labels.set("builtin:gc:minor", "Milliseconds")
 labels.set("builtin:gc:generic", "Milliseconds")
+labels.set("builtin:gc:major", "Milliseconds")
 
 </script>
 
