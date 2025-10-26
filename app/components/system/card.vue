@@ -10,18 +10,7 @@ import type {
 
 const { hwInfo, os, vmOptions, v3 } = defineProps<{ hwInfo: CreateProfile_HardwareInfo, os: CreateProfile_OperatingSystem, vmOptions: CreateProfile_VMOptions, v3: CreateProfile_V3 }>()
 
-// v3.versions: "Primary Version" (build), "Bukkit Version" (api) and "Minecraft Version"
-// os: "manufacturer" (Kernel/Core), "family" (flavor), "version" (os version), "bitness" (architecture)
-// hwInfo.cpu: "model" (brand), "coreCount" (cores), "threadCount" (threads), "frequency" (Hz)
-// hwInfo.memory: "total" (bytes), "swapTotal" (bytes), "virtualMax" (bytes)
-// vmOptions: "version" (number), "vendor" (flavor), "vm" (impl and bitness), "runtimeName", "runtimeVersion" (build), "flags"
-
 const flags = vmOptions.flags.join(" ")
-
-// v3.graphCategories: "Entities & Chunks", "MC Performance" and "System"
-// v3.timelineData: "airplane:mspt", "builtin:stat:memory_total", "builtin:gc:minor"
-
-
 
 </script>
 
