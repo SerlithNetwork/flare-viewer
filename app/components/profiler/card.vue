@@ -30,8 +30,8 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
       </button>
     </div>
     <div class="flex gap-4">
-      <ToolDropdown id="plugins" title="Filter by Plugin" :items="[ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]"></ToolDropdown>
-      <ToolDropdown id="mappings" title="Mappings" :items="[ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]"></ToolDropdown>
+      <!-- ToolDropdown id="plugins" title="Filter by Plugin" :items="[ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]"></ToolDropdown -->
+      <!-- ToolDropdown id="mappings" title="Mappings" :items="[ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]"></ToolDropdown -->
     </div>
   </div>
   <div class="flex flex-col items-center w-full rounded-lg">
