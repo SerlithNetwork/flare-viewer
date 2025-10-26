@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
 import {useProfilerScreenStore} from "~/store/profiler-screen-store";
+import {useProfilerStatusStore} from "~/store/status-store";
 
 const appConfig = useAppConfig();
-const route = useRoute();
 const screenStore = useProfilerScreenStore()
+const statusStore = useProfilerStatusStore()
 
 </script>
 
@@ -16,7 +17,7 @@ const screenStore = useProfilerScreenStore()
       <div>{{ appConfig.title }}</div>
     </div>
 
-    <div v-if="route.path !== '/'" class="flex items-center justify-center text-lg underline space-x-6 text-gray-400">
+    <div v-if="statusStore.status === 'ready'" class="flex items-center justify-center text-lg underline space-x-6 text-gray-400">
       <!-- Add buttons -->
       <span @click="screenStore.setScreen('profiler')" :class="['cursor-pointer duration-200', screenStore.screen === 'profiler' ? 'text-pink-200' : 'hover:text-white']">
         Profiler

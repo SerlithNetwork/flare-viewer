@@ -7,10 +7,9 @@
 
 An unofficial re-creation of the original [Flare](https://blog.airplane.gg/flare/) viewer
 
-Made in Nuxt.js for no particular reason ¯\\\_(ツ)\_/¯
 
 <div align="center">
-<img src="assets/preview.png" height="256">
+<img src="assets/preview.png" width="1894">
 </div>
 
 ### Viewer

@@ -5,14 +5,15 @@ import type {FlareProfile} from "~/types/profiler";
 import {CreateProfile, AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
 import {b64UnzipBytes} from "~/util/binary-utils";
 import { io } from 'socket.io-client';
+import {useProfilerStatusStore} from "~/store/status-store";
 
 
 const route = useRoute()
 const id = route.params.id
 const config = useRuntimeConfig()
 const screenStore = useProfilerScreenStore()
+const statusStore = useProfilerStatusStore()
 
-const status = ref<"pending" | "ready" | "error">("pending")
 const profile = ref<CreateProfile | null>(null)
 const dataSamples = ref<AirplaneProfileFile[] | null>(null)
 const timelineSamples = ref<TimelineFile[] | null>(null)
@@ -22,14 +23,14 @@ async function fallbackToProfilerEnded() {
   const { error, data } = await useFetch<FlareProfile>(`${config.public.apiBackendUrl}/api/profiler/${id}`)
 
   if (error.value) {
-    status.value = "error"
+    statusStore.status = "error"
   } else if (!data.value) {
-    status.value = "error"
+    statusStore.status = "error"
   } else {
     profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value.raw));
     dataSamples.value = data.value.dataSamples.map(i => AirplaneProfileFile.fromBinary(b64UnzipBytes(i)))
     timelineSamples.value = data.value.timelineSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
-    status.value = "ready"
+    statusStore.status = "ready"
   }
 
 }
@@ -42,6 +43,7 @@ onMounted(() => {
     transports: ["websocket"],
     upgrade: false,
     reconnection: false,
+    timeout: 10000,
   });
 
   socket.on("connect_error", () => {
@@ -52,7 +54,7 @@ onMounted(() => {
 
   socket.once("airplane_profiler", async (profiler: { payload: string }) => {
     profile.value = CreateProfile.fromBinary(b64UnzipBytes(profiler.payload));
-    status.value = "ready"
+    statusStore.status = "ready"
   })
 
   socket.on("airplane_data", async (data: { payload: string }) => {
@@ -74,13 +76,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="status === 'error'" class="flex flex-col items-center text-white">
-    Error: Test
+  <div v-if="statusStore.status === 'error'" class="flex flex-col items-center text-white">
+    <WebsiteNotFound />
   </div>
-  <div v-else-if="status === 'pending'" class="flex flex-col items-center text-white">
+  <div v-else-if="statusStore.status === 'loading'" class="flex flex-col items-center text-white">
     <ToolLoading message="Loading..." />
   </div>
-  <div v-else-if="status === 'ready'" class="flex flex-col items-center text-white">
+  <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-white">
     <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples!" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
     <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples!" class="animate-fade-left" />

@@ -7,12 +7,36 @@ import type {LiveSummary} from "~/types/timeline";
 const { timelineSamples } = defineProps<{ timelineSamples: TimelineFile[] }>()
 const eventCount = timelineSamples.reduce((subtotal, sample) => subtotal + sample.events.length + sample.live.length, 0);
 
+const sortedKeys = [
+  "airplane:tps",
+  "airplane:mspt",
+  "builtin:stat:cpu_process",
+  "builtin:stat:cpu",
+  "builtin:stat:memory_used",
+  "builtin:stat:memory_total",
+  "airplane:world:playercount",
+  "airplane:world:entitycount",
+  "airplane:world:chunkcount",
+  "airplane:world:blockentitycount",
+  "builtin:gc:minor",
+  "builtin:gc:generic",
+  "builtin:gc:major",
+]
+
 const summary: ComputedRef<LiveSummary> = computed(() => groupTimelineSamples(timelineSamples));
 const sortedMetrics = computed(() => {
-  return Array.from(summary.value.metrics.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  return Array.from(summary.value.metrics.entries()).sort((a, b) => {
+    const indexA = sortedKeys.indexOf(a[0])
+    const indexB = sortedKeys.indexOf(b[0])
+    return indexA - indexB
+  });
 })
 const sortedEvents = computed(() => {
-  return Array.from(summary.value.events.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  return Array.from(summary.value.events.entries()).sort((a, b) => {
+    const indexA = sortedKeys.indexOf(a[0])
+    const indexB = sortedKeys.indexOf(b[0])
+    return indexA - indexB
+  });
 })
 
 const categories = new Map<string, { value: { name: string, color: string } }>()
