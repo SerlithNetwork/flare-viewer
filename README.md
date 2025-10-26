@@ -9,6 +9,10 @@ An unofficial re-creation of the original [Flare](https://blog.airplane.gg/flare
 
 Made in Nuxt.js for no particular reason ¯\\\_(ツ)\_/¯
 
+<div align="center">
+<img src="assets/preview.png" height="256">
+</div>
+
 ### Viewer
 Features:
 1. CPU and Memory timings for all threads

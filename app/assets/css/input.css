@@ -17,6 +17,12 @@
     --text-color: #f8fafc;
     --border-color: rgba(255, 255, 255, 0.1);
     --dashed_color: rgba(255, 255, 255, 0.001);
+
+    --profiler-top-color: #292929;
+    --profiler-top-hover-color: #363636;
+    --profiler-child-color: #101010;
+    --profiler-child-hover-color: #212121;
+    --profiler-child-group-hover-color: #161616;
 }
 
 * {

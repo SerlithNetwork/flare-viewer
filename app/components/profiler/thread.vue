@@ -63,7 +63,7 @@ function onClick() {
 
 <template>
   <div class="flex flex-col min-w-full">
-    <div class="flex justify-between items-center min-w-full py-1.5 px-2 text-sm bg-gray-800 rounded-lg hover:bg-gray-700">
+    <div class="flex justify-between items-center min-w-full py-1.5 px-2 text-sm bg-(--profiler-top-color) rounded-lg hover:bg-(--profiler-top-hover-color)">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
         <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
         <span class="text-gray-200">{{ threadName }}</span>
@@ -74,7 +74,7 @@ function onClick() {
         <ToolPercentageBar :percentage="1.0" :loaded="threadColor" rest="bg-gray-700" />
       </div>
     </div>
-    <div v-if="collapsed !== ''" class="bg-gray-900 ml-2">
+    <div v-if="collapsed !== ''" class="bg-(--profiler-child-color) ml-2">
       <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" />
       <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="timeProfile!.time" :childrenTime="timeProfile!.children" :rootTime="timeProfile!.time" />

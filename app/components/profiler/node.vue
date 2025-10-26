@@ -89,7 +89,7 @@ function onClick() {
 
 <template>
   <div class="flex flex-col min-w-fit border-l border-gray-500 ml-2">
-    <div class="flex justify-between items-center text-sm min-w-fit hover:bg-gray-800 ml-2">
+    <div class="flex justify-between items-center text-sm min-w-fit hover:bg-(--profiler-child-hover-color) ml-2">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
         <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
         <div v-if="definition.methodType === 'java'" class="flex flex-row">
@@ -114,7 +114,7 @@ function onClick() {
         <ToolPercentageBar :percentage="nodePercentage" :loaded="nodeColor" rest="bg-gray-700" class="max-h-2" />
       </div>
     </div>
-    <div v-if="collapsed !== ''" class="bg-gray-900 ml-2">
+    <div v-if="collapsed !== ''" class="bg-(--profiler-child-color) ml-2">
       <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" />
       <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="parentTime!" :childrenTime="nodeTimeChildren" :rootTime="rootTime" />
