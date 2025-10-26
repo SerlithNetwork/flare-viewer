@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import {useProfilerStatusStore} from "~/store/status-store";
 
 
+const appConfig = useAppConfig()
 const route = useRoute()
 const id = route.params.id
 const config = useRuntimeConfig()
@@ -71,6 +72,20 @@ onMounted(() => {
     timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(timeline.payload)));
   })
 
+})
+
+
+
+useSeoMeta({
+  title: `${appConfig.title} - ${id}`,
+  description: appConfig.description,
+
+  ogTitle: `${appConfig.title} - ${id}`,
+  ogDescription: appConfig.description,
+  ogUrl: new URL(`/${id}`, appConfig.url).toString(),
+  ogImage: new URL(`/thumbnail/${id}.png`, appConfig.url).toString(),
+
+  themeColor: appConfig.color,
 })
 
 </script>
