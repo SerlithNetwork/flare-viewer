@@ -28,7 +28,7 @@ async function fallbackToProfilerEnded() {
   } else {
     profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value.raw));
     dataSamples.value = data.value.dataSamples.map(i => AirplaneProfileFile.fromBinary(b64UnzipBytes(i)))
-    timelineSamples.value = data.value.dataSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
+    timelineSamples.value = data.value.timelineSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
     status.value = "ready"
   }
 
@@ -42,14 +42,6 @@ onMounted(() => {
     transports: ["websocket"],
     upgrade: false,
     reconnection: false,
-  });
-
-  socket.on("connect", () => {
-    console.log("Connected to websocket")
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Disconnected from websocket")
   });
 
   socket.on("connect_error", () => {
