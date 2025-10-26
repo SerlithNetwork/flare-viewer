@@ -12,6 +12,6 @@
 - [ ] Check if selecting mappings makes any sense in this version
 
 ## Optional
-- [ ] Update FlarePlugin and add support for Folia (and Velocity?) (Fabric idk, that would be a pain to maintain)
+- [x] Update FlarePlugin and add support for Folia (and Velocity?) (Fabric idk, that would be a pain to maintain)
 - [ ] Design a custom favicon
 
