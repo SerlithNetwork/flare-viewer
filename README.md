@@ -31,12 +31,31 @@ Then create start the development environment by running
   npm run dev
 ````
 
-### Backend
-* [Jet](https://github.com/SerlithNetwork/Jet)
+### Compiling for production
+
+Compile the project with SSR support by running
+````shell
+  npm run build
+````
+
+Then run it using
+````shell
+  npm .output/server/index.mjs
+````
+
+### Supported Backends
+Flare viewer was designed to work on pair with [Jet](https://github.com/SerlithNetwork/Jet). \
+Since the Flare protocol expects a single endpoint for both submitting data and using the web-ui, it is
+highly recommended to use a reverse proxy like Nginx to forward the requests accordingly.
 
 ### Client
-* [FlarePlatform](https://github.com/SerlithNetwork/FlarePlatform)
-* [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) and its forks or re-implementations like [Puffernot](https://github.com/SerlithNetwork/Puffernot)/[Pufferfork](https://github.com/Toffikk/Pufferfork)
+Flare viewer is compatible with any platform that provides [Flare](https://github.com/TECHNOVE/Flare)
+1. As a standalone plugin \
+   1.1. [FlarePlugin](https://github.com/TECHNOVE/FlarePlugin) \
+   1.2. [FlarePlatform](https://github.com/SerlithNetwork/FlarePlatform) (recommended)
+2. Provided by a server software \
+   2.1. [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) and forks \
+   2.2. [Puffernot](https://github.com/SerlithNetwork/Puffernot)/[Pufferfork](https://github.com/Toffikk/Pufferfork) and forks (recommended)
 
 ### License
 
