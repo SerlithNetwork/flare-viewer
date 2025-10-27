@@ -22,12 +22,6 @@ export default defineNuxtConfig({
             routes:[
                 "/"
             ]
-        },
-        routeRules: {
-            "/create" : { proxy: `${apiBackendUrl}/create` },
-            "/license" : { proxy: `${apiBackendUrl}/license` },
-            "/:id/:key" : { proxy: `${apiBackendUrl}/**` },
-            "/:id/:key/timeline" : { proxy: `${apiBackendUrl}/**` },
         }
     }
 })
