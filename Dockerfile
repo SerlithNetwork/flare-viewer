@@ -12,5 +12,5 @@ COPY . ./
 RUN bun run proto
 RUN bun run build
 
-CMD ["bun", "run", "start"]
+CMD ["bun", ".output/server/index.mjs"]
 EXPOSE 3000/tcp
