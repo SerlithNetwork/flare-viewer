@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui', '@pinia/nuxt', 'nuxt-charts'],
     css: ['~/assets/css/input.css'],
+    plugins: ["~/plugins/highlightjs.ts"],
     runtimeConfig : {
         public: {
             apiBackendUrl,
@@ -16,12 +17,4 @@ export default defineNuxtConfig({
             apiMappingsUrl,
         }
     },
-
-    nitro: {
-        prerender: {
-            routes:[
-                "/"
-            ]
-        }
-    }
 })

@@ -1,15 +1,12 @@
 
-FROM node:lts AS build
+FROM oven/bun:latest AS build
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN bun install
 
 COPY . ./
-RUN npm run generate
+RUN bun run build
 
-FROM nginx:alpine
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/.output/public /usr/share/nginx/html
-CMD ["nginx", "-g", "daemon off;"]
-EXPOSE 80/tcp
+CMD ["bun", "run", "start"]
+EXPOSE 3000/tcp
