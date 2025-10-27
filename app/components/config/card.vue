@@ -7,6 +7,16 @@ const { configs } = defineProps<{ configs: CreateProfile_ConfigurationFile[] }>(
 const configMap = new Map(configs.map(config => [config.filename, config.contents]))
 const selectedConfig = ref("server.properties")
 
+const { $highlight } = useNuxtApp()
+
+const highlightedMap = Object.fromEntries(
+  Array.from(configMap.entries()).map(([filename, code]) => {
+    const ext = filename.split('.').pop()
+    return [filename, $highlight(code, ext)]
+  })
+)
+const highlightedCode = computed(() => highlightedMap[selectedConfig.value])
+
 </script>
 
 <template>
@@ -18,9 +28,7 @@ const selectedConfig = ref("server.properties")
         </span>
       </button>
     </div>
-    <div class="flex flex-col items-center w-full">
-      <highlightjs class="text-wrap w-full" :code="configMap.get(selectedConfig)" :autodetect="true" />
-    </div>
+    <pre class="hljs text-wrap w-full"><code v-html="highlightedCode"></code></pre>
   </div>
 </template>
 
