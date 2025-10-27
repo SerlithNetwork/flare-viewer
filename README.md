@@ -35,7 +35,7 @@ Then create start the development environment by running
 * [Jet](https://github.com/SerlithNetwork/Jet)
 
 ### Client
-* [FlarePlugin](https://github.com/TECHNOVE/FlarePlugin)
+* [FlarePlatform](https://github.com/SerlithNetwork/FlarePlatform)
 * [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) and its forks or re-implementations like [Puffernot](https://github.com/SerlithNetwork/Puffernot)/[Pufferfork](https://github.com/Toffikk/Pufferfork)
 
 ### License
