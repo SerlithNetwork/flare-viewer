@@ -1,15 +1,7 @@
 <script setup lang="ts">
 
 import 'highlight.js/styles/nord.css';
-import hljs from 'highlight.js/lib/core';
-import properties from 'highlight.js/lib/languages/properties';
-import yaml from 'highlight.js/lib/languages/yaml';
-import json from 'highlight.js/lib/languages/json';
 import {type CreateProfile_ConfigurationFile} from "~/proto/ProfileFile_pb";
-
-hljs.registerLanguage('properties', properties);
-hljs.registerLanguage('yaml', yaml);
-hljs.registerLanguage('json', json);
 
 const { configs } = defineProps<{ configs: CreateProfile_ConfigurationFile[] }>()
 const configMap = new Map(configs.map(config => [config.filename, config.contents]))
