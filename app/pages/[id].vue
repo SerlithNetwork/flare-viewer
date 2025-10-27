@@ -16,8 +16,8 @@ const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 
 const profile = ref<CreateProfile | null>(null)
-const dataSamples = ref<AirplaneProfileFile[] | null>(null)
-const timelineSamples = ref<TimelineFile[] | null>(null)
+const dataSamples = ref<AirplaneProfileFile[] | null>([])
+const timelineSamples = ref<TimelineFile[] | null>([])
 
 async function fallbackToProfilerEnded() {
 
@@ -84,6 +84,7 @@ useSeoMeta({
   ogDescription: appConfig.description,
   ogUrl: new URL(`/${id}`, appConfig.url).toString(),
   ogImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
+  twitterImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
 
   themeColor: appConfig.color,
 })
