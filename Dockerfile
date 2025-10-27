@@ -1,5 +1,5 @@
 
-FROM oven/bun:latest AS build
+FROM oven/bun:1.3.0-alpine AS build
 
 RUN apt-get update && apt-get install -y python3 g++ make
 

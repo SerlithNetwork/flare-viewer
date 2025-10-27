@@ -83,7 +83,7 @@ useSeoMeta({
   ogTitle: `${appConfig.title} - ${id}`,
   ogDescription: appConfig.description,
   ogUrl: new URL(`/${id}`, appConfig.url).toString(),
-  ogImage: new URL(`/thumbnail/${id}.png`, appConfig.url).toString(),
+  ogImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
 
   themeColor: appConfig.color,
 })
