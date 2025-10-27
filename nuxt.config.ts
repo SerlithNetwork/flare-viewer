@@ -17,4 +17,7 @@ export default defineNuxtConfig({
             apiMappingsUrl,
         }
     },
+    nitro: {
+        preset: 'bun',
+    }
 })
