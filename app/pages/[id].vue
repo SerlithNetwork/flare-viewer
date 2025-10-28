@@ -84,7 +84,11 @@ useSeoMeta({
   ogDescription: appConfig.description,
   ogUrl: new URL(`/${id}`, appConfig.url).toString(),
   ogImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
+
+  twitterTitle: `${appConfig.title} - ${id}`,
+  twitterDescription: appConfig.description,
   twitterImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
+  twitterCard: "summary_large_image",
 
   themeColor: appConfig.color,
 })
