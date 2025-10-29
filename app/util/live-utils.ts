@@ -10,6 +10,9 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
         const time = sample.startedAt
         for (const entry of sample.live) {
             const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length
+            if (!Number.isFinite(avg)) {
+                continue
+            }
             if (!metrics.get(entry.type)) {
                 metrics.set(entry.type, [])
             }
