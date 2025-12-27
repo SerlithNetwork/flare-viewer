@@ -75,8 +75,8 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-(--profiler-child-color) ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" />
+      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" :siblings="threadTimeChildren" />
+      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" :siblings="threadMemoryChildren" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="timeProfile!.time" :childrenTime="timeProfile!.children" :rootTime="timeProfile!.time" />
       <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="memoryProfile!.bytes" :childrenBytes="memoryProfile!.children" :rootBytes="memoryProfile!.bytes" />
     </div>

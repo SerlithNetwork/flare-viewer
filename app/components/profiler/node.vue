@@ -1,16 +1,12 @@
 <script setup lang="ts">
 
-import type {
-  MemoryProfileV2Children, MethodDefinition,
-  MethodDictionary,
-  TimeProfileV2Children
-} from "~/types/protos";
+import type {MemoryProfileV2Children, MethodDefinition, MethodDictionary, TimeProfileV2Children} from "~/types/protos";
 import {faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {calculatePercentage, formatBytes, formatMilliseconds, formatPercentage} from "~/util/unit-utils";
 import {mergeMemoryChildren, mergeTimeChildren} from "~/util/merge-utils";
 
-const { mode, dictionary, timeChildren, memoryChildren, parentTime, parentBytes, rootTime, rootBytes } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeChildren?: TimeProfileV2Children, memoryChildren?: MemoryProfileV2Children, parentTime?: number, parentBytes?: number, rootTime?: number, rootBytes?: number }>();
+const { mode, dictionary, timeChildren, memoryChildren, parentTime, parentBytes, rootTime, rootBytes, siblings } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeChildren?: TimeProfileV2Children, memoryChildren?: MemoryProfileV2Children, parentTime?: number, parentBytes?: number, rootTime?: number, rootBytes?: number, siblings: any[] }>();
 
 const definition: ComputedRef<MethodDefinition> = computed(() => {
   if (mode === "cpu" && timeChildren) {
@@ -76,14 +72,32 @@ const nodePlugin: ComputedRef<string> = computed(() => {
   return ""
 })
 
-const collapsed = ref("")
+enum CollapsedState {
+  COLLAPSED,
+  UNCOLLAPSED,
+}
+
+const collapsedStyle = ref("")
+const collapsed = ref(CollapsedState.COLLAPSED);
 function onClick() {
-  if (collapsed.value === "") { // Is collapsed
-    collapsed.value = "rotate-90"
+  if (collapsed.value === CollapsedState.COLLAPSED) { // Is collapsed
+    collapsedStyle.value = "rotate-90"
+    collapsed.value = CollapsedState.UNCOLLAPSED
   } else {
-    collapsed.value = ""
+    collapsedStyle.value = ""
+    collapsed.value = CollapsedState.COLLAPSED
   }
 }
+
+onMounted(() => {
+  if (siblings.length < 2) {
+    collapsedStyle.value = "rotate-90"
+    collapsed.value = CollapsedState.UNCOLLAPSED
+  } else {
+    collapsedStyle.value = ""
+    collapsed.value = CollapsedState.COLLAPSED
+  }
+})
 
 </script>
 
@@ -91,7 +105,7 @@ function onClick() {
   <div class="flex flex-col min-w-fit border-l border-gray-500 ml-2">
     <div class="flex justify-between items-center text-sm min-w-fit hover:bg-(--profiler-child-hover-color) ml-2">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
-        <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
+        <FontAwesomeIcon class="text-gray-600" :class="collapsedStyle" :icon="faCircleChevronRight" />
         <div v-if="definition.methodType === 'java'" class="flex flex-row">
           <span class="text-gray-500">{{ definition.javaPackageName }}.</span>
           <span class="text-gray-200">{{ definition.javaClassName }}.</span>
@@ -114,9 +128,9 @@ function onClick() {
         <ToolPercentageBar :percentage="nodePercentage" :loaded="nodeColor" rest="bg-gray-700" class="max-h-2" />
       </div>
     </div>
-    <div v-if="collapsed !== ''" class="bg-(--profiler-child-color) ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" />
+    <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-(--profiler-child-color) ml-2">
+      <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" :siblings="nodeTimeChildren" />
+      <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" :siblings="nodeMemoryChildren" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="parentTime!" :childrenTime="nodeTimeChildren" :rootTime="rootTime" />
       <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="parentBytes!" :childrenBytes="nodeMemoryChildren" :rootBytes="rootBytes" />
     </div>
