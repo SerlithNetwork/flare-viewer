@@ -30,7 +30,7 @@
     "flowbite": "^3.1.2",
     "highlight.js": "^11.11.1",
     "nuxt": "^4.3.0",
-    "nuxt-charts": "^1.0.2",
+    "nuxt-charts": "^2.1.1",
     "pako": "^2.1.0",
     "pinia": "^3.0.3",
     "socket.io-client": "^4.8.1",
