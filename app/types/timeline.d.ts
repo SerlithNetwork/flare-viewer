@@ -1,6 +1,6 @@
 
 export interface MetricInstant {
-    time: number;
+    time: string;
     value: number;
 }
 

@@ -7,7 +7,14 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
     const events = new Map<string, MetricInstant[]>()
 
     for (const sample of samples) {
-        const time = sample.startedAt
+        const timeString = new Date(sample.startedAt).toLocaleString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        })
         for (const entry of sample.live) {
             const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length
             if (!Number.isFinite(avg)) {
@@ -17,11 +24,11 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
                 metrics.set(entry.type, [])
             }
             if (entry.type.includes("memory")) {
-                metrics.get(entry.type)!.push({ time, value: (avg / 1073741824) })
+                metrics.get(entry.type)!.push({ time: timeString, value: (avg / 1073741824) })
             } else if (entry.type.includes("cpu")) {
-                metrics.get(entry.type)!.push({ time, value: (avg * 1000) })
+                metrics.get(entry.type)!.push({ time: timeString, value: (avg * 1000) })
             } else {
-                metrics.get(entry.type)!.push({ time, value: avg })
+                metrics.get(entry.type)!.push({ time: timeString, value: avg })
             }
 
         }
@@ -30,8 +37,24 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
                 events.set(entry.type, [])
             }
             const event = events.get(entry.type)!
-            event.push({ time: entry.time, value: entry.duration })
-            event.push({ time: (entry.time + entry.duration), value: 0 })
+            const entryTimeStart = new Date(entry.time).toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            })
+            const entryTimeEnd = new Date(entry.time + entry.duration).toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            })
+            event.push({ time: entryTimeStart, value: entry.duration })
+            event.push({ time: entryTimeEnd, value: 0 })
         }
     }
 
