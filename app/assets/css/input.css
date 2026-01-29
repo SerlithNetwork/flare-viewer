@@ -27,6 +27,9 @@
 
     --ui-primary: var(--color-pink-300);
     --ui-secondary: var(--color-purple-400);
+    .hljs {
+        background: transparent;
+    }
 }
 
 * {

@@ -15,9 +15,9 @@ const selectedConfig = ref("server.properties")
       <div class="flex flex-row flex-wrap-reverse justify-items-start items-center w-full gap-2">
         <UButton v-for="filename in configMap.keys()" icon="i-lucide-file-cog" size="xl" color="primary" class="font-bold text-lg" @click="selectedConfig = filename" :variant="selectedConfig === filename ? 'solid' : 'outline'" >{{ filename }}</UButton>
       </div>
-      <div class="flex flex-col items-center w-full">
+      <UCard class="w-full">
         <highlightjs class="text-wrap w-full" :code="configMap.get(selectedConfig)" :autodetect="true" />
-      </div>
+      </UCard>
     </div>
   </UCard>
 </template>
