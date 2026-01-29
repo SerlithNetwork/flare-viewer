@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+@import "@nuxt/ui";
 @import "tailwindcss";
 @import "tailwindcss-animated";
 @import "flowbite/src/themes/default.css";
@@ -23,6 +24,9 @@
     --profiler-child-color: #101010;
     --profiler-child-hover-color: #212121;
     --profiler-child-group-hover-color: #161616;
+
+    --ui-primary: var(--color-pink-300);
+    --ui-secondary: var(--color-purple-400);
 }
 
 * {

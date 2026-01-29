@@ -2,38 +2,56 @@
 
 import {useProfilerScreenStore} from "~/store/profiler-screen-store";
 import {useProfilerStatusStore} from "~/store/status-store";
+import type {NavigationMenuItem} from "#ui/components/NavigationMenu.vue";
 
 const appConfig = useAppConfig();
 const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 
+const items = computed<NavigationMenuItem[]>(() => [
+  {
+    label: 'Profiler',
+    onSelect() {
+      screenStore.setScreen('profiler')
+    },
+  },
+  {
+    label: 'Configurations',
+    onSelect() {
+      screenStore.setScreen('config')
+    },
+  },
+  {
+    label: 'Statistics',
+    onSelect() {
+      screenStore.setScreen('server')
+    },
+  },
+  {
+    label: 'System',
+    onSelect() {
+      screenStore.setScreen('system')
+    },
+  }
+])
+
 </script>
 
 <template>
-<header class="border-b animate-fade-down animate-once" style="background-color: var(--background-color); border-color: var(--border-color);">
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
-    <div class="flex flex-row gap-2 text-pink-300 sm:mb-0 text-2xl font-bold">
-      <img src="../../assets/airplane.png" alt="airplane" width="60">
-      <div>{{ appConfig.title }}</div>
-    </div>
+  <UHeader>
+    <template #title>
+      <div class="flex flex-row items-center gap-4">
+        <img src="../../assets/airplane.png" alt="logo" width="60">
+        <span class="text-2xl text-primary font-bold">Flare</span>
+      </div>
+    </template>
 
-    <div v-if="statusStore.status === 'ready'" class="flex items-center justify-center text-lg underline space-x-6 text-gray-400">
-      <!-- Add buttons -->
-      <span @click="screenStore.setScreen('profiler')" :class="['cursor-pointer duration-200', screenStore.screen === 'profiler' ? 'text-pink-200' : 'hover:text-white']">
-        Profiler
-      </span>
-      <span @click="screenStore.setScreen('config')" :class="['cursor-pointer duration-200', screenStore.screen === 'config' ? 'text-pink-200' : 'hover:text-white']">
-        Configs
-      </span>
-      <span @click="screenStore.setScreen('server')" :class="['cursor-pointer duration-200', screenStore.screen === 'server' ? 'text-pink-200' : 'hover:text-white']">
-        Server
-      </span>
-      <span @click="screenStore.setScreen('system')" :class="['cursor-pointer duration-200', screenStore.screen === 'system' ? 'text-pink-200' : 'hover:text-white']">
-        System
-      </span>
-    </div>
-  </div>
-</header>
+    <UNavigationMenu v-if="statusStore.status === 'ready'" :items="items" />
+
+    <template #right>
+      <UColorModeSwitch />
+    </template>
+  </UHeader>
 </template>
 
 <style scoped>

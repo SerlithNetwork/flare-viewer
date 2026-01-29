@@ -103,32 +103,32 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col min-w-fit border-l border-gray-500 ml-2">
-    <div class="flex justify-between items-center text-sm min-w-fit hover:bg-(--profiler-child-hover-color) ml-2">
+    <div class="flex justify-between items-center text-sm min-w-fit hover:bg-accented ml-2">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
-        <FontAwesomeIcon class="text-gray-600" :class="collapsedStyle" :icon="faCircleChevronRight" />
+        <FontAwesomeIcon class="text-dimmed" :class="collapsedStyle" :icon="faCircleChevronRight" />
         <div v-if="definition.methodType === 'java'" class="flex flex-row">
-          <span class="text-gray-500">{{ definition.javaPackageName }}.</span>
-          <span class="text-gray-200">{{ definition.javaClassName }}.</span>
-          <span class="text-blue-200">{{ definition.javaMethodName }}</span>
+          <span class="text-dimmed">{{ definition.javaPackageName }}.</span>
+          <span class="text-muted">{{ definition.javaClassName }}.</span>
+          <span class="text-secondary">{{ definition.javaMethodName }}</span>
 
           <span class="group relative text-blue-200 cursor-pointer">
-            (<span class="hidden group-hover:inline text-gray-500">{{ definition.javaArguments }}</span>)
-            <span class="hidden group-hover:inline text-gray-500">{{ definition.javaReturn }}</span>
+            (<span class="hidden group-hover:inline text-dimmed">{{ definition.javaArguments }}</span>)
+            <span class="hidden group-hover:inline text-dimmed">{{ definition.javaReturn }}</span>
           </span>
         </div>
         <div v-else >
-          <span class="text-gray-500">{{ definition.otherPath }}</span>
-          <span class="text-gray-600"> ({{ definition.methodType }})</span>
+          <span class="text-dimmed">{{ definition.otherPath }}</span>
+          <span class="text-default"> ({{ definition.methodType }})</span>
         </div>
-        <span class="text-pink-300">({{ nodePercentageString }})</span>
-        <span class="text-gray-500">{{ nodeUsage }}</span>
+        <span class="text-primary">({{ nodePercentageString }})</span>
+        <span class="text-dimmed">{{ nodeUsage }}</span>
         <span v-if="nodePlugin !== ''" class="text-amber-500">({{ nodePlugin }})</span>
       </div>
       <div class="min-w-24 mr-2 hidden xl:block">
-        <ToolPercentageBar :percentage="nodePercentage" :loaded="nodeColor" rest="bg-gray-700" class="max-h-2" />
+        <ToolPercentageBar :percentage="nodePercentage" :loaded="nodeColor" rest="bg-toned" class="max-h-2" />
       </div>
     </div>
-    <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-(--profiler-child-color) ml-2">
+    <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-elevated ml-2">
       <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" :siblings="nodeTimeChildren" />
       <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" :siblings="nodeMemoryChildren" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="parentTime!" :childrenTime="nodeTimeChildren" :rootTime="rootTime" />

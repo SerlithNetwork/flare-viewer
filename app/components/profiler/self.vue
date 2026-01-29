@@ -50,12 +50,12 @@ const selfPercentageString: ComputedRef<string> = computed(() => formatPercentag
 </script>
 
 <template>
-  <div v-if="diff !== 0" class="flex justify-between items-center text-sm min-w-fit hover:bg-(--profiler-child-hover-color) border-l border-gray-500 ml-2">
+  <div v-if="diff !== 0" class="flex justify-between items-center text-sm min-w-fit hover:bg-accented border-l border-gray-500 ml-2">
     <div class="flex flex-row items-center gap-2 ml-2 cursor-default">
       <FontAwesomeIcon class="text-gray-600" :icon="faCircle" />
-      <span class="text-gray-500">self</span>
-      <span class="text-pink-300">({{ selfPercentageString }})</span>
-      <span class="text-gray-500">{{ selfUsage }}</span>
+      <span class="text-toned">self</span>
+      <span class="text-primary">({{ selfPercentageString }})</span>
+      <span class="text-dimmed">{{ selfUsage }}</span>
     </div>
     <div class="min-w-24 mr-2 hidden xl:block">
       <ToolPercentageBar :percentage="selfPercentage" :loaded="selfColor" rest="bg-gray-700" class="max-h-2" />

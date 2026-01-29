@@ -21,13 +21,15 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: var(--background-color)">
-    <div class="flex flex-col grow">
-      <WebsiteHeader/>
-      <main>
-        <NuxtPage/>
-      </main>
-      <WebsiteFooter/>
-    </div>
-  </div>
+  <UApp>
+    <WebsiteHeader />
+
+    <UMain>
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </UMain>
+
+    <WebsiteFooter />
+  </UApp>
 </template>

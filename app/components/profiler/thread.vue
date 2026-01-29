@@ -63,25 +63,24 @@ function onClick() {
 
 <template>
   <div class="flex flex-col min-w-full">
-    <div class="flex justify-between items-center min-w-full py-1.5 px-2 text-sm bg-(--profiler-top-color) rounded-lg hover:bg-(--profiler-top-hover-color)">
+    <div class="flex justify-between items-center min-w-full py-1.5 px-2 text-sm bg-default rounded-lg hover:bg-muted">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
-        <FontAwesomeIcon class="text-gray-600" :class="collapsed" :icon="faCircleChevronRight" />
-        <span class="text-gray-200">{{ threadName }}</span>
-        <span class="text-pink-300">(100%)</span>
-        <span class="text-gray-500">{{ threadUsage }}</span>
+        <FontAwesomeIcon class="text-dimmed" :class="collapsed" :icon="faCircleChevronRight" />
+        <span class="text-toned">{{ threadName }}</span>
+        <span class="text-primary">(100%)</span>
+        <span class="text-dimmed">{{ threadUsage }}</span>
       </div>
       <div class="min-w-24 hidden xl:block">
         <ToolPercentageBar :percentage="1.0" :loaded="threadColor" rest="bg-gray-700" />
       </div>
     </div>
-    <div v-if="collapsed !== ''" class="bg-(--profiler-child-color) ml-2">
+    <div v-if="collapsed !== ''" class="bg-elevated ml-2">
       <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" :siblings="threadTimeChildren" />
       <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" :siblings="threadMemoryChildren" />
       <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="timeProfile!.time" :childrenTime="timeProfile!.children" :rootTime="timeProfile!.time" />
       <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="memoryProfile!.bytes" :childrenBytes="memoryProfile!.children" :rootBytes="memoryProfile!.bytes" />
     </div>
   </div>
-
 </template>
 
 <style scoped>

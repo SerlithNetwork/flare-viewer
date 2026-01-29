@@ -101,173 +101,187 @@ const unknownEvents = computed(() => summary.value.events.entries().filter((entr
 
 <template>
   <div v-if="eventCount === 0" class="flex flex-col items-center justify-center min-h-36 min-w-[80%] m-8 max-w-sm p-6 gap-6 rounded-lg shadow-sm" style="background-color: var(--surface-color)">
-    <span class="text-white text-3xl md:text-4xl font-bold">Nothing to report</span>
+    <span class="text-default text-3xl md:text-4xl font-bold">Nothing to report</span>
   </div>
   <div v-else class="flex flex-col items-center min-w-fit m-8 max-w-sm gap-6">
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Performance Metrics</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:tps')!"
-                   :categories="categories.get('airplane:tps')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:tps')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:mspt')!"
-                   :categories="categories.get('airplane:mspt')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:mspt')!"
-        />
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Performance Metrics</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:tps')!"
+                     :categories="categories.get('airplane:tps')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:tps')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:mspt')!"
+                     :categories="categories.get('airplane:mspt')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:mspt')!"
+          />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Resource Utilisation</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:stat:cpu_process')!"
-                   :categories="categories.get('builtin:stat:cpu_process')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:stat:cpu_process')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:stat:cpu')!"
-                   :categories="categories.get('builtin:stat:cpu')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:stat:cpu')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:stat:memory_used')!"
-                   :categories="categories.get('builtin:stat:memory_used')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:stat:memory_used')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:stat:memory_total')!"
-                   :categories="categories.get('builtin:stat:memory_total')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:stat:memory_total')!"
-        />
+    </UCard>
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Resource Utilisation</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:stat:cpu_process')!"
+                     :categories="categories.get('builtin:stat:cpu_process')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:stat:cpu_process')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:stat:cpu')!"
+                     :categories="categories.get('builtin:stat:cpu')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:stat:cpu')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:stat:memory_used')!"
+                     :categories="categories.get('builtin:stat:memory_used')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:stat:memory_used')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:stat:memory_total')!"
+                     :categories="categories.get('builtin:stat:memory_total')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:stat:memory_total')!"
+          />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">World Resources</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:world:playercount')!"
-                   :categories="categories.get('airplane:world:playercount')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:world:playercount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:world:entitycount')!"
-                   :categories="categories.get('airplane:world:entitycount')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:world:entitycount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:world:blockentitycount')!"
-                   :categories="categories.get('airplane:world:blockentitycount')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:world:blockentitycount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('airplane:world:chunkcount')!"
-                   :categories="categories.get('airplane:world:chunkcount')!"
-                   :height="300"
-                   :yLabel="labels.get('airplane:world:chunkcount')!"
-        />
+    </UCard>
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">World Resources</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:world:playercount')!"
+                     :categories="categories.get('airplane:world:playercount')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:world:playercount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:world:entitycount')!"
+                     :categories="categories.get('airplane:world:entitycount')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:world:entitycount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:world:blockentitycount')!"
+                     :categories="categories.get('airplane:world:blockentitycount')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:world:blockentitycount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('airplane:world:chunkcount')!"
+                     :categories="categories.get('airplane:world:chunkcount')!"
+                     :height="300"
+                     :yLabel="labels.get('airplane:world:chunkcount')!"
+          />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Network Metrics</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('flare:network:outpacketcount')!"
-                   :categories="categories.get('flare:network:outpacketcount')!"
-                   :height="300"
-                   :yLabel="labels.get('flare:network:outpacketcount')!"
-        />
+    </UCard>
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Network Metrics</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('flare:network:outpacketcount')!"
+                     :categories="categories.get('flare:network:outpacketcount')!"
+                     :height="300"
+                     :yLabel="labels.get('flare:network:outpacketcount')!"
+          />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Garbage Collections</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.events.get('builtin:gc:minor')!"
-                   :categories="categories.get('builtin:gc:minor')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:gc:minor')!"
-                   :curve-type="CurveType.Step"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.events.get('builtin:gc:generic')!"
-                   :categories="categories.get('builtin:gc:generic')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:gc:generic')!"
-                   :curve-type="CurveType.Step"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.events.get('builtin:gc:major')!"
-                   :categories="categories.get('builtin:gc:major')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:gc:major')!"
-                   :curve-type="CurveType.Step"
-        />
+    </UCard>
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Garbage Collections</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.events.get('builtin:gc:minor')!"
+                     :categories="categories.get('builtin:gc:minor')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:gc:minor')!"
+                     :curve-type="CurveType.Step"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.events.get('builtin:gc:generic')!"
+                     :categories="categories.get('builtin:gc:generic')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:gc:generic')!"
+                     :curve-type="CurveType.Step"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.events.get('builtin:gc:major')!"
+                     :categories="categories.get('builtin:gc:major')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:gc:major')!"
+                     :curve-type="CurveType.Step"
+          />
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Thread Utilisation</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:thread:threadcount')!"
-                   :categories="categories.get('builtin:thread:threadcount')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:thread:threadcount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:thread:schedulercount')!"
-                   :categories="categories.get('builtin:thread:schedulercount')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:thread:schedulercount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:thread:daemoncount')!"
-                   :categories="categories.get('builtin:thread:daemoncount')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:thread:daemoncount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:thread:startedcount')!"
-                   :categories="categories.get('builtin:thread:startedcount')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:thread:startedcount')!"
-        />
-        <AreaChart class="w-[70vh]"
-                   :data="summary.metrics.get('builtin:thread:peakcount')!"
-                   :categories="categories.get('builtin:thread:peakcount')!"
-                   :height="300"
-                   :yLabel="labels.get('builtin:thread:peakcount')!"
-        />
+    </UCard>
+    <UCard class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Thread Utilisation</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:thread:threadcount')!"
+                     :categories="categories.get('builtin:thread:threadcount')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:thread:threadcount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:thread:schedulercount')!"
+                     :categories="categories.get('builtin:thread:schedulercount')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:thread:schedulercount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:thread:daemoncount')!"
+                     :categories="categories.get('builtin:thread:daemoncount')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:thread:daemoncount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:thread:startedcount')!"
+                     :categories="categories.get('builtin:thread:startedcount')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:thread:startedcount')!"
+          />
+          <AreaChart class="w-[70vh]"
+                     :data="summary.metrics.get('builtin:thread:peakcount')!"
+                     :categories="categories.get('builtin:thread:peakcount')!"
+                     :height="300"
+                     :yLabel="labels.get('builtin:thread:peakcount')!"
+          />
+        </div>
       </div>
-    </div>
-    <div v-if="unknownMetrics.length + unknownEvents.length > 0" class="flex flex-col items-center w-full rounded-lg shadow-sm gap-4 p-6" style="background-color: var(--surface-color)">
-      <span class="text-3xl font-bold">Other Metrics</span>
-      <div class="flex flex-wrap justify-around w-full gap-4">
-        <AreaChart v-for="metric in unknownMetrics" class="w-[70vh]"
-                   :data="metric[1]"
-                   :categories="{ value: { name: metric[0], color: '#ffffff' } }"
-                   :height="300"
-                   :yLabel="metric[0]"
-        />
-        <AreaChart v-for="event in unknownEvents" class="w-[70vh]"
-                   :data="event[1]"
-                   :categories="{ value: { name: event[0], color: '#ffffff' } }"
-                   :height="300"
-                   :yLabel="event[0]"
-        />
+    </UCard>
+    <UCard v-if="unknownMetrics.length + unknownEvents.length > 0" class="flex flex-col w-full shadow-sm" >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Other Metrics</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart v-for="metric in unknownMetrics" class="w-[70vh]"
+                     :data="metric[1]"
+                     :categories="{ value: { name: metric[0], color: '#ffffff' } }"
+                     :height="300"
+                     :yLabel="metric[0]"
+          />
+          <AreaChart v-for="event in unknownEvents" class="w-[70vh]"
+                     :data="event[1]"
+                     :categories="{ value: { name: event[0], color: '#ffffff' } }"
+                     :height="300"
+                     :yLabel="event[0]"
+          />
+        </div>
       </div>
-    </div>
+    </UCard>
   </div>
 </template>
 

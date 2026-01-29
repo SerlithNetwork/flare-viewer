@@ -7,4 +7,10 @@ export default defineAppConfig({
 
     holder: "Serlith Network",
     url: "https://flare.serlith.net/",
+
+    ui: {
+        colors: {
+            primary: 'pink'
+        }
+    }
 })
