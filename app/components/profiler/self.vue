@@ -52,7 +52,7 @@ const selfPercentageString: ComputedRef<string> = computed(() => formatPercentag
 <template>
   <div v-if="diff !== 0" class="flex justify-between items-center text-sm min-w-fit hover:bg-accented border-l border-gray-500 ml-2">
     <div class="flex flex-row items-center gap-2 ml-2 cursor-default">
-      <FontAwesomeIcon class="text-gray-600" :icon="faCircle" />
+      <FontAwesomeIcon class="text-dimmed" :icon="faCircle" />
       <span class="text-toned">self</span>
       <span class="text-primary">({{ selfPercentageString }})</span>
       <span class="text-dimmed">{{ selfUsage }}</span>
