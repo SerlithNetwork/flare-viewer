@@ -96,13 +96,13 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="statusStore.status === 'error'" class="flex flex-col items-center text-white">
+  <div v-if="statusStore.status === 'error'" class="flex flex-col items-center text-default">
     <WebsiteNotFound />
   </div>
-  <div v-else-if="statusStore.status === 'loading'" class="flex flex-col items-center text-white">
+  <div v-else-if="statusStore.status === 'loading'" class="flex flex-col items-center text-default">
     <ToolLoading message="Loading..." />
   </div>
-  <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-white">
+  <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-default">
     <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples!" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
     <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples!" class="animate-fade-left" />
