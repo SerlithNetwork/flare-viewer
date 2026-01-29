@@ -124,13 +124,13 @@ const flags = vmOptions.flags.join(" ")
         </UCard>
       </div>
     </div>
-    <UCard class="min-h-64 w-[60%] m-8 p-6" >
+    <UCard class="min-h-64 w-fit m-8 p-6" >
       <div class="flex flex-col w-full gap-4 rounded-lg">
         <div class="flex flex-row gap-4 items-center text-2xl font-bold">
           <FontAwesomeIcon :icon="faTerminal" class="text-primary" />
           <span class="text-default">Flags</span>
         </div>
-        <span class="text-dimmed">{{ flags }}</span>
+        <span class="text-dimmed text-wrap">{{ flags }}</span>
       </div>
     </UCard>
   </div>

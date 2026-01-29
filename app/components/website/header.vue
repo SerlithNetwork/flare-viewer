@@ -4,7 +4,6 @@ import {useProfilerScreenStore} from "~/store/profiler-screen-store";
 import {useProfilerStatusStore} from "~/store/status-store";
 import type {NavigationMenuItem} from "#ui/components/NavigationMenu.vue";
 
-const appConfig = useAppConfig();
 const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 

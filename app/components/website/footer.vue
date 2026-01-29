@@ -14,17 +14,17 @@ onMounted(() => {
 
 const items: NavigationMenuItem[] = [
   {
-    icon: "uil:discord",
+    icon: "i-simple-icons-discord",
     to: 'https://discord.serlith.net',
     target: '_blank',
   },
   {
-    icon: "uil:github",
+    icon: "i-simple-icons-github",
     to: 'https://github.com/SerlithNetwork/flare-viewer',
     target: '_blank',
   },
   {
-    icon: "uil:at",
+    icon: "i-lucide-newspaper",
     to: 'https://blog.biquaternions.me',
     target: '_blank',
   },

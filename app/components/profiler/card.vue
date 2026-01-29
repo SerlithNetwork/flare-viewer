@@ -15,7 +15,7 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
 </script>
 
 <template>
-  <UCard class="flex flex-col min-h-6 min-w-[90%] m-8 max-w-sm" >
+  <div class="flex flex-col min-h-6 min-w-[90%] m-8 max-w-sm" >
     <div class="flex flex-col w-full gap-4">
       <div class="flex flex-row justify-between items-center w-full px-8">
         <div class="flex gap-4">
@@ -28,7 +28,7 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
         <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" :key="thread.thread" mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
       </div>
     </div>
-  </UCard>
+  </div>
 </template>
 
 <style scoped>
