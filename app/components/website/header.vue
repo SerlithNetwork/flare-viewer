@@ -38,7 +38,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 </script>
 
 <template>
-  <UHeader>
+  <UHeader mode="slideover">
     <template #title>
       <div class="flex flex-row items-center gap-4">
         <img src="../../assets/airplane.png" alt="logo" width="60">
@@ -51,6 +51,11 @@ const items = computed<NavigationMenuItem[]>(() => [
     <template #right>
       <UColorModeSwitch />
     </template>
+
+    <template #body>
+      <UNavigationMenu v-if="statusStore.status === 'ready'" :items="items" orientation="vertical" class="-mx-2.5" />
+    </template>
+
   </UHeader>
 </template>
 
