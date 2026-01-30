@@ -104,7 +104,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col min-w-fit border-l border-gray-500 ml-2">
     <div class="flex justify-between items-center text-sm min-w-fit hover:bg-accented ml-2">
-      <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
+      <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer text-nowrap">
         <FontAwesomeIcon class="text-dimmed" :class="collapsedStyle" :icon="faCircleChevronRight" />
         <div v-if="definition.methodType === 'java'" class="flex flex-row">
           <span class="text-dimmed">{{ definition.javaPackageName }}.</span>
