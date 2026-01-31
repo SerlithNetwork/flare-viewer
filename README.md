@@ -1,10 +1,6 @@
 
 # flare-viewer
 
-> [!WARNING]
-> flare-viewer is still under development and is not in a usable state \
-> At the moment of writing this, most of the features are missing
-
 An unofficial re-creation of the original [Flare](https://blog.airplane.gg/flare/) viewer
 
 
@@ -17,7 +13,7 @@ Features:
 1. CPU and Memory timings for all threads
 2. Display server configurations
 3. Display system information
-4. Display jvm events and server status
+4. Display jvm and server statistics
 
 ### Setting up the project
 
@@ -46,7 +42,7 @@ Then run it using
 ### Supported Backends
 Flare viewer was designed to work on pair with [Jet](https://github.com/SerlithNetwork/Jet). \
 Since the Flare protocol expects a single endpoint for both submitting data and using the web-ui, it is
-highly recommended to use a reverse proxy like Nginx to forward the requests accordingly.
+highly recommended to use a reverse proxy like Nginx or Caddy to forward the requests accordingly.
 
 ### Client
 Flare viewer is compatible with any platform that provides [Flare](https://github.com/TECHNOVE/Flare)
