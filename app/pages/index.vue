@@ -3,12 +3,14 @@
 </script>
 
 <template>
-<div class="flex flex-col items-center animate-fade-up animate-once">
-  <div class="flex flex-wrap justify-center gap-16 items-center p-64 max-w-full">
+  <UPageHero
+      title="Flare"
+      orientation="horizontal"
+      description="The Minecraft thread and allocation profiler revitalized"
+      reverse
+  >
     <img src="~/assets/airplane.png" alt="airplane">
-    <h1 class="text-default text-6xl md:text-9xl font-bold">Flare</h1>
-  </div>
-</div>
+  </UPageHero>
 </template>
 
 <style scoped>
