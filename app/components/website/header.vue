@@ -13,24 +13,28 @@ const items = computed<NavigationMenuItem[]>(() => [
     onSelect() {
       screenStore.setScreen('profiler')
     },
+    active: screenStore.screen === 'profiler'
   },
   {
     label: 'Configurations',
     onSelect() {
       screenStore.setScreen('config')
     },
+    active: screenStore.screen === 'config'
   },
   {
     label: 'Statistics',
     onSelect() {
       screenStore.setScreen('server')
     },
+    active: screenStore.screen === 'server'
   },
   {
     label: 'System',
     onSelect() {
       screenStore.setScreen('system')
     },
+    active: screenStore.screen === 'system'
   }
 ])
 
