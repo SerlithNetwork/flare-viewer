@@ -58,7 +58,7 @@ const selfPercentageString: ComputedRef<string> = computed(() => formatPercentag
       <span class="text-dimmed">{{ selfUsage }}</span>
     </div>
     <div class="min-w-24 mr-2 hidden xl:block">
-      <ToolPercentageBar :percentage="selfPercentage" :loaded="selfColor" rest="bg-gray-700" class="max-h-2" />
+      <ToolPercentageBar :percentage="selfPercentage" :loaded="selfColor" rest="bg-toned" class="max-h-2" />
     </div>
   </div>
 </template>

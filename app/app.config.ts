@@ -5,12 +5,18 @@ export default defineAppConfig({
     image: "img/logo.png",
     color: "#FD81B7",
 
+    repository: "https://github.com/SerlithNetwork/flare-viewer",
+    discord: "https://discord.serlith.net",
+    blog: "https://blog.biquaternions.me",
+
+    flare: "https://github.com/SerlithNetwork/FlarePlatform",
+
     holder: "Serlith Network",
     url: "https://flare.serlith.net/",
 
     ui: {
         colors: {
-            primary: 'pink'
+            primary: "pink"
         }
-    }
+    },
 })
