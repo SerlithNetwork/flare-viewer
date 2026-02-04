@@ -1,10 +1,8 @@
 <script setup lang="ts">
 
 import {useProfilerScreenStore} from "~/store/profiler-screen-store";
-import type {FlareProfile} from "~/types/profiler";
 import {CreateProfile, AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
 import {b64UnzipBytes} from "~/util/binary-utils";
-import { io } from 'socket.io-client';
 import {useProfilerStatusStore} from "~/store/status-store";
 
 
@@ -15,65 +13,54 @@ const config = useRuntimeConfig()
 const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 
-const profile = ref<CreateProfile | null>(null)
-const dataSamples = ref<AirplaneProfileFile[] | null>([])
-const timelineSamples = ref<TimelineFile[] | null>([])
+const profile = ref<CreateProfile | undefined>(undefined)
+const dataSamples = ref<AirplaneProfileFile[]>([])
+const timelineSamples = ref<TimelineFile[]>([])
 
-async function fallbackToProfilerEnded() {
+const dataSource = ref<EventSource | undefined>(undefined)
+const timelineSource = ref<EventSource | undefined>(undefined)
 
-  const { error, data } = await useFetch<FlareProfile>(`${config.public.apiBackendUrl}/api/profiler/${id}`)
-
-  if (error.value) {
-    statusStore.status = "error"
-  } else if (!data.value) {
-    statusStore.status = "error"
-  } else {
-    profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value.raw));
-    dataSamples.value = data.value.dataSamples.map(i => AirplaneProfileFile.fromBinary(b64UnzipBytes(i)))
-    timelineSamples.value = data.value.timelineSamples.map(i => TimelineFile.fromBinary(b64UnzipBytes(i)))
-    statusStore.status = "ready"
-  }
-
-}
-
-onMounted(() => {
-  const socketUri = new URL(config.public.wsBackendUrl)
-  socketUri.searchParams.set("key", id!.toString())
-
-  const socket = io(socketUri.toString(), {
-    transports: ["websocket"],
-    upgrade: false,
-    reconnection: false,
-    timeout: 10000,
-  });
-
-  socket.on("connect_error", () => {
-    socket.disconnect();
-    console.log("Profiler probably done, attempting to fetch via REST")
-    fallbackToProfilerEnded();
-  });
-
-  socket.once("airplane_profiler", async (profiler: { payload: string }) => {
-    profile.value = CreateProfile.fromBinary(b64UnzipBytes(profiler.payload));
-    statusStore.status = "ready"
-  })
-
-  socket.on("airplane_data", async (data: { payload: string }) => {
-    if (dataSamples.value === null) {
-      dataSamples.value = []
-    }
-    dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(data.payload)));
-  })
-
-  socket.on("airplane_timeline", async (timeline: { payload: string }) => {
-    if (timelineSamples.value === null) {
-      timelineSamples.value = []
-    }
-    timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(timeline.payload)));
-  })
-
+const { data, error } = useFetch<string>(`${config.public.apiBackendUrl}/api/profiler/${id}`, {
+  method: "get",
 })
 
+onMounted(() => {
+  watchEffect(async () => {
+
+    if (error.value) {
+      statusStore.status = "error"
+    }
+
+    if (data.value) {
+      profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value))
+
+      dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/data/${id}`)
+      dataSource.value.onmessage = (event: MessageEvent<string>) => {
+        dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data)))
+      }
+      dataSource.value.addEventListener("flare$terminated", () => {
+        dataSource.value?.close()
+      })
+
+      timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/timeline/${id}`)
+      timelineSource.value.onmessage = (event: MessageEvent<string>) => {
+        timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
+      }
+      timelineSource.value.addEventListener("flare$terminated", () => {
+        timelineSource.value?.close()
+      })
+
+      statusStore.status = "ready"
+    }
+
+  })
+})
+
+
+onUnmounted(() => {
+  dataSource.value?.close()
+  timelineSource.value?.close()
+})
 
 
 useSeoMeta({
@@ -103,9 +90,9 @@ useSeoMeta({
     <ToolLoading message="Loading..." />
   </div>
   <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-default">
-    <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples!" class="animate-fade-left" />
+    <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
-    <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples!" class="animate-fade-left" />
+    <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples" class="animate-fade-left" />
     <SystemCard v-if="screenStore.screen === 'system'" :hwInfo="profile!.hwinfo!" :os="profile!.os!" :vmOptions="profile!.vmoptions!" :v3="profile!.v3!" class="animate-fade-left" />
   </div>
 </template>
