@@ -38,7 +38,7 @@ onMounted(() => {
       dataSource.value.onmessage = (event: MessageEvent<string>) => {
         dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data)))
       }
-      dataSource.value.addEventListener("jet$terminated", () => {
+      dataSource.value.addEventListener("flare$terminated", () => {
         dataSource.value?.close()
       })
 
@@ -46,7 +46,7 @@ onMounted(() => {
       timelineSource.value.onmessage = (event: MessageEvent<string>) => {
         timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
       }
-      timelineSource.value.addEventListener("jet$terminated", () => {
+      timelineSource.value.addEventListener("flare$terminated", () => {
         timelineSource.value?.close()
       })
 
