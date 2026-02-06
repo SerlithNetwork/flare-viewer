@@ -60,7 +60,7 @@ export interface ChartNode {
 export interface ChartData {
     height: number;
     levels: number[][];
-    nodes: { // @ts-ignore
+    nodes: {
         [uid: number]: ChartNode
     };
     root: number;

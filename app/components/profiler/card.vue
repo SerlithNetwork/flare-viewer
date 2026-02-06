@@ -3,6 +3,7 @@
 import {AirplaneProfileFile, type MemoryProfileV2, type TimeProfileV2} from "~/proto/ProfileFile_pb";
 import {mergeAirplaneFile, mergeDictionarySlices} from "~/util/merge-utils";
 import type {ContextMenuItem} from "#ui/components/ContextMenu.vue";
+import type {AbstractNode} from "~/types/profiler";
 
 const { dataSamples } = defineProps<{ dataSamples: AirplaneProfileFile[] }>()
 const profilerType = ref<"cpu" | "memory">("cpu")
@@ -15,7 +16,7 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
 
 const flameShown = ref(false)
 const flameThread = ref("")
-const flameProfile = ref<TimeProfileV2 | MemoryProfileV2 | undefined>(undefined)
+const flameProfile = ref<AbstractNode | undefined>(undefined)
 const items = ref<ContextMenuItem[][]>([
     [
       {
@@ -28,13 +29,22 @@ const items = ref<ContextMenuItem[][]>([
     ]
 ])
 
-function onThreadSelected(profile: TimeProfileV2 | MemoryProfileV2) {
+function onTimeThreadSelected(profile: TimeProfileV2) {
   if (flameThread.value === profile.thread) {
     return
   }
 
   flameThread.value = profile.thread
-  flameProfile.value = profile
+  flameProfile.value = { node: profile, type: "time" }
+}
+
+function onMemoryThreadSelected(profile: MemoryProfileV2) {
+  if (flameThread.value === profile.thread) {
+    return
+  }
+
+  flameThread.value = profile.thread
+  flameProfile.value = { node: profile, type: "memory" }
 }
 
 </script>
@@ -49,17 +59,17 @@ function onThreadSelected(profile: TimeProfileV2 | MemoryProfileV2) {
         </div>
       </div>
       <div class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
-        <UContextMenu v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" :items="items" @update:open="onThreadSelected(thread)" >
+        <UContextMenu v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" :items="items" @update:open="onTimeThreadSelected(thread)" >
           <ProfilerThread mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
         </UContextMenu>
-        <UContextMenu v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" :key="thread.thread" :items="items" @update:open="onThreadSelected(thread)">
+        <UContextMenu v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" :key="thread.thread" :items="items" @update:open="onMemoryThreadSelected(thread)">
           <ProfilerThread mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
         </UContextMenu>
       </div>
     </div>
   </div>
   <UModal fullscreen v-model:open="flameShown" :title="flameThread" close-icon="i-lucide-corner-up-right" >
-    <FlameCard />
+    <FlameCard :node="flameProfile!" :dictionary="dictionary" />
   </UModal>
 </template>
 

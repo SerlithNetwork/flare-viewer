@@ -1,9 +1,14 @@
 <script setup lang="ts">
 
 import {type ChartData, type ChartNode, constant, type ItemData, type RawData} from "~/types/flame";
+import type {
+  MemoryProfileV2,
+  TimeProfileV2,
+} from "~/proto/ProfileFile_pb";
 
 type Props = {
   data: ChartData;
+  profile: TimeProfileV2 | MemoryProfileV2;
   disableDefaultTooltips?: boolean;
   height: number;
   width: number;
