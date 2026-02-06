@@ -17,6 +17,9 @@ export default defineAppConfig({
     ui: {
         colors: {
             primary: "pink"
-        }
+        },
+        main: {
+            base: 'min-h-[calc(90vh-var(--ui-header-height))]'
+        },
     },
 })
