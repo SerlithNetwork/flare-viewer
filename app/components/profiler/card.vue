@@ -55,7 +55,10 @@ function onMemoryThreadSelected(profile: MemoryProfileV2) {
           <UButton icon="i-lucide-memory-stick" size="xl" color="secondary" class="font-bold text-lg" @click="profilerType = 'memory'" :variant="profilerType === 'memory' ? 'solid' : 'outline'" >Memory</UButton>
         </div>
       </div>
-      <div class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
+      <div v-if="airplaneData.timeProfile.length === 0 || airplaneData.memoryProfile.length === 0" class="flex flex-col gap-1" >
+        <USkeleton v-for="i in 25" :key="i" class="h-6 w-full" />
+      </div>
+      <div v-else class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
         <UContextMenu v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" :items="items" @update:open="onTimeThreadSelected(thread)" >
           <ProfilerThread mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
         </UContextMenu>
