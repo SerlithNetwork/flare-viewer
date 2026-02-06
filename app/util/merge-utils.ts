@@ -12,6 +12,145 @@ import type {
     TimeProfileV2Children
 } from "~/types/protos";
 
+export interface Sample {
+    threads: Thread[];
+}
+
+export type Thread = {
+    name: string;
+    nodes: Node[];
+    unit: number;
+    plugins: Set<string>;
+}
+
+export type Node = {
+    children: Node[];
+    name: number;
+    unit: number;
+    plugin: string;
+}
+
+
+
+
+
+export interface CollectedTimeThread {
+    name: string;
+    time: number;
+    nodes: CollectedTimeNode[];
+    plugins: Set<string>;
+}
+
+export interface CollectedMemoryThread {
+    name: string;
+    bytes: number;
+    nodes: CollectedMemoryNode[];
+    plugins: Set<string>;
+}
+
+export interface CollectedTimeNode {
+    name: number;
+    time: number;
+    children: CollectedTimeNode[];
+    plugins: Set<string>;
+}
+
+export interface CollectedMemoryNode {
+    name: number;
+    bytes: number;
+    children: CollectedMemoryNode[];
+    plugins: Set<string>;
+}
+
+
+interface TimeThreadAccumulator {
+    name: string;
+    time: number;
+    nodes: Map<number, TimeNodeAccumulator>;
+    plugins: Set<string>;
+}
+
+interface TimeNodeAccumulator {
+    name: number;
+    time: number;
+    children: Map<number, TimeNodeAccumulator>;
+    plugins: Set<string>;
+}
+
+interface MemoryThreadAccumulator {
+    name: string;
+    time: number;
+    nodes: Map<number, TimeNodeAccumulator>;
+    plugins: Set<string>;
+}
+
+interface MemoryNodeAccumulator {
+    name: number;
+    time: number;
+    children: Map<number, TimeNodeAccumulator>;
+    plugins: Set<string>;
+}
+
+export function mergeAirplaneSample(
+    sample: AirplaneProfileFile,
+    threads: Map<string, TimeThreadAccumulator>,
+    plugins: Set<string>
+) {
+
+    for (const thread of sample.v2!.timeProfile) {
+        let accumulator = threads.get(thread.thread)
+
+        if (!accumulator) {
+            accumulator = {
+                name: thread.thread,
+                time: 0,
+                nodes: new Map(),
+                plugins: new Set(),
+            }
+            threads.set(thread.thread, accumulator)
+        }
+
+        accumulator.time += thread.time
+        mergeAirplaneNodes(thread.children, accumulator.nodes, accumulator.plugins, plugins)
+    }
+}
+
+export function mergeAirplaneNodes(
+    incomingNodes: TimeProfileV2_Children[],
+    parentNodes: Map<number, TimeNodeAccumulator>,
+    threadPlugins: Set<string>,
+    plugins: Set<string>
+) {
+
+    for (const node of incomingNodes) {
+        let accumulator = parentNodes.get(node.name)
+
+        if (!accumulator) {
+            accumulator = {
+                name: node.name,
+                time: 0,
+                children: new Map(),
+                plugins: new Set(),
+            }
+            parentNodes.set(node.name, accumulator)
+        }
+
+        accumulator.time += node.time
+        if (node.plugin) {
+            accumulator.plugins.add(node.plugin)
+            threadPlugins.add(node.plugin)
+            plugins.add(node.plugin)
+        }
+
+        mergeAirplaneNodes(node.children, accumulator.children, threadPlugins, plugins)
+        for (const pl of accumulator.children.values()) {
+            pl.plugins.forEach(p => accumulator.plugins.add(p))
+        }
+
+    }
+}
+
+
 export function mergeAirplaneFile(samples: AirplaneProfileFile[]): AirplaneProfileFileV2Data {
     const dictionary: MethodDictionarySlice[] = [];
     const timeMap = new Map<string, TimeProfileV2>();
