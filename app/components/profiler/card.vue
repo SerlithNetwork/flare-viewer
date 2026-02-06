@@ -23,7 +23,7 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
           <UButton icon="i-lucide-memory-stick" size="xl" color="secondary" class="font-bold text-lg" @click="profilerType = 'memory'" :variant="profilerType === 'memory' ? 'solid' : 'outline'" >Memory</UButton>
         </div>
       </div>
-      <div class="flex flex-col items-start w-full rounded-lg">
+      <div class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
         <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
         <ProfilerThread v-if="profilerType === 'memory'" v-for="thread in airplaneData.memoryProfile" :key="thread.thread" mode="memory" :dictionary="dictionary" :memoryProfile="thread" />
       </div>
