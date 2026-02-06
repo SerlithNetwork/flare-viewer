@@ -24,7 +24,7 @@ const dictionary = computed(() => mergeDictionarySlices(airplaneData.value.dicti
         </div>
       </div>
       <div v-if="airplaneData.timeProfile.length === 0 || airplaneData.memoryProfile.length === 0" class="flex flex-col gap-1" >
-        <USkeleton v-for="i in 25" :key="i" class="h-6 w-full" />
+        <USkeleton v-for="i in 20" :key="i" class="h-6 w-full" />
       </div>
       <div v-else class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
         <ProfilerThread v-if="profilerType === 'cpu'" v-for="thread in airplaneData.timeProfile" :key="thread.thread" mode="cpu" :dictionary="dictionary" :timeProfile="thread" />
