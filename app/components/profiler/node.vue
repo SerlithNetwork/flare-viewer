@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
-import type {MethodDefinition, MethodDictionary} from "~/types/protos";
+import type {MethodDefinition, MethodDictionary, NodeAccumulator} from "~/types/protos";
 import {faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {calculatePercentage, formatBytes, formatMilliseconds, formatPercentage} from "~/util/unit-utils";
 import {getFromDictionary} from "~/util/merge-utils";
-import {type NodeAccumulator} from "~/types/protos";
 
 type Props = {
   mode: "time" | "memory",

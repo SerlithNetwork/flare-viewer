@@ -3,8 +3,7 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {formatBytes, formatMilliseconds} from "~/util/unit-utils";
-import type {NodeAccumulator, ThreadAccumulator} from "~/types/protos";
-import type {MethodDictionary} from "~/types/protos";
+import type {MethodDictionary, NodeAccumulator, ThreadAccumulator} from "~/types/protos";
 
 type Props = {
   mode: "time" | "memory",

@@ -2,8 +2,8 @@
 
 import {type MethodDictionarySlice} from "~/proto/ProfileFile_pb";
 import {mergeDictionarySlices} from "~/util/merge-utils";
-import {type ThreadAccumulator} from "~/types/protos";
 import type {ContextMenuItem} from "#ui/components/ContextMenu.vue";
+import type {ThreadAccumulator} from "~/types/protos";
 
 type Props = {
   timeThreads: Map<string, ThreadAccumulator>,
