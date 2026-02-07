@@ -55,12 +55,12 @@ const items = ref<ContextMenuItem[][]>([
 <template>
   <div class="flex flex-col min-h-6 min-w-[90%] m-8 max-w-sm" >
     <div class="flex flex-col w-full gap-4">
-      <div class="flex flex-row justify-between items-center w-full px-8">
+      <div class="flex flex-row flex-wrap justify-between items-center w-full px-8 gap-2">
         <div class="flex gap-4">
           <UButton icon="i-lucide-cpu" size="xl" color="primary" class="font-bold text-lg" @click="profilerType = 'time'" :variant="profilerType === 'time' ? 'solid' : 'outline'" >CPU</UButton>
           <UButton icon="i-lucide-memory-stick" size="xl" color="secondary" class="font-bold text-lg" @click="profilerType = 'memory'" :variant="profilerType === 'memory' ? 'solid' : 'outline'" >Memory</UButton>
         </div>
-        <USelectMenu v-model="selectedPlugins" multiple :items="sortedPlugins" icon="i-lucide-list-filter" placeholder="Filter by Plugin" class="h-10 w-64" />
+        <USelectMenu v-model="selectedPlugins" multiple :items="sortedPlugins" icon="i-lucide-list-filter" placeholder="Filter by Plugin" class="h-10 w-full md:w-64" />
       </div>
       <div v-if="timeThreads.size === 0 || memoryThreads.size === 0" class="flex flex-col gap-1" >
         <USkeleton v-for="i in 20" :key="i" class="h-6 w-full" />
