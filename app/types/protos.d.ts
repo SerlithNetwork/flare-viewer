@@ -1,19 +1,10 @@
 import {
     type MemoryProfileV2, type MemoryProfileV2_Children,
-    MethodDictionarySlice, type MethodDictionarySlice_MethodDictionaryEntry,
+    type MethodDictionarySlice_MethodDictionaryEntry,
     type TimeProfileV2,
     type TimeProfileV2_Children
 } from "~/proto/ProfileFile_pb";
 
-public export interface AirplaneProfileFileV2Data {
-
-    dictionary: MethodDictionarySlice[];
-
-    timeProfile: TimeProfileV2[];
-
-    memoryProfile: MemoryProfileV2[];
-
-}
 
 public export interface MethodDictionary {
 
@@ -43,28 +34,33 @@ public export interface MethodDefinition {
 
 }
 
-public export interface TimeProfileV2Children {
-
-    methodDefinition: MethodDefinition;
-
-    time: number;
-
-    plugin: string;
-
-    samples: number;
-
-    children: TimeProfileV2_Children[];
-
+export interface ThreadAccumulator {
+    name: string;
+    units: number;
+    nodes: Map<number, NodeAccumulator>;
+    plugins: Set<string>;
 }
 
-public export interface MemoryProfileV2Children {
+export interface NodeAccumulator {
+    name: number;
+    units: number;
+    children: Map<number, NodeAccumulator>;
+    plugins: Set<string>;
+    plugin?: string;
+}
 
-    methodDefinition: MethodDefinition;
+export type AirplaneSample = {
+    threads: TimeProfileV2[],
+    type: "time"
+} | {
+    threads: MemoryProfileV2[];
+    type: "memory"
+}
 
-    plugin: string;
-
-    bytes: number;
-
-    children: MemoryProfileV2_Children[];
-
+export type AirplaneNode = {
+    nodes: TimeProfileV2_Children[],
+    type: "time"
+} | {
+    nodes: MemoryProfileV2_Children[];
+    type: "memory"
 }

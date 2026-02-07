@@ -1,53 +1,38 @@
 <script setup lang="ts">
 
-import {MemoryProfileV2, TimeProfileV2} from "~/proto/ProfileFile_pb";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {formatBytes, formatMilliseconds} from "~/util/unit-utils";
-import {mergeMemoryChildren, mergeTimeChildren} from "~/util/merge-utils";
-import type {MemoryProfileV2Children, MethodDictionary, TimeProfileV2Children} from "~/types/protos";
+import type {NodeAccumulator, ThreadAccumulator} from "~/types/protos";
+import type {MethodDictionary} from "~/types/protos";
 
-const { mode, dictionary, timeProfile, memoryProfile } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeProfile?: TimeProfileV2, memoryProfile?: MemoryProfileV2 }>();
+type Props = {
+  mode: "time" | "memory",
+  thread: ThreadAccumulator,
+  dictionary: MethodDictionary,
+}
 
-const threadName: ComputedRef<string> = computed(() => {
-  if (mode === "cpu" && timeProfile) {
-    return timeProfile.thread
-  } else if (mode === "memory" && memoryProfile) {
-    return memoryProfile.thread
-  }
-  return ""
-})
+const { mode, thread, dictionary } = defineProps<Props>();
+
+const threadName: ComputedRef<string> = computed(() => thread.name)
+const children: ComputedRef<NodeAccumulator[]> = computed(() => thread.nodes.values().toArray())
 
 const threadUsage: ComputedRef<string> = computed(() => {
-  if (mode === "cpu" && timeProfile) {
-    return formatMilliseconds(timeProfile.time)
-  } else if (mode === "memory" && memoryProfile) {
-    return formatBytes(memoryProfile.bytes)
+  if (mode === "time") {
+    return formatMilliseconds(thread.units)
+  } else if (mode === "memory") {
+    return formatBytes(thread.units)
   }
   throw new Error("Not properly used")
 })
 
 const threadColor: ComputedRef<string> = computed(() => {
-  if (mode === "cpu") {
+  if (mode === "time") {
     return "bg-pink-300"
   } else if (mode == "memory") {
     return "bg-purple-400"
   }
   throw new Error("Not properly used")
-})
-
-const threadTimeChildren: ComputedRef<TimeProfileV2Children[]> = computed(() => {
-  if (mode === "cpu" && timeProfile) {
-    return mergeTimeChildren(dictionary, timeProfile.children)
-  }
-  return []
-})
-
-const threadMemoryChildren: ComputedRef<MemoryProfileV2Children[]> = computed(() => {
-  if (mode === "memory" && memoryProfile) {
-    return mergeMemoryChildren(dictionary, memoryProfile.children)
-  }
-  return []
 })
 
 const collapsed = ref("")
@@ -75,10 +60,8 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-elevated ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in threadTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="timeProfile!.time" :rootTime="timeProfile!.time" :siblings="threadTimeChildren" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in threadMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="memoryProfile!.bytes" :rootBytes="memoryProfile!.bytes" :siblings="threadMemoryChildren" />
-      <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="timeProfile!.time" :childrenTime="timeProfile!.children" :rootTime="timeProfile!.time" />
-      <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="memoryProfile!.bytes" :childrenBytes="memoryProfile!.children" :rootBytes="memoryProfile!.bytes" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="thread.units" :root-units="thread.units" :siblings="children" />
+      <ProfilerSelf :mode="mode" :parent-units="thread.units" :root-units="thread.units" :siblings="children" />
     </div>
   </div>
 </template>

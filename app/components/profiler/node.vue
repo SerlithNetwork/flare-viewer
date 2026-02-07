@@ -1,33 +1,37 @@
 <script setup lang="ts">
 
-import type {MemoryProfileV2Children, MethodDefinition, MethodDictionary, TimeProfileV2Children} from "~/types/protos";
+import type {MethodDefinition, MethodDictionary} from "~/types/protos";
 import {faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {calculatePercentage, formatBytes, formatMilliseconds, formatPercentage} from "~/util/unit-utils";
-import {mergeMemoryChildren, mergeTimeChildren} from "~/util/merge-utils";
+import {getFromDictionary} from "~/util/merge-utils";
+import {type NodeAccumulator} from "~/types/protos";
 
-const { mode, dictionary, timeChildren, memoryChildren, parentTime, parentBytes, rootTime, rootBytes, siblings } = defineProps<{ mode: "cpu" | "memory", dictionary: MethodDictionary, timeChildren?: TimeProfileV2Children, memoryChildren?: MemoryProfileV2Children, parentTime?: number, parentBytes?: number, rootTime?: number, rootBytes?: number, siblings: any[] }>();
+type Props = {
+  mode: "time" | "memory",
+  node: NodeAccumulator,
+  dictionary: MethodDictionary,
+  parentUnits: number,
+  rootUnits: number,
+  siblings: any[],
+}
 
-const definition: ComputedRef<MethodDefinition> = computed(() => {
-  if (mode === "cpu" && timeChildren) {
-    return timeChildren.methodDefinition
-  } else if (mode === "memory" && memoryChildren) {
-    return memoryChildren.methodDefinition
-  }
-  throw new Error("Not properly used")
-})
+const { mode, node, dictionary, parentUnits, rootUnits, siblings } = defineProps<Props>();
+
+const children: ComputedRef<NodeAccumulator[]> = computed(() => node.children.values().toArray().sort((a, b) => b.units - a.units))
+const definition: ComputedRef<MethodDefinition> = computed(() => getFromDictionary(dictionary, node.name))
 
 const nodeUsage: ComputedRef<string> = computed(() => {
-  if (mode === "cpu" && timeChildren) {
-    return formatMilliseconds(timeChildren.time)
-  } else if (mode === "memory" && memoryChildren) {
-    return formatBytes(memoryChildren.bytes)
+  if (mode === "time") {
+    return formatMilliseconds(node.units)
+  } else if (mode === "memory") {
+    return formatBytes(node.units)
   }
   throw new Error("Not properly used")
 })
 
 const nodeColor: ComputedRef<string> = computed(() => {
-  if (mode === "cpu") {
+  if (mode === "time") {
     return "bg-pink-200"
   } else if (mode === "memory") {
     return "bg-purple-300"
@@ -35,42 +39,10 @@ const nodeColor: ComputedRef<string> = computed(() => {
   throw new Error("Not properly used")
 })
 
-const nodeTimeChildren: ComputedRef<TimeProfileV2Children[]> = computed(() => {
-  if (mode === "cpu" && timeChildren) {
-    return mergeTimeChildren(dictionary, timeChildren.children)
-  }
-  return []
-})
 
-
-const nodeMemoryChildren: ComputedRef<MemoryProfileV2Children[]> = computed(() => {
-  if (mode === "memory" && memoryChildren) {
-    return mergeMemoryChildren(dictionary, memoryChildren.children)
-  }
-  return []
-})
-
-
-const nodePercentage: ComputedRef<number> = computed(() => {
-  if (mode === "cpu" && timeChildren) {
-    return calculatePercentage(timeChildren.time, rootTime!)
-  } else if (mode === "memory" && memoryChildren) {
-    return calculatePercentage(memoryChildren.bytes, rootBytes!)
-  }
-  throw new Error("Not properly used")
-})
-
-
+const nodePercentage: ComputedRef<number> = computed(() => calculatePercentage(node.units, rootUnits))
 const nodePercentageString: ComputedRef<string> = computed(() => formatPercentage(nodePercentage.value))
-
-const nodePlugin: ComputedRef<string> = computed(() => {
-  if (mode === "cpu" && timeChildren) {
-    return timeChildren.plugin
-  } else if (mode === "memory" && memoryChildren) {
-    return memoryChildren.plugin
-  }
-  return ""
-})
+const nodePlugin: ComputedRef<string> = computed(() => node.plugin || "")
 
 enum CollapsedState {
   COLLAPSED,
@@ -129,10 +101,8 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-elevated ml-2">
-      <ProfilerNode v-if="mode === 'cpu'" v-for="child in nodeTimeChildren" :key="child.methodDefinition.fullName" mode="cpu" :dictionary="dictionary" :timeChildren="child" :parentTime="child.time" :rootTime="rootTime" :siblings="nodeTimeChildren" />
-      <ProfilerNode v-if="mode === 'memory'" v-for="child in nodeMemoryChildren" :key="child.methodDefinition.fullName" mode="memory" :dictionary="dictionary" :memoryChildren="child" :parentBytes="child.bytes" :rootBytes="rootBytes" :siblings="nodeMemoryChildren" />
-      <ProfilerSelf v-if="mode === 'cpu'" mode="cpu" :parentTime="parentTime!" :childrenTime="nodeTimeChildren" :rootTime="rootTime" />
-      <ProfilerSelf v-if="mode === 'memory'" mode="memory" :parentBytes="parentBytes!" :childrenBytes="nodeMemoryChildren" :rootBytes="rootBytes" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="child.units" :root-units="rootUnits" :siblings="children" />
+      <ProfilerSelf :mode="mode" :parent-units="parentUnits" :root-units="rootUnits" :siblings="children" />
     </div>
   </div>
 </template>
