@@ -1,9 +1,11 @@
 <script setup lang="ts">
 
 import {useProfilerScreenStore} from "~/store/profiler-screen-store";
-import {CreateProfile, AirplaneProfileFile, TimelineFile} from "~/proto/ProfileFile_pb";
+import {CreateProfile, AirplaneProfileFile, TimelineFile, type MethodDictionarySlice} from "~/proto/ProfileFile_pb";
 import {b64UnzipBytes} from "~/util/binary-utils";
 import {useProfilerStatusStore} from "~/store/status-store";
+import {mergeAirplaneSample} from "~/util/merge-utils";
+import type {ThreadAccumulator} from "~/types/protos";
 
 
 const appConfig = useAppConfig()
@@ -14,8 +16,12 @@ const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 
 const profile = ref<CreateProfile | undefined>(undefined)
-const dataSamples = ref<AirplaneProfileFile[]>([])
 const timelineSamples = ref<TimelineFile[]>([])
+
+const dictionary = ref<MethodDictionarySlice[]>([])
+const timeThreads = ref(new Map<string, ThreadAccumulator>)
+const memoryThreads = ref(new Map<string, ThreadAccumulator>)
+const plugins = ref(new Set<string>())
 
 const dataSource = ref<EventSource | undefined>(undefined)
 const timelineSource = ref<EventSource | undefined>(undefined)
@@ -36,7 +42,12 @@ onMounted(() => {
 
       dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/data/${id}`)
       dataSource.value.onmessage = (event: MessageEvent<string>) => {
-        dataSamples.value = dataSamples.value.concat(AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data)))
+        const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
+        mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
+        mergeAirplaneSample({ threads: sample.v2!.memoryProfile, type: "memory" }, memoryThreads.value, plugins.value)
+        if (sample.v2!.dictionary) {
+          dictionary.value.push(sample.v2!.dictionary)
+        }
       }
       dataSource.value.addEventListener("flare$terminated", () => {
         dataSource.value?.close()
@@ -90,7 +101,7 @@ useSeoMeta({
     <ToolLoading message="Loading..." />
   </div>
   <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-default">
-    <ProfilerCard v-if="screenStore.screen === 'profiler'" :dataSamples="dataSamples" class="animate-fade-left" />
+    <ProfilerCard v-if="screenStore.screen === 'profiler'" :time-threads="timeThreads" :memory-threads="memoryThreads" :dictionary-slices="dictionary" :plugins="plugins" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
     <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples" class="animate-fade-left" />
     <SystemCard v-if="screenStore.screen === 'system'" :hwInfo="profile!.hwinfo!" :os="profile!.os!" :vmOptions="profile!.vmoptions!" :v3="profile!.v3!" class="animate-fade-left" />

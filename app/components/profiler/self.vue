@@ -1,24 +1,23 @@
 <script setup lang="ts">
 
-import {type MemoryProfileV2_Children, type TimeProfileV2_Children} from "~/proto/ProfileFile_pb";
-import type {MemoryProfileV2Children, TimeProfileV2Children} from "~/types/protos";
 import {calculatePercentage, formatBytes, formatMilliseconds, formatPercentage} from "~/util/unit-utils";
 import {faCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import type {NodeAccumulator, ThreadAccumulator} from "~/types/protos";
 
-const { mode, parentTime, childrenTime, parentBytes, childrenBytes, rootTime, rootBytes } = defineProps<{ mode: "cpu" | "memory", parentTime?: number, childrenTime?: (TimeProfileV2_Children | TimeProfileV2Children)[], parentBytes?: number, childrenBytes?: (MemoryProfileV2_Children | MemoryProfileV2Children)[], rootTime?: number, rootBytes?: number }>();
+type Props = {
+  mode: "time" | "memory",
+  parentUnits: number,
+  rootUnits: number,
+  siblings: (ThreadAccumulator | NodeAccumulator)[]
+}
 
-const diff: ComputedRef<number> = computed(() => {
-  if (mode === "cpu" && childrenTime && parentTime) {
-    return parentTime - childrenTime.reduce((subtotal, { time }) => subtotal + time, 0)
-  } else if (mode === "memory" && childrenBytes && parentBytes) {
-    return parentBytes - childrenBytes.reduce((subtotal, { bytes }) => subtotal + bytes, 0)
-  }
-  throw new Error("Not properly used")
-})
+const { mode, parentUnits, rootUnits, siblings } = defineProps<Props>();
+
+const diff: ComputedRef<number> = computed(() => parentUnits - siblings.reduce((subtotal, { units }) => subtotal + units, 0))
 
 const selfUsage: ComputedRef<string> = computed(() => {
-  if (mode === "cpu") {
+  if (mode === "time") {
     return formatMilliseconds(diff.value)
   } else if (mode === "memory") {
     return formatBytes(diff.value)
@@ -27,7 +26,7 @@ const selfUsage: ComputedRef<string> = computed(() => {
 })
 
 const selfColor: ComputedRef<string> = computed(() => {
-  if (mode == "cpu") {
+  if (mode == "time") {
     return "bg-pink-200"
   } else if (mode == "memory") {
     return "bg-purple-300"
@@ -35,15 +34,7 @@ const selfColor: ComputedRef<string> = computed(() => {
   throw new Error("Not properly used")
 })
 
-const selfPercentage: ComputedRef<number> = computed(() => {
-  if (mode === "cpu" && rootTime) {
-    return calculatePercentage(diff.value, rootTime)
-  } else if (mode === "memory" && rootBytes) {
-    return calculatePercentage(diff.value, rootBytes)
-  }
-  throw new Error("Not properly used")
-})
-
+const selfPercentage: ComputedRef<number> = computed(() => calculatePercentage(diff.value, rootUnits))
 const selfPercentageString: ComputedRef<string> = computed(() => formatPercentage(selfPercentage.value))
 
 
