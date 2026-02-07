@@ -10,12 +10,18 @@ type Props = {
   mode: "time" | "memory",
   thread: ThreadAccumulator,
   dictionary: MethodDictionary,
+  plugins: string[],
 }
 
-const { mode, thread, dictionary } = defineProps<Props>();
+const { mode, thread, dictionary, plugins } = defineProps<Props>();
 
 const threadName: ComputedRef<string> = computed(() => thread.name)
-const children: ComputedRef<NodeAccumulator[]> = computed(() => thread.nodes.values().toArray())
+const children: ComputedRef<NodeAccumulator[]> = computed(() => thread.nodes.values().toArray().sort((a, b) => b.units - a.units).filter(i => {
+  if (plugins.length > 0) {
+    return plugins.some(j => i.plugins.values().toArray().includes(j))
+  }
+  return true
+}))
 
 const threadUsage: ComputedRef<string> = computed(() => {
   if (mode === "time") {
@@ -60,7 +66,7 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-elevated ml-2">
-      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="thread.units" :root-units="thread.units" :siblings="children" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="thread.units" :root-units="thread.units" :siblings="children" :plugins="plugins" />
       <ProfilerSelf :mode="mode" :parent-units="thread.units" :root-units="thread.units" :siblings="children" />
     </div>
   </div>

@@ -14,12 +14,18 @@ type Props = {
   parentUnits: number,
   rootUnits: number,
   siblings: any[],
+  plugins: string[],
 }
 
-const { mode, node, dictionary, parentUnits, rootUnits, siblings } = defineProps<Props>();
+const { mode, node, dictionary, parentUnits, rootUnits, siblings, plugins } = defineProps<Props>();
 
-const children: ComputedRef<NodeAccumulator[]> = computed(() => node.children.values().toArray().sort((a, b) => b.units - a.units))
 const definition: ComputedRef<MethodDefinition> = computed(() => getFromDictionary(dictionary, node.name))
+const children: ComputedRef<NodeAccumulator[]> = computed(() => node.children.values().toArray().sort((a, b) => b.units - a.units).filter(i => {
+  if (plugins.length > 0) {
+    return plugins.some(j => i.plugins.values().toArray().includes(j))
+  }
+  return true
+}))
 
 const nodeUsage: ComputedRef<string> = computed(() => {
   if (mode === "time") {
@@ -101,7 +107,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-elevated ml-2">
-      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="child.units" :root-units="rootUnits" :siblings="children" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="child.units" :root-units="rootUnits" :siblings="children" :plugins="plugins" />
       <ProfilerSelf :mode="mode" :parent-units="parentUnits" :root-units="rootUnits" :siblings="children" />
     </div>
   </div>

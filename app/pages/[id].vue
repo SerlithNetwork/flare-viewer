@@ -101,7 +101,7 @@ useSeoMeta({
     <ToolLoading message="Loading..." />
   </div>
   <div v-else-if="statusStore.status === 'ready'" class="flex flex-col items-center text-default">
-    <ProfilerCard v-if="screenStore.screen === 'profiler'" :time-threads="timeThreads" :memory-threads="memoryThreads" :dictionary-slices="dictionary" class="animate-fade-left" />
+    <ProfilerCard v-if="screenStore.screen === 'profiler'" :time-threads="timeThreads" :memory-threads="memoryThreads" :dictionary-slices="dictionary" :plugins="plugins" class="animate-fade-left" />
     <ConfigCard v-if="screenStore.screen === 'config'" :configs="profile!.configs" class="animate-fade-left" />
     <ServerCard v-if="screenStore.screen === 'server'" :timelineSamples="timelineSamples" class="animate-fade-left" />
     <SystemCard v-if="screenStore.screen === 'system'" :hwInfo="profile!.hwinfo!" :os="profile!.os!" :vmOptions="profile!.vmoptions!" :v3="profile!.v3!" class="animate-fade-left" />
