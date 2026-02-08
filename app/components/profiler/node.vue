@@ -106,8 +106,8 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-elevated ml-2">
-      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="child.units" :root-units="rootUnits" :siblings="children" :plugins="plugins" />
-      <ProfilerSelf :mode="mode" :parent-units="parentUnits" :root-units="rootUnits" :siblings="children" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="parentUnits" :root-units="rootUnits" :siblings="children" :plugins="plugins" />
+      <ProfilerSelf :mode="mode" :parent-units="node.units" :root-units="rootUnits" :siblings="children" />
     </div>
   </div>
 </template>
