@@ -1,39 +1,11 @@
 import type {NodeAccumulator, ThreadAccumulator} from "~/types/protos";
 
-export const constant = {
-    minWidthToDisplay: 1,
-    minWidthToDisplayText: 12,
-    rowHeight: 20,
-
-    backgroundColorGradient: [
-        '#37afa9',
-        '#4bb0a5',
-        '#5ab0a1',
-        '#67b19d',
-        '#72b299',
-        '#7cb295',
-        '#86b390',
-        '#8fb48c',
-        '#97b488',
-        '#9fb584',
-        '#a6b680',
-        '#aeb67b',
-        '#b5b777',
-        '#bcb772',
-        '#c2b86e',
-        '#c9b869',
-        '#cfb965',
-        '#d5b960',
-        '#dbba5b',
-        '#e1ba56',
-        '#e7bb50',
-        '#edbb4b',
-        '#f3bb45',
-        '#f8bc3f',
-        '#febc38',
-    ],
-
-    colorGradient: ['#000000'],
+export interface FlameConstants {
+    minWidthToDisplay: number,
+    minWidthToDisplayText: number,
+    rowHeight: number,
+    backgroundColorGradient: string[],
+    colorGradient: string[],
 }
 
 export interface RawData {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import {constant, type ItemData, type RawData} from "~/types/flame";
+import {type FlameConstants, type ItemData, type RawData} from "~/types/flame";
 
 type Props = {
   data: ItemData;
   index: number;
   top: number;
+  constants: FlameConstants;
 }
 
 type Emits = {
@@ -38,7 +39,7 @@ const nodes = computed(() => {
     }
     const left = scale(node.left)
     const width = scale(node.width)
-    if (width < constant.minWidthToDisplay) return undefined
+    if (width < props.constants.minWidthToDisplay) return undefined
     if (
         left + width < focusedNodeLeft.value ||
         left > focusedNodeLeft.value + focusedNodeWidth.value
@@ -55,18 +56,20 @@ const nodes = computed(() => {
   <FlameRect
       v-for="{ uid, node, left, width } in nodes"
       :key="uid"
+
       :node="node"
       :background-color="node.backgroundColor"
       :color="node.color"
       :container-width="containerWidth"
       :disable-default-tooltips="disableDefaultTooltips"
-      :height="constant.rowHeight"
+      :height="props.constants.rowHeight"
       :is-dimmed="index < focusedNode.depth"
       :label="node.name"
       :tooltip="node.tooltip"
       :width="width"
       :x="left - focusedNodeLeft"
       :y="top"
+      :constants="props.constants"
 
       @click="emit('click', uid)"
       @mouseenter="emit('mouseenter', $event, node.source)"

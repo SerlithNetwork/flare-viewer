@@ -84,7 +84,9 @@ function onThreadSelected(thread: ThreadAccumulator) {
     </div>
   </div>
   <UModal fullscreen v-model:open="flameShown" :title="flameThread?.name ?? ''" close-icon="i-lucide-corner-up-right" >
-    <FlameCard :mode="profilerType" :thread="flameThread!" :dictionary="dictionary" />
+    <template #body>
+      <FlameCard v-if="flameShown" :mode="profilerType" :thread="flameThread!" :dictionary="dictionary" />
+    </template>
   </UModal>
 </template>
 
