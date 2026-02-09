@@ -35,7 +35,7 @@ const threadColor: ComputedRef<string> = computed(() => {
   if (mode === "time") {
     return "bg-gradient-to-r from-pink-300 to-pink-400"
   } else if (mode == "memory") {
-    return "bg-gradient-to-r from-purple-400 to-purple-700"
+    return "bg-gradient-to-r from-purple-400 to-purple-600"
   }
   throw new Error("Not properly used")
 })

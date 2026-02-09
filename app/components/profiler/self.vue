@@ -27,9 +27,9 @@ const selfUsage: ComputedRef<string> = computed(() => {
 
 const selfColor: ComputedRef<string> = computed(() => {
   if (mode == "time") {
-    return "bg-gradient-to-r from-pink-200 via-pink-300 to-purple-300"
+    return "bg-gradient-to-r from-pink-200 to-pink-300"
   } else if (mode == "memory") {
-    return "bg-gradient-to-r from-purple-300 via-purple-400 to-pink-400"
+    return "bg-gradient-to-r from-purple-300 to-purple-500"
   }
   throw new Error("Not properly used")
 })
