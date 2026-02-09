@@ -20,32 +20,27 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 
-const {
-  containerWidth,
-  data,
-  disableDefaultTooltips,
-  focusedNode,
-  scale,
-} = props.data
+const uids = computed(() => props.data.data.levels[props.index] || [])
+const focusedNodeLeft = computed(() => props.data.scale(props.data.focusedNode.left))
+const focusedNodeWidth = computed(() => props.data.scale(props.data.focusedNode.width))
 
-const uids = computed(() => data.levels[props.index] || [])
-const focusedNodeLeft = computed(() => scale(focusedNode.left))
-const focusedNodeWidth = computed(() => scale(focusedNode.width))
 const nodes = computed(() => {
   return uids.value.map(uid => {
-    const node = data.nodes.get(uid)
+
+    const node = props.data.data.nodes.get(uid)
     if (!node) {
       return undefined
     }
-    const left = scale(node.left)
-    const width = scale(node.width)
-    if (width < props.constants.minWidthToDisplay) return undefined
-    if (
-        left + width < focusedNodeLeft.value ||
-        left > focusedNodeLeft.value + focusedNodeWidth.value
-    ) {
+
+    const left = props.data.scale(node.left)
+    const width = props.data.scale(node.width)
+    if (width < props.constants.minWidthToDisplay) {
       return undefined
     }
+    if (left + width < focusedNodeLeft.value || left > focusedNodeLeft.value + focusedNodeWidth.value) {
+      return undefined
+    }
+
     return { uid, node, left, width }
   }).filter(i => i != undefined)
 })
@@ -60,10 +55,10 @@ const nodes = computed(() => {
       :node="node"
       :background-color="node.backgroundColor"
       :color="node.color"
-      :container-width="containerWidth"
-      :disable-default-tooltips="disableDefaultTooltips"
+      :container-width="props.data.containerWidth"
+      :disable-default-tooltips="props.data.disableDefaultTooltips"
       :height="props.constants.rowHeight"
-      :is-dimmed="index < focusedNode.depth"
+      :is-dimmed="index < props.data.focusedNode.depth"
       :label="node.name"
       :tooltip="node.tooltip"
       :width="width"
