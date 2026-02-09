@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="container" :class="`w-full h-[${height}px]`" style="overflow: hidden" >
+  <div ref="container" :class="`w-full h-[${height}px]`" >
     <FlameGraph v-if="width > 0" :raw="nodePair[0]" :height="height" :width="width" />
   </div>
 </template>
