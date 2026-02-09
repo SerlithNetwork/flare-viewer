@@ -37,7 +37,7 @@ const nodes = computed(() => {
     if (width < props.constants.minWidthToDisplay) {
       return undefined
     }
-    if (left + width < focusedNodeLeft.value || left > focusedNodeLeft.value + focusedNodeWidth.value) {
+    if (left + width <= focusedNodeLeft.value || left >= focusedNodeLeft.value + focusedNodeWidth.value) {
       return undefined
     }
 
