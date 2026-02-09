@@ -26,7 +26,7 @@ const constants: FlameConstants = {
   rowHeight: 20,
 
   backgroundColorGradient: [
-    '#37afa9',
+    '#37afa9', // Change to #c88aff
     '#4bb0a5',
     '#5ab0a1',
     '#67b19d',
@@ -50,7 +50,7 @@ const constants: FlameConstants = {
     '#edbb4b',
     '#f3bb45',
     '#f8bc3f',
-    '#febc38',
+    '#febc38', // Change to #ffc4fd
   ],
 
   colorGradient: ['#000000'],

@@ -18,19 +18,26 @@ const nodePair = computed(() => toFlameNode(
     props.mode === "memory",
 ))
 const height = computed(() => Math.min(nodePair.value[1] * 20, 5000))
-const width = computed(() => {
-  const rect = container.value?.getBoundingClientRect()
-  if (rect) {
-    return Math.round(rect.width)
-  }
-  return 0
-})
+const width = ref(0)
 
+let observer: ResizeObserver | undefined
+onMounted(() => {
+  if (!container.value) {
+    return
+  }
+
+  observer = new ResizeObserver(entries => {
+    const entry = entries[0]!
+    width.value = Math.round(entry.contentRect.width)
+  })
+
+  observer.observe(container.value)
+})
 
 </script>
 
 <template>
-  <div ref="container" :class="`flex w-full h-[${height}px]`" style="overflow: hidden" >
+  <div ref="container" :class="`w-full h-[${height}px]`" style="overflow: hidden" >
     <FlameGraph v-if="width > 0" :raw="nodePair[0]" :height="height" :width="width" />
   </div>
 </template>

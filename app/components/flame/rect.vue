@@ -29,30 +29,22 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 
-const x = ref<number>(props.x)
-const width = ref<number>(props.width)
-const height = ref<number>(props.height)
-const filter = ref<string | undefined>(undefined)
-const mounted = ref(false)
-
-onMounted(() => {
-  if (x.value < 0) {
-    width.value += x.value
-    x.value = 0
+const x = computed(() => props.x < 0 ? 0 : props.x)
+const filter = computed(() => props.isDimmed ? 'brightness(115%) grayscale(50%)' : undefined)
+const height = computed(() => props.height - 1)
+const width = computed(() => {
+  let w = props.width
+  if (props.x < 0) {
+    w += props.x
   }
-  // Fake a border by shrinking the rect slightly.
-  height.value -= 1
-  width.value = Math.min(Math.round(width.value), props.containerWidth)
-  filter.value = props.isDimmed ? 'brightness(115%) grayscale(50%)' : undefined
-  mounted.value = true
+  return Math.min(w, props.containerWidth)
 })
+
 
 </script>
 
 <template>
   <div
-      v-if="mounted"
-
       :title="disableDefaultTooltips ? undefined : tooltip != undefined ? tooltip : label"
       :style="{
         backgroundColor: props.backgroundColor,
