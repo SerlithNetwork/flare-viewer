@@ -10,8 +10,8 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-const container = ref<HTMLDivElement>()
 
+const container = ref<HTMLDivElement>()
 const nodePair = computed(() => toFlameNode(
     { node: props.thread, type: "thread" },
     props.dictionary,
@@ -28,16 +28,20 @@ onMounted(() => {
 
   observer = new ResizeObserver(entries => {
     const entry = entries[0]!
-    width.value = Math.round(entry.contentRect.width)
+    width.value = entry.contentRect.width
   })
 
   observer.observe(container.value)
 })
 
+onBeforeUnmount(() => {
+  observer?.disconnect()
+})
+
 </script>
 
 <template>
-  <div ref="container" :class="`w-full h-[${height}px]`" >
+  <div ref="container" :class="`w-full`" :style="{ 'height': `${height}px` }" >
     <FlameGraph v-if="width > 0" :raw="nodePair[0]" :height="height" :width="width" />
   </div>
 </template>
