@@ -37,9 +37,9 @@ const nodeUsage: ComputedRef<string> = computed(() => {
 
 const nodeColor: ComputedRef<string> = computed(() => {
   if (mode === "time") {
-    return "bg-pink-200"
-  } else if (mode === "memory") {
-    return "bg-purple-300"
+    return "bg-gradient-to-r from-pink-200 to-pink-300"
+  } else if (mode == "memory") {
+    return "bg-gradient-to-r from-purple-300 to-purple-500"
   }
   throw new Error("Not properly used")
 })
