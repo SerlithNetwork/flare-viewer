@@ -65,7 +65,7 @@ function onClick() {
       </div>
     </div>
     <div v-if="collapsed !== ''" class="bg-elevated ml-2">
-      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="thread.units" :root-units="thread.units" :siblings="children" :plugins="plugins" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :root-units="thread.units" :siblings="children" :plugins="plugins" />
       <ProfilerSelf :mode="mode" :parent-units="thread.units" :root-units="thread.units" :siblings="children" />
     </div>
   </div>

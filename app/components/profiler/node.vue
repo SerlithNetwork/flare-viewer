@@ -10,13 +10,12 @@ type Props = {
   mode: "time" | "memory",
   node: NodeAccumulator,
   dictionary: MethodDictionary,
-  parentUnits: number,
   rootUnits: number,
   siblings: any[],
   plugins: string[],
 }
 
-const { mode, node, dictionary, parentUnits, rootUnits, siblings, plugins } = defineProps<Props>();
+const { mode, node, dictionary, rootUnits, siblings, plugins } = defineProps<Props>();
 
 const definition: ComputedRef<MethodDefinition> = computed(() => getFromDictionary(dictionary, node.name))
 const children: ComputedRef<NodeAccumulator[]> = computed(() => node.children.values().toArray().sort((a, b) => b.units - a.units).filter(i => {
@@ -106,7 +105,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="collapsed === CollapsedState.UNCOLLAPSED" class="bg-elevated ml-2">
-      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :parent-units="parentUnits" :root-units="rootUnits" :siblings="children" :plugins="plugins" />
+      <ProfilerNode v-for="child in children" :key="child.name" :mode="mode" :node="child" :dictionary="dictionary" :root-units="rootUnits" :siblings="children" :plugins="plugins" />
       <ProfilerSelf :mode="mode" :parent-units="node.units" :root-units="rootUnits" :siblings="children" />
     </div>
   </div>
