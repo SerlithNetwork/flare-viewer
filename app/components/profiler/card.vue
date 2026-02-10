@@ -41,7 +41,7 @@ const flameShown = ref(false)
 const items = ref<ContextMenuItem[][]>([
   [
     {
-      label: "Coming soon...",
+      label: "View as Flame Graph",
       icon: "i-lucide-flame",
       onSelect() {
         flameShown.value = true
@@ -49,6 +49,14 @@ const items = ref<ContextMenuItem[][]>([
     }
   ]
 ])
+
+const flameThread = ref<ThreadAccumulator>()
+function onThreadSelected(thread: ThreadAccumulator) {
+  if (flameThread.value?.name === thread.name) {
+    return
+  }
+  flameThread.value = thread
+}
 
 </script>
 
@@ -66,15 +74,20 @@ const items = ref<ContextMenuItem[][]>([
         <USkeleton v-for="i in 20" :key="i" class="h-6 w-full" />
       </div>
       <div v-else class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
-        <UContextMenu v-if="profilerType === 'time'" :items="items" v-for="thread in sortedTimeThreads" :key="thread.name">
+        <UContextMenu v-if="profilerType === 'time'" :items="items" v-for="thread in sortedTimeThreads" :key="thread.name" @update:open="onThreadSelected(thread)" >
           <ProfilerThread :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
         </UContextMenu>
-        <UContextMenu v-else-if="profilerType === 'memory'" :items="items" v-for="thread in sortedMemoryThreads" :key="thread.name">
+        <UContextMenu v-else-if="profilerType === 'memory'" :items="items" v-for="thread in sortedMemoryThreads" :key="thread.name" @update:open="onThreadSelected(thread)" >
           <ProfilerThread :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
         </UContextMenu>
       </div>
     </div>
   </div>
+  <UModal fullscreen scrollable v-model:open="flameShown" :title="flameThread?.name ?? ''" :dismissible="false" close-icon="i-lucide-corner-up-right" class="min-h-screen" >
+    <template #body>
+      <FlameCard v-if="flameShown" :mode="profilerType" :thread="flameThread!" :dictionary="dictionary" />
+    </template>
+  </UModal>
 </template>
 
 <style scoped>
