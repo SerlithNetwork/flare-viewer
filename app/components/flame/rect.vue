@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {type ChartNode, type FlameConstants} from "~/types/flame";
+import type {ChartNode, FlameConstants} from "~/types/flame";
 
 type Props = {
   node: ChartNode;
