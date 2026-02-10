@@ -62,7 +62,7 @@ function onThreadSelected(thread: ThreadAccumulator) {
 
 <template>
   <div class="flex flex-col min-h-6 min-w-[90%] m-8 max-w-sm" >
-    <div class="flex flex-col w-full gap-4">
+    <div class="flex flex-col w-full gap-4" v-bind="$attrs">
       <div class="flex flex-row flex-wrap justify-between items-center w-full px-8 gap-2">
         <div class="flex gap-4">
           <UButton icon="i-lucide-cpu" size="xl" color="primary" class="font-bold text-lg" @click="profilerType = 'time'" :variant="profilerType === 'time' ? 'solid' : 'outline'" >CPU</UButton>
@@ -73,7 +73,7 @@ function onThreadSelected(thread: ThreadAccumulator) {
       <div v-if="timeThreads.size === 0 || memoryThreads.size === 0" class="flex flex-col gap-1" >
         <USkeleton v-for="i in 20" :key="i" class="h-6 w-full" />
       </div>
-      <div v-else class="flex flex-col items-start w-full rounded-lg" v-bind="$attrs">
+      <div v-else class="flex flex-col items-start w-full rounded-lg">
         <UContextMenu v-if="profilerType === 'time'" :items="items" v-for="thread in sortedTimeThreads" :key="thread.name" @update:open="onThreadSelected(thread)" >
           <ProfilerThread :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
         </UContextMenu>
