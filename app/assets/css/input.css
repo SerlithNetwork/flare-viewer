@@ -25,6 +25,7 @@
     --profiler-child-hover-color: #212121;
     --profiler-child-group-hover-color: #161616;
 
+    --ui-success: var(--color-pink-300);
     --ui-primary: var(--color-pink-300);
     --ui-secondary: var(--color-purple-400);
     .hljs {

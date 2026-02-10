@@ -30,6 +30,7 @@ const { data, error } = useFetch<string>(`${config.public.apiBackendUrl}/api/pro
   method: "get",
 })
 
+const toast = useToast()
 onMounted(() => {
   watchEffect(async () => {
 
@@ -51,6 +52,12 @@ onMounted(() => {
       }
       dataSource.value.addEventListener("flare$terminated", () => {
         dataSource.value?.close()
+        toast.add({
+          title: "Profiling Data Ready",
+          description: "All CPU and Memory samples have been loaded",
+          icon: "uil:check-circle",
+          color: "success"
+        })
       })
 
       timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/timeline/${id}`)
@@ -59,6 +66,12 @@ onMounted(() => {
       }
       timelineSource.value.addEventListener("flare$terminated", () => {
         timelineSource.value?.close()
+        toast.add({
+          title: "Statistics Ready",
+          description: "All timeline records and events have been loaded",
+          icon: "uil:check-circle",
+          color: "success"
+        })
       })
 
       statusStore.status = "ready"
