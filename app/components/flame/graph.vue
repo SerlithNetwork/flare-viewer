@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {type ChartData, type ChartNode, type FlameConstants, type ItemData, type RawData} from "~/types/flame";
+import type {ChartData, ChartNode, FlameConstants, ItemData, RawData} from "~/types/flame";
 
 type Props = {
   raw: RawData,
