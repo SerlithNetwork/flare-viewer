@@ -20,6 +20,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 
+const delta = 1e-6
 const uids = computed(() => props.data.data.levels[props.index] || [])
 const focusedNodeLeft = computed(() => props.data.scale(props.data.focusedNode.left))
 const focusedNodeWidth = computed(() => props.data.scale(props.data.focusedNode.width))
@@ -37,12 +38,12 @@ const nodes = computed(() => {
     if (width < props.constants.minWidthToDisplay) {
       return undefined
     }
-    if (left + width <= focusedNodeLeft.value || left >= focusedNodeLeft.value + focusedNodeWidth.value) {
+    if (left + width <= focusedNodeLeft.value + delta || left >= focusedNodeLeft.value + focusedNodeWidth.value - delta) {
       return undefined
     }
 
     return { uid, node, left, width }
-  }).filter(i => i != undefined)
+  }).filter(i => i !== undefined)
 })
 
 </script>

@@ -181,7 +181,7 @@ const itemData = computed<ItemData>(() => ({
   data: data.value,
   disableDefaultTooltips: props.disableDefaultTooltips,
   focusedNode: focusedNode.value,
-  scale: (value: number) => (value / (focusedNode.value?.width || 1)) * props.width
+  scale: (value: number) => (value / (focusedNode.value.width)) * props.width
 }))
 
 </script>
