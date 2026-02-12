@@ -11,6 +11,7 @@ enum ProfileType {
   ALLOC = 2;
   LOCK = 3;
   WALL = 4;
+  CTIMER = 5;
 }
 
 message CreateProfile {
