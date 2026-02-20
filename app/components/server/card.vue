@@ -5,7 +5,6 @@ import {groupTimelineSamples} from "~/util/live-utils";
 import type {LiveSummary} from "~/types/timeline";
 
 const { timelineSamples } = defineProps<{ timelineSamples: TimelineFile[] }>()
-const eventCount = timelineSamples.reduce((subtotal, sample) => subtotal + sample.events.length + sample.live.length, 0);
 
 const knownKeys = [
   "airplane:tps",
