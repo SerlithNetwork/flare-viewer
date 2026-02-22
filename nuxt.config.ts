@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 const apiBackendUrl = "https://jet.serlith.net"
-const wsBackendUrl = "https://jet-live.serlith.net"
 const apiMappingsUrl = "https://spark-mappings.lucko.me"
 
 export default defineNuxtConfig({
@@ -12,7 +11,6 @@ export default defineNuxtConfig({
     runtimeConfig : {
         public: {
             apiBackendUrl,
-            wsBackendUrl,
             apiMappingsUrl,
         }
     },
