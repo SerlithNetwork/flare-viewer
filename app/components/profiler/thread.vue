@@ -56,7 +56,7 @@ function onClick() {
     <div class="flex justify-between items-center min-w-full py-1.5 px-2 text-sm bg-default rounded-lg hover:bg-muted">
       <div @click="onClick()" class="flex flex-row items-center gap-2 cursor-pointer">
         <FontAwesomeIcon class="text-dimmed" :class="collapsed" :icon="faCircleChevronRight" />
-        <span class="text-toned">{{ threadName }}</span>
+        <span class="text-toned select-none md:select-text">{{ threadName }}</span>
         <span class="text-primary">(100%)</span>
         <span class="text-dimmed">{{ threadUsage }}</span>
       </div>
