@@ -25,7 +25,6 @@ const knownKeys = [
   "builtin:thread:schedulercount",
   "builtin:thread:daemoncount",
   "builtin:thread:threadcount",
-  "flare:network:outpacketcount",
 ]
 
 const summary: ComputedRef<LiveSummary> = computed(() => groupTimelineSamples(timelineSamples));
@@ -49,7 +48,6 @@ categories.set("builtin:thread:peakcount", { value: { name: "Max Threads Lifetim
 categories.set("builtin:thread:schedulercount", { value: { name: "Craft Scheduler Threads", color: "#80FF88" } })
 categories.set("builtin:thread:daemoncount", { value: { name: "Daemon Threads", color: "#C7FFCC" } })
 categories.set("builtin:thread:threadcount", { value: { name: "Native Threads", color: "#ADFFB2" } })
-categories.set("flare:network:outpacketcount", { value: { name: "Packets Sent", color: "#87FF8D" } })
 
 const titles = new Map<string, string>()
 titles.set("airplane:tps", "TPS")
@@ -70,7 +68,6 @@ titles.set("builtin:thread:peakcount", "Max Threads Lifetime")
 titles.set("builtin:thread:schedulercount", "Craft Scheduler Threads")
 titles.set("builtin:thread:daemoncount", "Daemon Threads")
 titles.set("builtin:thread:threadcount", "Native Threads")
-titles.set("flare:network:outpacketcount", "Packets Sent")
 
 const labels = new Map<string, string>()
 labels.set("airplane:tps", "Ticks")
@@ -91,7 +88,6 @@ labels.set("builtin:thread:peakcount", "Threads")
 labels.set("builtin:thread:schedulercount", "Threads")
 labels.set("builtin:thread:daemoncount", "Threads")
 labels.set("builtin:thread:threadcount", "Threads")
-labels.set("flare:network:outpacketcount", "Packets")
 
 const unknownMetrics = computed(() => summary.value.metrics.entries().filter((entry) => !knownKeys.includes(entry[0])).toArray())
 const unknownEvents = computed(() => summary.value.events.entries().filter((entry) => !knownKeys.includes(entry[0])).toArray())
@@ -177,19 +173,6 @@ const unknownEvents = computed(() => summary.value.events.entries().filter((entr
                      :categories="categories.get('airplane:world:chunkcount')!"
                      :height="300"
                      :yLabel="labels.get('airplane:world:chunkcount')!"
-          />
-        </div>
-      </div>
-    </UCard>
-    <UCard class="flex flex-col w-full shadow-sm" >
-      <div class="flex flex-col items-center w-full gap-4">
-        <span class="text-default text-3xl font-bold">Network Metrics</span>
-        <div class="flex flex-wrap justify-around w-full gap-4">
-          <AreaChart class="w-[50vh] md:w-[75vh]"
-                     :data="summary.metrics.get('flare:network:outpacketcount')!"
-                     :categories="categories.get('flare:network:outpacketcount')!"
-                     :height="300"
-                     :yLabel="labels.get('flare:network:outpacketcount')!"
           />
         </div>
       </div>
