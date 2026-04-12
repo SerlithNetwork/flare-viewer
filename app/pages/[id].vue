@@ -26,7 +26,7 @@ const plugins = ref(new Set<string>())
 const dataSource = ref<EventSource | undefined>(undefined)
 const timelineSource = ref<EventSource | undefined>(undefined)
 
-const { data, error } = useFetch<string>(`${config.public.apiBackendUrl}/api/profiler/${id}`, {
+const { data, error } = useFetch<string>(`${config.public.apiBackendUrl}/api/v1/flare/profiler/${id}`, {
   method: "get",
 })
 
@@ -41,7 +41,7 @@ onMounted(() => {
     if (data.value) {
       profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value))
 
-      dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/data/${id}`)
+      dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`)
       dataSource.value.onmessage = (event: MessageEvent<string>) => {
         const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
         mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
@@ -60,7 +60,7 @@ onMounted(() => {
         })
       })
 
-      timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/stream/timeline/${id}`)
+      timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`)
       timelineSource.value.onmessage = (event: MessageEvent<string>) => {
         timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
       }
@@ -94,11 +94,11 @@ useSeoMeta({
   ogTitle: `${appConfig.title} - ${id}`,
   ogDescription: appConfig.description,
   ogUrl: new URL(`/${id}`, appConfig.url).toString(),
-  ogImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
+  ogImage: new URL(`/api/v1/flare/thumbnail/${id}.png`, appConfig.url).toString(),
 
   twitterTitle: `${appConfig.title} - ${id}`,
   twitterDescription: appConfig.description,
-  twitterImage: new URL(`/api/thumbnail/${id}.png`, appConfig.url).toString(),
+  twitterImage: new URL(`/api/v1/flare/thumbnail/${id}.png`, appConfig.url).toString(),
   twitterCard: "summary_large_image",
 
   themeColor: appConfig.color,
