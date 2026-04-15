@@ -3,12 +3,8 @@
 @import "@nuxt/ui";
 @import "tailwindcss";
 @import "tailwindcss-animated";
-@import "flowbite/src/themes/default.css";
 
 @tailwind utilities;
-
-@plugin "flowbite/plugin";
-@source "../../node_modules/flowbite";
 
 :root {
     --background-color: #0a0a0a;
