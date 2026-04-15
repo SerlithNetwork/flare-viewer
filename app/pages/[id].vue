@@ -15,7 +15,7 @@ const config = useRuntimeConfig()
 const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
 
-const profile = ref<CreateProfile | undefined>(undefined)
+const profile = ref<CreateProfile>()
 const timelineSamples = ref<TimelineFile[]>([])
 
 const dictionary = ref<MethodDictionarySlice[]>([])
@@ -23,61 +23,58 @@ const timeThreads = ref(new Map<string, ThreadAccumulator>)
 const memoryThreads = ref(new Map<string, ThreadAccumulator>)
 const plugins = ref(new Set<string>())
 
-const dataSource = ref<EventSource | undefined>(undefined)
-const timelineSource = ref<EventSource | undefined>(undefined)
+const dataSource = ref<EventSource>()
+const timelineSource = ref<EventSource >()
 
-const { data, error } = useFetch<string>(`${config.public.apiBackendUrl}/api/v1/flare/profiler/${id}`, {
+const { data, status } = useFetch<string>(`${config.public.apiBackendUrl}/api/v1/flare/profiler/${id}`, {
   method: "get",
 })
 
 const toast = useToast()
 onMounted(() => {
-  watchEffect(async () => {
 
-    if (error.value) {
-      statusStore.status = "error"
-    }
+  if (status.value === "success") {
+    profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value!!))
 
-    if (data.value) {
-      profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value))
-
-      dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`)
-      dataSource.value.onmessage = (event: MessageEvent<string>) => {
-        const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
-        mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
-        mergeAirplaneSample({ threads: sample.v2!.memoryProfile, type: "memory" }, memoryThreads.value, plugins.value)
-        if (sample.v2!.dictionary) {
-          dictionary.value.push(sample.v2!.dictionary)
-        }
+    dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`)
+    dataSource.value.onmessage = (event: MessageEvent<string>) => {
+      const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
+      mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
+      mergeAirplaneSample({ threads: sample.v2!.memoryProfile, type: "memory" }, memoryThreads.value, plugins.value)
+      if (sample.v2!.dictionary) {
+        dictionary.value.push(sample.v2!.dictionary)
       }
-      dataSource.value.addEventListener("flare$terminated", () => {
-        dataSource.value?.close()
-        toast.add({
-          title: "Profiling Data Ready",
-          description: "All CPU and Memory samples have been loaded",
-          icon: "uil:check-circle",
-          color: "success"
-        })
-      })
-
-      timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`)
-      timelineSource.value.onmessage = (event: MessageEvent<string>) => {
-        timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
-      }
-      timelineSource.value.addEventListener("flare$terminated", () => {
-        timelineSource.value?.close()
-        toast.add({
-          title: "Statistics Ready",
-          description: "All timeline records and events have been loaded",
-          icon: "uil:check-circle",
-          color: "success"
-        })
-      })
-
-      statusStore.status = "ready"
     }
+    dataSource.value.addEventListener("flare$terminated", () => {
+      dataSource.value?.close()
+      toast.add({
+        title: "Profiling Data Ready",
+        description: "All CPU and Memory samples have been loaded",
+        icon: "uil:check-circle",
+        color: "success"
+      })
+    })
 
-  })
+    timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`)
+    timelineSource.value.onmessage = (event: MessageEvent<string>) => {
+      timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
+    }
+    timelineSource.value.addEventListener("flare$terminated", () => {
+      timelineSource.value?.close()
+      toast.add({
+        title: "Statistics Ready",
+        description: "All timeline records and events have been loaded",
+        icon: "uil:check-circle",
+        color: "success"
+      })
+    })
+
+    statusStore.status = "ready"
+
+  } else {
+    statusStore.status = "error"
+  }
+
 })
 
 
