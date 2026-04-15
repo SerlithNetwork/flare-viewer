@@ -8,12 +8,16 @@ import {mergeAirplaneSample} from "~/util/merge-utils";
 import type {ThreadAccumulator} from "~/types/protos";
 
 
-const appConfig = useAppConfig()
 const route = useRoute()
 const id = route.params.id
+
 const config = useRuntimeConfig()
+const appConfig = useAppConfig()
 const screenStore = useProfilerScreenStore()
 const statusStore = useProfilerStatusStore()
+
+const dataStream = useServerStream()
+const timelineStream = useServerStream()
 
 const profile = ref<CreateProfile>()
 const timelineSamples = ref<TimelineFile[]>([])
@@ -22,9 +26,6 @@ const dictionary = ref<MethodDictionarySlice[]>([])
 const timeThreads = ref(new Map<string, ThreadAccumulator>)
 const memoryThreads = ref(new Map<string, ThreadAccumulator>)
 const plugins = ref(new Set<string>())
-
-const dataSource = ref<EventSource>()
-const timelineSource = ref<EventSource >()
 
 const { data, status } = useFetch<string>(`${config.public.apiBackendUrl}/api/v1/flare/profiler/${id}`, {
   method: "get",
@@ -36,53 +37,47 @@ onMounted(() => {
   if (status.value === "success") {
     profile.value = CreateProfile.fromBinary(b64UnzipBytes(data.value!!))
 
-    dataSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`)
-    dataSource.value.onmessage = (event: MessageEvent<string>) => {
-      const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
-      mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
-      mergeAirplaneSample({ threads: sample.v2!.memoryProfile, type: "memory" }, memoryThreads.value, plugins.value)
-      if (sample.v2!.dictionary) {
-        dictionary.value.push(sample.v2!.dictionary)
+    dataStream.listen<string>(`${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`, {
+      onMessage(event) {
+        const sample = AirplaneProfileFile.fromBinary(b64UnzipBytes(event.data))
+        mergeAirplaneSample({ threads: sample.v2!.timeProfile, type: "time" }, timeThreads.value, plugins.value)
+        mergeAirplaneSample({ threads: sample.v2!.memoryProfile, type: "memory" }, memoryThreads.value, plugins.value)
+        if (sample.v2!.dictionary) {
+          dictionary.value.push(sample.v2!.dictionary)
+        }
+      },
+      onTermination() {
+        toast.add({
+          title: "Profiling Data Ready",
+          description: "All CPU and Memory samples have been loaded",
+          icon: "uil:check-circle",
+          color: "success"
+        })
       }
-    }
-    dataSource.value.addEventListener("flare$terminated", () => {
-      dataSource.value?.close()
-      toast.add({
-        title: "Profiling Data Ready",
-        description: "All CPU and Memory samples have been loaded",
-        icon: "uil:check-circle",
-        color: "success"
-      })
     })
 
-    timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`)
-    timelineSource.value.onmessage = (event: MessageEvent<string>) => {
-      timelineSamples.value.push(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
-    }
-    timelineSource.value.addEventListener("flare$terminated", () => {
-      timelineSource.value?.close()
-      toast.add({
-        title: "Statistics Ready",
-        description: "All timeline records and events have been loaded",
-        icon: "uil:check-circle",
-        color: "success"
-      })
+    timelineStream.listen<string>(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`, {
+      onMessage(event) {
+        timelineSamples.value.push(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
+      },
+      onTermination() {
+        toast.add({
+          title: "Statistics Ready",
+          description: "All timeline records and events have been loaded",
+          icon: "uil:check-circle",
+          color: "success"
+        })
+      }
     })
 
     statusStore.status = "ready"
 
-  } else {
+  }
+  if (status.value === "error") {
     statusStore.status = "error"
   }
 
 })
-
-
-onUnmounted(() => {
-  dataSource.value?.close()
-  timelineSource.value?.close()
-})
-
 
 useSeoMeta({
   title: `${appConfig.title} - ${id}`,
