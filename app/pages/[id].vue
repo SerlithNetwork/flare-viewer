@@ -57,7 +57,7 @@ onMounted(() => {
 
     timelineSource.value = new EventSource(`${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`)
     timelineSource.value.onmessage = (event: MessageEvent<string>) => {
-      timelineSamples.value = timelineSamples.value.concat(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
+      timelineSamples.value.push(TimelineFile.fromBinary(b64UnzipBytes(event.data)))
     }
     timelineSource.value.addEventListener("flare$terminated", () => {
       timelineSource.value?.close()
