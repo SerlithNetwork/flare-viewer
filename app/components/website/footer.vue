@@ -1,16 +1,13 @@
 <script setup lang="ts">
+import type { NavigationMenuItem } from "#ui/components/NavigationMenu.vue";
 
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faDiscord, faGithub} from "@fortawesome/free-brands-svg-icons";
-import type {NavigationMenuItem} from "#ui/components/NavigationMenu.vue";
-
-const appConfig = useAppConfig()
-const year = ref("")
+const appConfig = useAppConfig();
+const year = ref("");
 
 onMounted(() => {
-  const date = new Date()
-  year.value = date.getFullYear().toString()
-})
+  const date = new Date();
+  year.value = date.getFullYear().toString();
+});
 
 const items: NavigationMenuItem[] = [
   {
@@ -28,12 +25,12 @@ const items: NavigationMenuItem[] = [
     to: appConfig.blog,
     target: "_blank",
   },
-]
-
+];
 </script>
 
 <template>
-  <UFooter class="border-t border-default">
+  <USeparator icon="i-lucide-plane" />
+  <UFooter>
     <template #left>
       <div class="text-slate-500 mb-4 sm:mb-0">
         <div class="mb-1">{{ appConfig.holder }}</div>
@@ -47,6 +44,4 @@ const items: NavigationMenuItem[] = [
   </UFooter>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
