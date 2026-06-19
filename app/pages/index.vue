@@ -6,7 +6,6 @@ const links = ref<ButtonProps[]>([
     label: "My Profilers",
     to: "/profilers",
     icon: "i-lucide-plane",
-    target: "_blank",
   },
   {
     label: "Documentation",
@@ -14,7 +13,6 @@ const links = ref<ButtonProps[]>([
     color: "neutral",
     variant: "subtle",
     trailingIcon: "i-lucide-arrow-right",
-    target: "_blank",
   },
 ]);
 </script>
