@@ -57,24 +57,22 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <NuxtLayout>
-    <div class="flex flex-col items-center justify-center h-[80vh]">
-      <UPageCard class="w-full max-w-md">
-        <UAuthForm
-          :schema="schema"
-          title="Login"
-          description="Enter your credentials to access your account."
-          icon="i-lucide-user"
-          :fields="fields"
-          @submit="onSubmit"
-        >
-          <template #leading>
-            <div class="flex flex-row items-center justify-center">
-              <img src="/assets/airplane.png" alt="flare" class="size-48" />
-            </div>
-          </template>
-        </UAuthForm>
-      </UPageCard>
-    </div>
-  </NuxtLayout>
+  <div class="flex flex-col items-center justify-center h-[80vh]">
+    <UPageCard class="w-full max-w-md">
+      <UAuthForm
+        :schema="schema"
+        title="Login"
+        description="Enter your credentials to access your account."
+        icon="i-lucide-user"
+        :fields="fields"
+        @submit="onSubmit"
+      >
+        <template #leading>
+          <div class="flex flex-row items-center justify-center">
+            <img src="/assets/airplane.png" alt="flare" class="size-48" />
+          </div>
+        </template>
+      </UAuthForm>
+    </UPageCard>
+  </div>
 </template>
