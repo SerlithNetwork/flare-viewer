@@ -27,6 +27,7 @@
     "@protobuf-ts/plugin": "^2.11.1",
     "better-sqlite3": "^12.4.1",
     "highlight.js": "^11.11.1",
+    "motion-v": "^2.3.0",
     "nuxt": "^4.3.0",
     "nuxt-charts": "^2.1.1",
     "pako": "^2.1.0",

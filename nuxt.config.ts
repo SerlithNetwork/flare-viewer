@@ -1,20 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-const apiBackendUrl = "https://jet.serlith.net"
-const apiMappingsUrl = "https://spark-mappings.lucko.me"
+const apiBackendUrl = "https://jet.serlith.net";
+const apiMappingsUrl = "https://spark-mappings.lucko.me";
 
 export default defineNuxtConfig({
-    compatibilityDate: '2025-07-15',
-    devtools: { enabled: true },
-    modules: ['@nuxt/content', '@nuxt/image', '@nuxt/ui', '@pinia/nuxt', 'nuxt-charts'],
-    css: ['~/assets/css/input.css'],
-    runtimeConfig : {
-        public: {
-            apiBackendUrl,
-            apiMappingsUrl,
-        }
+  compatibilityDate: "2025-07-15",
+  devtools: { enabled: true },
+  modules: [
+    "@nuxt/content",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "nuxt-charts",
+    "motion-v/nuxt",
+  ],
+  css: ["~/assets/css/input.css"],
+  runtimeConfig: {
+    public: {
+      apiBackendUrl,
+      apiMappingsUrl,
     },
-    nitro: {
-        preset: 'bun',
-    },
-})
+  },
+  nitro: {
+    preset: "bun",
+  },
+});
