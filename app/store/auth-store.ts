@@ -9,7 +9,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
 
   // Cookies for token storage (SSR-compatible)
   const accessToken = useCookie<AuthenticationDetails$Entry | undefined>(
-    "cobalt_access_token",
+    "flare_access_token",
     {
       maxAge: 45 * 60, // 45 minutes
       sameSite: "lax",
@@ -18,7 +18,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
   );
 
   const refreshToken = useCookie<AuthenticationDetails$Entry | undefined>(
-    "cobalt_refresh_token",
+    "flare_refresh_token",
     {
       maxAge: 24 * 60 * 60, // 1 day
       sameSite: "lax",

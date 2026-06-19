@@ -11,7 +11,9 @@ export default defineNuxtRouteMiddleware((to, _) => {
     return;
   }
 
-  if (!isAuthenticated) {
-    return navigateTo("/");
+  if (to.path.startsWith("/panel")) {
+    if (!isAuthenticated) {
+      return navigateTo("/");
+    }
   }
 });

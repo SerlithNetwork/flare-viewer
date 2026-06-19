@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import type { ButtonProps, FormSubmitEvent } from "@nuxt/ui";
+import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
+import useAuthenticationToken from "~/composables/use-authentication-token";
+
+const toast = useToast();
+const authentication = useAuthenticationToken();
 
 const schema = z.object({
   token: z
@@ -9,12 +13,31 @@ const schema = z.object({
 });
 
 type Schema = z.output<typeof schema>;
-
 const state = reactive<Partial<Schema>>({
   token: "",
 });
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {}
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  authentication.authenticate(event.data.token, "/profilers/panel", {
+    onRequestError() {
+      toast.add({
+        title: "Error",
+        description: "Service down, please try again later",
+        icon: "uil:times-circle",
+        color: "error",
+      });
+    },
+    onResponseError() {
+      toast.add({
+        title: "Error",
+        description:
+          "Profiling token invalid or not authorized to perform this operation",
+        icon: "uil:times-circle",
+        color: "error",
+      });
+    },
+  });
+}
 </script>
 
 <template>
