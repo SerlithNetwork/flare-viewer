@@ -22,7 +22,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     onRequestError() {
       toast.add({
         title: "Error",
-        description: "Service down, please try again later",
+        description: "Service unavailable, try again later",
         icon: "uil:times-circle",
         color: "error",
       });
