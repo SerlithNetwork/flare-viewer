@@ -11,6 +11,7 @@ type Emits = {
   submit: [FlareUserDetails$View];
 };
 
+const backend = useBackend();
 const config = useRuntimeConfig();
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
@@ -27,18 +28,14 @@ const state = reactive<Partial<Schema>>({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  return $fetch<FlareUserDetails$View>(
-    `${config.public.apiBackendUrl}/api/v1/management/user/${props.user.id}`,
-    {
-      method: "put",
-      body: {
-        name: event.data.name,
-        can_manage: event.data.canManage,
-      },
-    },
-  ).then((result) => {
-    emit("submit", result);
-  });
+  return backend
+    .updateUser(props.user.id, {
+      name: event.data.name,
+      can_manage: event.data.canManage,
+    })
+    .then((result) => {
+      emit("submit", result);
+    });
 }
 </script>
 

@@ -1,21 +1,10 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-import { useTokenStore } from "~/store/token-store";
 import type { FlareProfileData$View } from "~/types/profiling";
 
-const toast = useToast();
-const config = useRuntimeConfig();
-const tokenStore = useTokenStore();
+const backend = useBackend();
 
-const { data, status, refresh } = useFetch<FlareProfileData$View[]>(
-  `${config.public.apiBackendUrl}/api/v1/user/profiler`,
-  {
-    method: "get",
-    headers: {
-      Authentication: `token ${tokenStore.profilingToken}`,
-    },
-  },
-);
+const { data, status, refresh } = backend.fetchProfilerSummaries();
 
 const columns: TableColumn<FlareProfileData$View>[] = [
   {
@@ -61,33 +50,9 @@ const columns: TableColumn<FlareProfileData$View>[] = [
 ];
 
 async function onExpireProfiler(profiler: FlareProfileData$View) {
-  await $fetch(
-    `${config.public.apiBackendUrl}/api/v1/user/profiler/${profiler.key}`,
-    {
-      method: "post",
-      headers: {
-        Authentication: `token ${tokenStore.profilingToken}`,
-      },
-      onRequestError() {
-        toast.add({
-          title: "Error",
-          description: "Service down, please try again later",
-          icon: "uil:times-circle",
-          color: "error",
-        });
-      },
-      onResponseError() {
-        toast.add({
-          title: "Error",
-          description:
-            "Profiling token invalid or not authorized to perform this operation",
-          icon: "uil:times-circle",
-          color: "error",
-        });
-      },
-    },
-  );
-  refresh();
+  return backend.deleteProfiler(profiler.key).then(() => {
+    refresh();
+  });
 }
 </script>
 

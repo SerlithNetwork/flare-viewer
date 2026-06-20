@@ -2,14 +2,8 @@
 import type { TableColumn } from "@nuxt/ui";
 import type { FlareUserDetails$View } from "~/types/authentication";
 
-const config = useRuntimeConfig();
-const {
-  data: users,
-  status,
-  refresh,
-} = useFetch<FlareUserDetails$View[]>(
-  `${config.public.apiBackendUrl}/api/v1/management/user`,
-);
+const backend = useBackend();
+const { data: users, status, refresh } = backend.fetchUsers();
 
 const filter = ref("");
 const columns: TableColumn<FlareUserDetails$View>[] = [

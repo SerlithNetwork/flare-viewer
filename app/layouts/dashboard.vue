@@ -2,14 +2,11 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 import { useAuthenticationStore } from "~/store/auth-store";
 import useAuthenticationRefresh from "~/composables/use-authentication-refresh";
-import type { FlareManagerDetails$View } from "~/types/authentication";
 
-const config = useRuntimeConfig();
+const backend = useBackend();
 const authStore = useAuthenticationStore();
 const { refresh } = useAuthenticationRefresh();
-const { data, status } = useFetch<FlareManagerDetails$View>(
-  `${config.public.apiBackendUrl}/api/v1/management/manager/self`,
-);
+const { data, status } = backend.fetchSelfManager();
 
 const interval = ref(0);
 watch(status, (newStatus) => {

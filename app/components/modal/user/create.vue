@@ -7,7 +7,7 @@ type Emits = {
   submit: [FlareUserDetails$View];
 };
 
-const config = useRuntimeConfig();
+const backend = useBackend();
 const emit = defineEmits<Emits>();
 
 const schema = z.object({
@@ -22,18 +22,14 @@ const state = reactive<Partial<Schema>>({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  return $fetch<FlareUserDetails$View>(
-    `${config.public.apiBackendUrl}/api/v1/management/user`,
-    {
-      method: "post",
-      body: {
-        name: event.data.name,
-        can_manage: event.data.canManage,
-      },
-    },
-  ).then((result) => {
-    emit("submit", result);
-  });
+  return backend
+    .createUser({
+      name: event.data.name,
+      can_manage: event.data.canManage,
+    })
+    .then((result) => {
+      emit("submit", result);
+    });
 }
 </script>
 

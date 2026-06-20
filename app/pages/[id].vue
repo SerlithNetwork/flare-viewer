@@ -10,12 +10,12 @@ import { b64UnzipBytes } from "~/util/binary-utils";
 import { useProfilerStatusStore } from "~/store/status-store";
 import { mergeAirplaneSample } from "~/util/merge-utils";
 import type { ThreadAccumulator } from "~/types/protos";
-import type { FlareProfileData$View } from "~/types/profiling";
 
 const route = useRoute();
-const id = route.params.id;
+const key = route.params.id;
 
-const config = useRuntimeConfig();
+const backend = useBackend();
+const toast = useToast();
 const appConfig = useAppConfig();
 const screenStore = useProfilerScreenStore();
 const statusStore = useProfilerStatusStore();
@@ -31,55 +31,44 @@ const timeThreads = ref(new Map<string, ThreadAccumulator>());
 const memoryThreads = ref(new Map<string, ThreadAccumulator>());
 const plugins = ref(new Set<string>());
 
-const { data, status } = useFetch<FlareProfileData$View>(
-  `${config.public.apiBackendUrl}/api/v1/flare/profiler/${id}`,
-  {
-    method: "get",
-  },
-);
+const { data, status } = backend.fetchProfilerSummary(key as string);
 
-const toast = useToast();
 onMounted(async () => {
   if (status.value === "success") {
-    const raw = await $fetch<string>(
-      `${config.public.apiBackendUrl}/api/v1/flare/profiler/encoded/${id}`,
-    );
+    const raw = await backend.fetchProfilerEncoded(key as string);
     profile.value = CreateProfile.fromBinary(b64UnzipBytes(raw));
 
-    dataStream.listen<string>(
-      `${config.public.apiBackendUrl}/api/v1/flare/stream/data/${id}`,
-      {
-        onMessage(event) {
-          const sample = AirplaneProfileFile.fromBinary(
-            b64UnzipBytes(event.data),
-          );
-          mergeAirplaneSample(
-            { threads: sample.v2!.timeProfile, type: "time" },
-            timeThreads.value,
-            plugins.value,
-          );
-          mergeAirplaneSample(
-            { threads: sample.v2!.memoryProfile, type: "memory" },
-            memoryThreads.value,
-            plugins.value,
-          );
-          if (sample.v2!.dictionary) {
-            dictionary.value.push(sample.v2!.dictionary);
-          }
-        },
-        onTermination() {
-          toast.add({
-            title: "Profiling Data Ready",
-            description: "All CPU and Memory samples have been loaded",
-            icon: "uil:check-circle",
-            color: "success",
-          });
-        },
+    dataStream.listen<string>(`${backend.flareApi}/stream/data/${key}`, {
+      onMessage(event) {
+        const sample = AirplaneProfileFile.fromBinary(
+          b64UnzipBytes(event.data),
+        );
+        mergeAirplaneSample(
+          { threads: sample.v2!.timeProfile, type: "time" },
+          timeThreads.value,
+          plugins.value,
+        );
+        mergeAirplaneSample(
+          { threads: sample.v2!.memoryProfile, type: "memory" },
+          memoryThreads.value,
+          plugins.value,
+        );
+        if (sample.v2!.dictionary) {
+          dictionary.value.push(sample.v2!.dictionary);
+        }
       },
-    );
+      onTermination() {
+        toast.add({
+          title: "Profiling Data Ready",
+          description: "All CPU and Memory samples have been loaded",
+          icon: "uil:check-circle",
+          color: "success",
+        });
+      },
+    });
 
     timelineStream.listen<string>(
-      `${config.public.apiBackendUrl}/api/v1/flare/stream/timeline/${id}`,
+      `${backend.flareApi}/stream/timeline/${key}`,
       {
         onMessage(event) {
           timelineSamples.value.push(
@@ -105,21 +94,21 @@ onMounted(async () => {
 });
 
 useSeoMeta({
-  title: `${appConfig.title} - ${id}`,
+  title: `${appConfig.title} - ${key}`,
   description: appConfig.description,
 
-  ogTitle: `${appConfig.title} - ${id}`,
+  ogTitle: `${appConfig.title} - ${key}`,
   ogDescription: appConfig.description,
-  ogUrl: new URL(`/${id}`, appConfig.url).toString(),
+  ogUrl: new URL(`/${key}`, appConfig.url).toString(),
   ogImage: new URL(
-    `/api/v1/flare/thumbnail/${id}.png`,
+    `/api/v1/flare/thumbnail/${key}.png`,
     appConfig.url,
   ).toString(),
 
-  twitterTitle: `${appConfig.title} - ${id}`,
+  twitterTitle: `${appConfig.title} - ${key}`,
   twitterDescription: appConfig.description,
   twitterImage: new URL(
-    `/api/v1/flare/thumbnail/${id}.png`,
+    `/api/v1/flare/thumbnail/${key}.png`,
     appConfig.url,
   ).toString(),
   twitterCard: "summary_large_image",
