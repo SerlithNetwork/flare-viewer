@@ -2,12 +2,14 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 import { useAuthenticationStore } from "~/store/auth-store";
 import useAuthenticationRefresh from "~/composables/use-authentication-refresh";
+import type { FlareManagerDetails$View } from "~/types/authentication";
 
+const config = useRuntimeConfig();
 const authStore = useAuthenticationStore();
-const backend = useBackend();
-
-const { data, status } = backend.fetchSelfUser();
 const { refresh } = useAuthenticationRefresh();
+const { data, status } = useFetch<FlareManagerDetails$View>(
+  `${config.public.apiBackendUrl}/api/v1/management/manager/self`,
+);
 
 const interval = ref(0);
 watch(status, (newStatus) => {
@@ -34,13 +36,18 @@ onUnmounted(() => {
 const items: NavigationMenuItem[][] = [
   [
     {
+      label: "Statistics",
+      icon: "i-lucide-chart-spline",
+      to: "/panel",
+    },
+    {
       label: "Users",
       icon: "i-lucide-users",
       defaultOpen: true,
       children: [
         {
           label: "User",
-          icon: "i-lucide-file-up",
+          icon: "i-lucide-user",
           to: "/panel/user",
         },
         {
@@ -65,22 +72,6 @@ const items: NavigationMenuItem[][] = [
       :ui="{ footer: 'border-t border-default' }"
     >
       <template #default="{ collapsed }">
-        <UButton
-          :label="collapsed ? undefined : 'Search...'"
-          icon="i-lucide-search"
-          color="neutral"
-          variant="outline"
-          block
-          :square="collapsed"
-        >
-          <template v-if="!collapsed" #trailing>
-            <div class="flex items-center gap-0.5 ms-auto">
-              <UKbd value="meta" variant="subtle" />
-              <UKbd value="K" variant="subtle" />
-            </div>
-          </template>
-        </UButton>
-
         <UNavigationMenu
           :collapsed="collapsed"
           :items="items[0]"
