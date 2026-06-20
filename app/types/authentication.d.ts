@@ -31,7 +31,7 @@ export interface FlareManagerDetails$View
 
 export interface FlareUserDetails {
   name: string;
-  can_list: boolean;
+  can_manage: boolean;
 }
 
 export interface FlareUserDetails$Request extends FlareUserDetails {}
