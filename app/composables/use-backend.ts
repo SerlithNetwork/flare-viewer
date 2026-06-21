@@ -54,6 +54,7 @@ export default function () {
       headers: managerHeaders,
       method: "post",
       body: request,
+      ...messages,
     });
   }
 
@@ -62,6 +63,25 @@ export default function () {
       headers: managerHeaders,
       method: "put",
       body: request,
+      ...messages,
+    });
+  }
+
+  function resetUserToken(id: number) {
+    return $fetch<FlareUserDetails$View>(`${managementApi}/user/${id}/reset`, {
+      headers: managerHeaders,
+      method: "put",
+      ...messages,
+      onResponse(event) {
+        if (!event.error) {
+            toast.add({
+            title: "Done!",
+            description: "User token reset successfully",
+            icon: "uil:check-circle",
+            color: "success",
+          })
+        }
+      }
     });
   }
 
@@ -69,6 +89,7 @@ export default function () {
     return $fetch<FlareUserDetails$View>(`${managementApi}/user/${user.id}`, {
       headers: managerHeaders,
       method: "delete",
+      ...messages,
     });
   }
 
