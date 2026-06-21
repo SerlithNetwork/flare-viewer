@@ -20,7 +20,7 @@ export default function () {
         {
           method: "GET",
           headers: {
-            Authentication: `token ${token}`,
+            Authorization: `token ${token}`,
           },
 
           onResponseError: triggers?.onResponseError,
