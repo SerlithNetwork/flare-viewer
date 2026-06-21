@@ -11,8 +11,13 @@ type Emits = {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+const backend = useBackend();
 
-function onSubmit() {}
+async function onSubmit() {
+  return backend.resetUserToken(props.user).then(() => {
+    emit("submit", props.user);
+  });
+}
 </script>
 
 <template>
