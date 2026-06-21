@@ -1,4 +1,5 @@
 import type { IAudited } from "./audited";
+import type { IPassworded } from "./security";
 
 export interface AuthenticationForm {}
 
@@ -25,6 +26,13 @@ export interface AuthenticationDetails$Entry {
 export interface FlareManagerDetails {
   username: string;
 }
+
+export interface FlareManagerDetails$Request
+  extends FlareManagerDetails, IPassworded {}
+
+export interface FlareManagerDetails$Update extends FlareManagerDetails {}
+
+export interface FlareManagerDetails$Reset extends IPassworded {}
 
 export interface FlareManagerDetails$View
   extends FlareManagerDetails, IAudited {}
