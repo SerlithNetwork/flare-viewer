@@ -86,8 +86,6 @@ function onSubmitGeneric() {
   refresh();
 }
 
-async function placeholder(user: FlareUserDetails$View) {}
-
 definePageMeta({
   layout: "dashboard",
 });
@@ -150,7 +148,7 @@ definePageMeta({
           <ModalGenericDelete
             :user="userSelected!"
             name-field="name"
-            :delete-function="placeholder"
+            :delete-function="backend.deleteUser"
             @submit="onSubmitGeneric"
           />
         </div>
