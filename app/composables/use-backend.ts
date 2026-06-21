@@ -2,6 +2,9 @@ import type { UseFetchOptions } from "#app";
 import { useAuthenticationStore } from "~/store/auth-store";
 import { useTokenStore } from "~/store/token-store";
 import type {
+  FlareManagerDetails$Request,
+  FlareManagerDetails$Reset,
+  FlareManagerDetails$Update,
   FlareManagerDetails$View,
   FlareUserDetails$Request,
   FlareUserDetails$Update,
@@ -41,6 +44,65 @@ export default function () {
     });
   }
 
+  function fetchManagers(opts: UseFetchOptions<any> | undefined = undefined) {
+    return useFetch<FlareManagerDetails$View[]>(`${managementApi}/manager`, {
+      headers: managerHeaders,
+      method: "get",
+      ...opts,
+    });
+  }
+
+  function createManager(request: FlareManagerDetails$Request) {
+    return $fetch<FlareManagerDetails$View>(`${managementApi}/manager`, {
+      headers: managerHeaders,
+      method: "post",
+      body: request,
+      ...messages,
+    });
+  }
+
+  function updateManager(id: number, request: FlareManagerDetails$Update) {
+    return $fetch<FlareManagerDetails$View>(`${managementApi}/manager/${id}`, {
+      headers: managerHeaders,
+      method: "put",
+      body: request,
+      ...messages,
+    });
+  }
+
+  function resetManagerPassword(
+    id: number,
+    request: FlareManagerDetails$Reset,
+  ) {
+    return $fetch<FlareManagerDetails$View>(
+      `${managementApi}/manager/${id}/reset`,
+      {
+        headers: managerHeaders,
+        method: "put",
+        body: request,
+        ...messages,
+        onResponse(event) {
+          if (!event.error) {
+            toast.add({
+              title: "Done!",
+              description: "Manager password changed successfully",
+              icon: "uil:check-circle",
+              color: "success",
+            });
+          }
+        },
+      },
+    );
+  }
+
+  function deleteManager(user: FlareManagerDetails$View) {
+    return $fetch<number>(`${managementApi}/manager/${user.id}`, {
+      headers: managerHeaders,
+      method: "delete",
+      ...messages,
+    });
+  }
+
   function fetchUsers(opts: UseFetchOptions<any> | undefined = undefined) {
     return useFetch<FlareUserDetails$View[]>(`${managementApi}/user`, {
       headers: managerHeaders,
@@ -67,26 +129,29 @@ export default function () {
     });
   }
 
-  function resetUserToken(id: number) {
-    return $fetch<FlareUserDetails$View>(`${managementApi}/user/${id}/reset`, {
-      headers: managerHeaders,
-      method: "put",
-      ...messages,
-      onResponse(event) {
-        if (!event.error) {
+  function resetUserToken(user: FlareUserDetails$View) {
+    return $fetch<FlareUserDetails$View>(
+      `${managementApi}/user/${user.id}/reset`,
+      {
+        headers: managerHeaders,
+        method: "put",
+        ...messages,
+        onResponse(event) {
+          if (!event.error) {
             toast.add({
-            title: "Done!",
-            description: "User token reset successfully",
-            icon: "uil:check-circle",
-            color: "success",
-          })
-        }
-      }
-    });
+              title: "Done!",
+              description: "User token reset successfully",
+              icon: "uil:check-circle",
+              color: "success",
+            });
+          }
+        },
+      },
+    );
   }
 
   function deleteUser(user: FlareUserDetails$View) {
-    return $fetch<FlareUserDetails$View>(`${managementApi}/user/${user.id}`, {
+    return $fetch<number>(`${managementApi}/user/${user.id}`, {
       headers: managerHeaders,
       method: "delete",
       ...messages,
@@ -128,7 +193,7 @@ export default function () {
   }
 
   function deleteProfiler(key: string) {
-    return $fetch<boolean>(`${userApi}/profiler/${key}`, {
+    return $fetch<number>(`${userApi}/profiler/${key}`, {
       headers: userHeaders,
       method: "delete",
       onRequestError() {
@@ -169,9 +234,16 @@ export default function () {
     userApi,
 
     fetchSelfManager,
+    fetchManagers,
+    createManager,
+    updateManager,
+    resetManagerPassword,
+    deleteManager,
+
     fetchUsers,
     createUser,
     updateUser,
+    resetUserToken,
     deleteUser,
 
     fetchProfilerSummaries,
