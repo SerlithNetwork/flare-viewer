@@ -40,12 +40,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     @submit="onSubmit"
     class="flex flex-col items-center justify-center gap-4 w-full"
   >
-    <div class="flex flex-col items-center justify-center gap-2 w-full">
+    <div class="flex flex-col items-center justify-center gap-4 w-full">
       <UFormField label="User Name" name="name">
         <UInput v-model="state.name" />
       </UFormField>
-      <UFormField label="Manage Profilers" name="manage">
-        <UCheckbox v-model="state.canManage" />
+      <UFormField name="manage">
+        <UCheckbox v-model="state.canManage" label="Manage Profilers" />
       </UFormField>
     </div>
     <div class="flex flex-col items-end w-full">

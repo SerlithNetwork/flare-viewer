@@ -5,5 +5,8 @@ definePageMeta({
 </script>
 
 <template>
-  <span> Placeholder </span>
+  <UPageHero
+    title="Welcome back!"
+    description="Manage users and their tokens."
+  />
 </template>

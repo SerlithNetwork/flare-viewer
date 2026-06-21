@@ -33,8 +33,8 @@ onUnmounted(() => {
 const items: NavigationMenuItem[][] = [
   [
     {
-      label: "Statistics",
-      icon: "i-lucide-chart-spline",
+      label: "Home",
+      icon: "i-lucide-house",
       to: "/panel",
     },
     {
