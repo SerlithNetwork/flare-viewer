@@ -71,7 +71,7 @@ function triggerResetModal(user: FlareUserDetails$View) {
 
 function onSubmitDisplaySecret(user: FlareUserDetails$View) {
   onSubmitGeneric();
-  userSelected.value = user;
+  userForSecret.value = user;
   isSecretModalShown.value = true;
 }
 
