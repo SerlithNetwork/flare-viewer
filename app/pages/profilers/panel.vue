@@ -31,32 +31,26 @@ const columns: TableColumn<FlareProfileData$View>[] = [
     accessorKey: "refreshed_at",
     header: "Refreshed at",
     cell: ({ row }) => {
-      return new Date(row.getValue(row.original.refreshed_at)).toLocaleString(
-        "en-US",
-        {
-          day: "numeric",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        },
-      );
+      return new Date(row.original.refreshed_at).toLocaleString("en-US", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
     },
   },
   {
     accessorKey: "created_at",
     header: "Created at",
     cell: ({ row }) => {
-      return new Date(row.getValue(row.original.created_at)).toLocaleString(
-        "en-US",
-        {
-          day: "numeric",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        },
-      );
+      return new Date(row.original.created_at).toLocaleString("en-US", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
     },
   },
   {

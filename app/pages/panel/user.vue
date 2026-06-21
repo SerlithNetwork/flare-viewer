@@ -30,16 +30,13 @@ const columns: TableColumn<FlareUserDetails$View>[] = [
     accessorKey: "created_at",
     header: "Created at",
     cell: ({ row }) => {
-      return new Date(row.getValue(row.original.created_at)).toLocaleString(
-        "en-US",
-        {
-          day: "numeric",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        },
-      );
+      return new Date(row.original.created_at).toLocaleString("en-US", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
     },
   },
   {
