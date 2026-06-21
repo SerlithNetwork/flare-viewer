@@ -11,5 +11,6 @@ export interface FlareProfileData$View extends FlareProfileData {
   storage: string;
   data_samples: number;
   timeline_samples: number;
+  refreshed_at: string;
   created_at: string;
 }

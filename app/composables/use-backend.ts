@@ -82,6 +82,30 @@ export default function () {
     });
   }
 
+  function refreshProfiler(key: string) {
+    return $fetch<boolean>(`${userApi}/profiler/${key}`, {
+      headers: userHeaders,
+      method: "patch",
+      onRequestError() {
+        toast.add({
+          title: "Error",
+          description: "Service down, please try again later",
+          icon: "uil:times-circle",
+          color: "error",
+        });
+      },
+      onResponseError() {
+        toast.add({
+          title: "Error",
+          description:
+            "Profiling token invalid or not authorized to perform this operation",
+          icon: "uil:times-circle",
+          color: "error",
+        });
+      },
+    });
+  }
+
   function deleteProfiler(key: string) {
     return $fetch<boolean>(`${userApi}/profiler/${key}`, {
       headers: userHeaders,
@@ -130,6 +154,7 @@ export default function () {
     deleteUser,
 
     fetchProfilerSummaries,
+    refreshProfiler,
     deleteProfiler,
 
     fetchProfilerSummary,

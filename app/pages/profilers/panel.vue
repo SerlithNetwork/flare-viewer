@@ -28,6 +28,22 @@ const columns: TableColumn<FlareProfileData$View>[] = [
     header: "JVM Implementation",
   },
   {
+    accessorKey: "refreshed_at",
+    header: "Refreshed at",
+    cell: ({ row }) => {
+      return new Date(row.getValue(row.original.refreshed_at)).toLocaleString(
+        "en-US",
+        {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        },
+      );
+    },
+  },
+  {
     accessorKey: "created_at",
     header: "Created at",
     cell: ({ row }) => {
@@ -49,6 +65,12 @@ const columns: TableColumn<FlareProfileData$View>[] = [
   },
 ];
 
+async function onRefreshProfiler(profiler: FlareProfileData$View) {
+  return backend.refreshProfiler(profiler.key).then(() => {
+    refresh();
+  });
+}
+
 async function onExpireProfiler(profiler: FlareProfileData$View) {
   return backend.deleteProfiler(profiler.key).then(() => {
     refresh();
@@ -65,6 +87,13 @@ async function onExpireProfiler(profiler: FlareProfileData$View) {
       class="flex-1"
     >
       <template #actions-cell="{ row }">
+        <UButton
+          icon="i-lucide-clock-check"
+          color="neutral"
+          variant="ghost"
+          class="ml-auto"
+          @click="onRefreshProfiler(row.original)"
+        />
         <UButton
           icon="i-lucide-trash-2"
           color="neutral"
