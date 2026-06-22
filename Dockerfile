@@ -1,23 +1,15 @@
-FROM node:24-slim AS base
+FROM oven/bun:1-debian AS build
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME/bin:$PATH"
-RUN corepack enable
 RUN apt-get update && apt-get install -y python3 g++ make protobuf-compiler
 
-FROM base AS prod
-
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install
+COPY package.json bun.lock ./
+RUN mkdir -p ./app/proto
+RUN bun install --frozen-lockfile --production
 
 COPY . ./
-RUN mkdir -p ./app/proto
-RUN pnpm run proto
-RUN pnpm run build
+RUN bun run proto
+RUN bun run build
 
-FROM base
-COPY --from=prod /app/node_modules /app/node_modules
-COPY --from=prod /app/.output /app/.output
 EXPOSE 3000
-CMD ["pnpm", "/app/.output/server/index.mjs"]
+CMD ["bun", ".output/server/index.mjs"]
