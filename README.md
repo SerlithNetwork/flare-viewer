@@ -19,6 +19,7 @@ Features:
 
 First generate the protobuf interfaces by running
 ````shell
+  mkdir app/proto 
   npm run proto
 ````
 
@@ -57,4 +58,3 @@ Flare viewer is compatible with any platform that provides [Flare](https://githu
 
 flare-viewer is free and open source software, released under the AGPL license. \
 Refer to [LICENSE](LICENSE) for details.
-

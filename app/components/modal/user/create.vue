@@ -1,0 +1,55 @@
+<script lang="ts" setup>
+import type { FormSubmitEvent } from "@nuxt/ui";
+import * as z from "zod";
+import type { FlareUserDetails$View } from "~/types/authentication";
+
+type Emits = {
+  submit: [FlareUserDetails$View];
+};
+
+const backend = useBackend();
+const emit = defineEmits<Emits>();
+
+const schema = z.object({
+  name: z.string().min(4, "Must be at least 4 characters long"),
+  canManage: z.boolean(),
+});
+type Schema = z.output<typeof schema>;
+
+const state = reactive<Partial<Schema>>({
+  name: "",
+  canManage: true,
+});
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  return backend
+    .createUser({
+      name: event.data.name,
+      can_manage: event.data.canManage,
+    })
+    .then((result) => {
+      emit("submit", result);
+    });
+}
+</script>
+
+<template>
+  <UForm
+    :schema="schema"
+    :state="state"
+    @submit="onSubmit"
+    class="flex flex-col items-center justify-center gap-4 w-full"
+  >
+    <div class="flex flex-col items-center justify-center gap-4 w-full">
+      <UFormField label="User Name" name="name">
+        <UInput v-model="state.name" />
+      </UFormField>
+      <UFormField name="manage">
+        <UCheckbox v-model="state.canManage" label="Manage Profilers" />
+      </UFormField>
+    </div>
+    <div class="flex flex-col items-end w-full">
+      <UButton type="submit"> Submit </UButton>
+    </div>
+  </UForm>
+</template>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-
-const appConfig = useAppConfig()
+const appConfig = useAppConfig();
 
 useHead({
-  title: appConfig.title
-})
+  title: appConfig.title,
+});
 
 useSeoMeta({
   title: appConfig.title,
@@ -16,8 +15,7 @@ useSeoMeta({
   ogImage: new URL(appConfig.image, appConfig.url).toString(),
 
   themeColor: appConfig.color,
-})
-
+});
 </script>
 
 <template>
@@ -29,7 +27,5 @@ useSeoMeta({
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-
-    <WebsiteFooter />
   </UApp>
 </template>

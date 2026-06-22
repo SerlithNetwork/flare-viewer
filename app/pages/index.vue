@@ -1,40 +1,34 @@
 <script setup lang="ts">
-
-import type {ButtonProps} from "#ui/components/Button.vue";
-
-const appConfig = useAppConfig()
+import type { ButtonProps } from "#ui/components/Button.vue";
 
 const links = ref<ButtonProps[]>([
   {
-    label: "Repository",
-    to: appConfig.repository,
-    icon: "i-lucide-github",
-    target: "_blank",
+    label: "My Profilers",
+    to: "/profilers",
+    icon: "i-lucide-plane",
   },
   {
-    label: "Start Profiling",
-    to: appConfig.flare,
+    label: "Documentation",
+    to: "/docs",
     color: "neutral",
     variant: "subtle",
     trailingIcon: "i-lucide-arrow-right",
-    target: "_blank",
-  }
-])
-
+  },
+]);
 </script>
 
 <template>
-  <UPageHero
+  <div class="flex flex-col justify-center h-[80vh]">
+    <UPageHero
       title="Flare"
       orientation="horizontal"
       description="The Minecraft thread and allocation profiler revitalized"
       :links="links"
       reverse
-  >
-    <img src="~/assets/airplane.png" alt="airplane">
-  </UPageHero>
+    >
+      <img src="~/assets/airplane.png" alt="airplane" />
+    </UPageHero>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
