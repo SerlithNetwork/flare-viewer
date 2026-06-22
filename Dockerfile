@@ -1,16 +1,17 @@
 
-FROM oven/bun:1.3.0-debian AS build
+FROM ghcr.io/pnpm/pnpm:11
+RUN pnpm runtime set node 22 -g
 
 RUN apt-get update && apt-get install -y python3 g++ make
 
 WORKDIR /app
-COPY package.json bun.lock ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN mkdir -p ./app/proto
-RUN bun install
+RUN pnpm install --frozen-lockfile
 
 COPY . ./
-RUN bun run proto
-RUN bun run build
+RUN pnpm run proto
+RUN pnpm run build
 
-CMD ["bun", ".output/server/index.mjs"]
+CMD ["pnpm", ".output/server/index.mjs"]
 EXPOSE 3000/tcp
