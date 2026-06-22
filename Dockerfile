@@ -7,16 +7,16 @@ RUN apt-get update && apt-get install -y python3 g++ make
 
 FROM base AS prod
 
-COPY pnpm-lock.yaml /app
 WORKDIR /app
+COPY pnpm-lock.yaml ./
 RUN pnpm fetch --prod
 
-COPY . /app
+COPY . ./
 RUN pnpm run proto
 RUN pnpm run build
 
 FROM base
 COPY --from=prod /app/node_modules /app/node_modules
-COPY --from=prod /app/dist /app/dist
+COPY --from=prod /app/.output /app/.output
 EXPOSE 3000
-CMD ["pnpm", ".output/server/index.mjs"]
+CMD ["pnpm", "/app/.output/server/index.mjs"]
