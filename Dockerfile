@@ -3,7 +3,7 @@ FROM node:24-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME/bin:$PATH"
 RUN corepack enable
-RUN apt-get update && apt-get install -y python3 g++ make
+RUN apt-get update && apt-get install -y python3 g++ make protobuf-compiler
 
 FROM base AS prod
 
