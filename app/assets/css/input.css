@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap");
 @import "@nuxt/ui";
 @import "tailwindcss";
 @import "tailwindcss-animated";
@@ -7,28 +6,29 @@
 @tailwind utilities;
 
 :root {
-    --background-color: #0a0a0a;
-    --surface-color: #1a1a1a;
-    --primary-color: #ffb0f4;
-    --secondary-color: #ffd9fa;
-    --text-color: #f8fafc;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --dashed_color: rgba(255, 255, 255, 0.001);
+  --background-color: #0a0a0a;
+  --surface-color: #1a1a1a;
+  --primary-color: #ffb0f4;
+  --secondary-color: #ffd9fa;
+  --text-color: #f8fafc;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --dashed_color: rgba(255, 255, 255, 0.001);
 
-    --profiler-top-color: #292929;
-    --profiler-top-hover-color: #363636;
-    --profiler-child-color: #101010;
-    --profiler-child-hover-color: #212121;
-    --profiler-child-group-hover-color: #161616;
+  --profiler-top-color: #292929;
+  --profiler-top-hover-color: #363636;
+  --profiler-child-color: #101010;
+  --profiler-child-hover-color: #212121;
+  --profiler-child-group-hover-color: #161616;
 
-    --ui-success: var(--color-pink-300);
-    --ui-primary: var(--color-pink-300);
-    --ui-secondary: var(--color-purple-400);
-    .hljs {
-        background: transparent;
-    }
+  --ui-success: var(--color-pink-300);
+  --ui-primary: var(--color-pink-300);
+  --ui-secondary: var(--color-purple-400);
+  .shiki {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 }
 
 * {
-    font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
 }

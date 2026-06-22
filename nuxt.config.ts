@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-charts",
     "motion-v/nuxt",
+    "nuxt-shiki",
   ],
   css: ["~/assets/css/input.css"],
   runtimeConfig: {

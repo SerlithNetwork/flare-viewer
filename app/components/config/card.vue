@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import "highlight.js/styles/nord.css";
 import { type CreateProfile_ConfigurationFile } from "~/proto/ProfileFile_pb";
 import type { TabsItem } from "#ui/components/Tabs.vue";
 
@@ -12,6 +11,7 @@ const configMap = computed(
 
 const selectedConfig = ref(configs[0]!.filename);
 const selectedContent = ref(configs[0]!.contents);
+const selectedLanguage = ref(languageFromFilename(configs[0]!.filename));
 const items = computed<TabsItem[]>(() =>
   configs.map((config) => ({
     label: config.filename,
@@ -20,6 +20,14 @@ const items = computed<TabsItem[]>(() =>
   })),
 );
 
+function languageFromFilename(filename: string): string {
+  const splits = filename.split(".");
+  if (splits.length === 2) {
+    return splits[1]!;
+  }
+  return "properties";
+}
+
 const selected = computed<string>({
   get() {
     return selectedConfig.value;
@@ -27,6 +35,7 @@ const selected = computed<string>({
   set(value) {
     selectedContent.value = configMap.value.get(value)!;
     selectedConfig.value = value;
+    selectedLanguage.value = languageFromFilename(value);
   },
 });
 </script>
@@ -40,11 +49,7 @@ const selected = computed<string>({
         </UScrollArea>
       </div>
       <UCard class="w-full">
-        <highlightjs
-          class="text-wrap w-full"
-          :code="selectedContent"
-          :autodetect="true"
-        />
+        <ConfigBlock :content="selectedContent" :language="selectedLanguage" />
       </UCard>
     </div>
   </div>
