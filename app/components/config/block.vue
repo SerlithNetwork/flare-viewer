@@ -19,6 +19,9 @@ const html = computed(() => {
       "catppuccin-macchiato": {
         "#24273a": "transparent",
       },
+      "catppuccin-latte": {
+        "#eff1f5": "transparent",
+      },
     },
   });
 });
