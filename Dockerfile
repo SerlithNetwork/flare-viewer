@@ -12,6 +12,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install
 
 COPY . ./
+RUN mkdir -p ./app/proto
 RUN pnpm run proto
 RUN pnpm run build
 
