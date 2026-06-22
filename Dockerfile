@@ -1,17 +1,22 @@
+FROM node:24-slim AS base
 
-FROM ghcr.io/pnpm/pnpm:11
-RUN pnpm runtime set node 22 -g
-
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME/bin:$PATH"
+RUN corepack enable
 RUN apt-get update && apt-get install -y python3 g++ make
 
-WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN mkdir -p ./app/proto
-RUN pnpm install --frozen-lockfile
+FROM base AS prod
 
-COPY . ./
+COPY pnpm-lock.yaml /app
+WORKDIR /app
+RUN pnpm fetch --prod
+
+COPY . /app
 RUN pnpm run proto
 RUN pnpm run build
 
+FROM base
+COPY --from=prod /app/node_modules /app/node_modules
+COPY --from=prod /app/dist /app/dist
+EXPOSE 3000
 CMD ["pnpm", ".output/server/index.mjs"]
-EXPOSE 3000/tcp
