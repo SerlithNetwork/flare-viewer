@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y python3 g++ make
 FROM base AS prod
 
 WORKDIR /app
-COPY pnpm-lock.yaml ./
-RUN pnpm fetch --prod
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install
 
 COPY . ./
 RUN pnpm run proto
