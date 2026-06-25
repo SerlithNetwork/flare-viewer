@@ -106,6 +106,50 @@ categories.set("flare:proxy:playercount", {
 categories.set("flare:proxy:servercount", {
   value: { name: "Servers", color: "#FF8787" },
 });
+const categoryWorldMspt = computed(() =>
+  parseCategoryFromAbstract(
+    extraMetrics.value.worldMspt[0],
+    "World [%s] MSPT",
+    "#53DBC7",
+  ),
+);
+const categoryRegionTps = computed(() =>
+  parseCategoryFromAbstract(
+    extraMetrics.value.regionTps[0],
+    "Region [%s] TPS",
+    "#53DB75",
+  ),
+);
+const categoryRegionMspt = computed(() =>
+  parseCategoryFromAbstract(
+    extraMetrics.value.regionMspt[0],
+    "Region [%s] MSPT",
+    "#53DBC7",
+  ),
+);
+
+function parseCategoryFromAbstract(
+  reference: Record<string, string | number> | undefined,
+  message: string,
+  color: string,
+) {
+  if (!reference) {
+    return {};
+  }
+
+  const allKeys = Object.keys(reference);
+  const keys = allKeys.filter((k) => k !== "time");
+  const record: Record<string, any> = {};
+
+  keys.forEach((key) => {
+    record[key] = {
+      name: message.replace("%s", key),
+      color: color,
+    };
+  });
+
+  return record;
+}
 
 const titles = new Map<string, string>();
 titles.set("airplane:tps", "TPS");
@@ -211,7 +255,7 @@ const unknownEvents = computed(() =>
           <AreaChart
             class="w-[50vh] md:w-[75vh]"
             :data="extraMetrics.worldMspt"
-            :categories="{ value: { name: 'World MSPT', color: '#53DBC7' } }"
+            :categories="categoryWorldMspt"
             :height="300"
             yLabel="MSPT"
           />
@@ -232,14 +276,14 @@ const unknownEvents = computed(() =>
           <AreaChart
             class="w-[50vh] md:w-[75vh]"
             :data="extraMetrics.regionTps"
-            :categories="{ value: { name: 'Region TPS', color: '#53DBC7' } }"
+            :categories="categoryRegionTps"
             :height="300"
             yLabel="TPS"
           />
           <AreaChart
             class="w-[50vh] md:w-[75vh]"
             :data="extraMetrics.regionMspt"
-            :categories="{ value: { name: 'Region MSPT', color: '#53DBC7' } }"
+            :categories="categoryRegionMspt"
             :height="300"
             yLabel="MSPT"
           />
