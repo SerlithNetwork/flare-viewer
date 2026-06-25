@@ -95,10 +95,10 @@ categories.set("builtin:thread:threadcount", {
   value: { name: "Native Threads", color: "#ADFFB2" },
 });
 categories.set("flare:proxy:playercount", {
-  value: { name: "Players", color: "#ADFFB2" },
+  value: { name: "Players", color: "#FCD4FF" },
 });
 categories.set("flare:proxy:servercount", {
-  value: { name: "Servers", color: "#ADFFB2" },
+  value: { name: "Servers", color: "#FF8787" },
 });
 
 const titles = new Map<string, string>();
@@ -166,7 +166,13 @@ const unknownEvents = computed(() =>
 
 <template>
   <div class="flex flex-col items-center min-w-fit m-8 max-w-sm gap-6">
-    <UCard class="flex flex-col w-full shadow-sm">
+    <UCard
+      v-if="
+        summary.metrics.has('airplane:tps') &&
+        summary.metrics.has('airplane:mspt')
+      "
+      class="flex flex-col w-full shadow-sm"
+    >
       <div class="flex flex-col items-center w-full gap-4">
         <span class="text-default text-3xl font-bold">Performance Metrics</span>
         <div class="flex flex-wrap justify-around w-full gap-4">
@@ -229,6 +235,7 @@ const unknownEvents = computed(() =>
         <span class="text-default text-3xl font-bold">World Resources</span>
         <div class="flex flex-wrap justify-around w-full gap-4">
           <AreaChart
+            v-if="summary.metrics.has('airplane:world:playercount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('airplane:world:playercount')!"
             :categories="categories.get('airplane:world:playercount')!"
@@ -236,6 +243,7 @@ const unknownEvents = computed(() =>
             :yLabel="labels.get('airplane:world:playercount')!"
           />
           <AreaChart
+            v-if="summary.metrics.has('airplane:world:entitycount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('airplane:world:entitycount')!"
             :categories="categories.get('airplane:world:entitycount')!"
@@ -243,6 +251,7 @@ const unknownEvents = computed(() =>
             :yLabel="labels.get('airplane:world:entitycount')!"
           />
           <AreaChart
+            v-if="summary.metrics.has('airplane:world:blockentitycount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('airplane:world:blockentitycount')!"
             :categories="categories.get('airplane:world:blockentitycount')!"
@@ -250,11 +259,28 @@ const unknownEvents = computed(() =>
             :yLabel="labels.get('airplane:world:blockentitycount')!"
           />
           <AreaChart
+            v-if="summary.metrics.has('airplane:world:chunkcount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('airplane:world:chunkcount')!"
             :categories="categories.get('airplane:world:chunkcount')!"
             :height="300"
             :yLabel="labels.get('airplane:world:chunkcount')!"
+          />
+          <AreaChart
+            v-if="summary.metrics.has('flare:proxy:playercount')"
+            class="w-[50vh] md:w-[75vh]"
+            :data="summary.metrics.get('flare:proxy:playercount')!"
+            :categories="categories.get('flare:proxy:playercount')!"
+            :height="300"
+            :yLabel="labels.get('flare:proxy:playercount')!"
+          />
+          <AreaChart
+            v-if="summary.metrics.has('flare:proxy:servercount')"
+            class="w-[50vh] md:w-[75vh]"
+            :data="summary.metrics.get('flare:proxy:servercount')!"
+            :categories="categories.get('flare:proxy:servercount')!"
+            :height="300"
+            :yLabel="labels.get('flare:proxy:servercount')!"
           />
         </div>
       </div>
