@@ -1,24 +1,36 @@
 <script setup lang="ts">
-
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faDesktop, faGears, faMugHot, faServer, faTerminal} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+  faDesktop,
+  faGears,
+  faMugHot,
+  faServer,
+  faTerminal,
+} from "@fortawesome/free-solid-svg-icons";
 import type {
   CreateProfile_HardwareInfo,
-  CreateProfile_OperatingSystem, CreateProfile_V3,
-  CreateProfile_VMOptions
+  CreateProfile_OperatingSystem,
+  CreateProfile_V3,
+  CreateProfile_VMOptions,
 } from "~/proto/ProfileFile_pb";
 
-const { hwInfo, os, vmOptions, v3 } = defineProps<{ hwInfo: CreateProfile_HardwareInfo, os: CreateProfile_OperatingSystem, vmOptions: CreateProfile_VMOptions, v3: CreateProfile_V3 }>()
+const { hwInfo, os, vmOptions, v3 } = defineProps<{
+  hwInfo: CreateProfile_HardwareInfo;
+  os: CreateProfile_OperatingSystem;
+  vmOptions: CreateProfile_VMOptions;
+  v3: CreateProfile_V3;
+}>();
 
-const flags = vmOptions.flags.join(" ")
-
+const flags = vmOptions.flags.join(" ");
 </script>
 
 <template>
-  <div class="flex flex-col items-center min-h-6 min-w-[95%] m-8 max-w-sm p-6 gap-4">
+  <div
+    class="flex flex-col items-center min-h-6 min-w-[95%] m-8 max-w-sm p-6 gap-4"
+  >
     <div>
       <div class="flex flex-wrap items-start justify-center min-w-full">
-        <UCard class="min-h-64 min-w-[40%] m-8 p-6" >
+        <UCard class="min-h-64 min-w-[40%] m-8 p-6">
           <div class="min-h-64 w-full gap-4 rounded-lg">
             <div class="flex flex-row gap-4 items-center text-2xl font-bold">
               <FontAwesomeIcon :icon="faGears" class="text-primary" />
@@ -31,24 +43,44 @@ const flags = vmOptions.flags.join(" ")
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">CPU Cores:</span>
-                <span class="text-dimmed">{{ hwInfo.cpu!.coreCount }} ({{ hwInfo.cpu!.threadCount }} threads)</span>
+                <span class="text-dimmed"
+                  >{{ hwInfo.cpu!.coreCount }} ({{
+                    hwInfo.cpu!.threadCount
+                  }}
+                  threads)</span
+                >
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">RAM Total:</span>
-                <span class="text-dimmed">{{ Math.round(hwInfo.memory!.total / 10737418.24) / 100 }} GiB</span>
+                <span class="text-dimmed"
+                  >{{
+                    Math.round(hwInfo.memory!.total / 10737418.24) / 100
+                  }}
+                  GiB</span
+                >
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">SWAP Total:</span>
-                <span class="text-dimmed">{{ Math.round(hwInfo.memory!.swapTotal / 10737418.24) / 100 }} GiB</span>
+                <span class="text-dimmed"
+                  >{{
+                    Math.round(hwInfo.memory!.swapTotal / 10737418.24) / 100
+                  }}
+                  GiB</span
+                >
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">Virtual Max:</span>
-                <span class="text-dimmed">{{ Math.round(hwInfo.memory!.virtualMax / 10737418.24) / 100 }} GiB</span>
+                <span class="text-dimmed"
+                  >{{
+                    Math.round(hwInfo.memory!.virtualMax / 10737418.24) / 100
+                  }}
+                  GiB</span
+                >
               </div>
             </div>
           </div>
         </UCard>
-        <UCard class="min-h-64 min-w-[40%] m-8 p-6" >
+        <UCard class="min-h-64 min-w-[40%] m-8 p-6">
           <div class="min-h-64 w-full gap-4 rounded-lg">
             <div class="flex flex-row gap-4 items-center text-2xl font-bold">
               <FontAwesomeIcon :icon="faDesktop" class="text-primary" />
@@ -68,13 +100,15 @@ const flags = vmOptions.flags.join(" ")
                 <span class="text-dimmed">{{ os.manufacturer }}</span>
               </div>
               <div class="flex flex-row items-center gap-2">
-                <span class="text-default text-lg font-bold">Architecture:</span>
+                <span class="text-default text-lg font-bold"
+                  >Architecture:</span
+                >
                 <span class="text-dimmed">{{ os.bitness }} bits</span>
               </div>
             </div>
           </div>
         </UCard>
-        <UCard class="min-h-64 min-w-[40%] m-8 p-6" >
+        <UCard class="min-h-64 min-w-[40%] m-8 p-6">
           <div class="min-h-64 w-full gap-4 rounded-lg">
             <div class="flex flex-row gap-4 items-center text-2xl font-bold">
               <FontAwesomeIcon :icon="faMugHot" class="text-primary" />
@@ -91,7 +125,10 @@ const flags = vmOptions.flags.join(" ")
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">Runtime:</span>
-                <span class="text-dimmed">{{ vmOptions.runtimeName }} {{ vmOptions.runtimeVersion }}</span>
+                <span class="text-dimmed"
+                  >{{ vmOptions.runtimeName }}
+                  {{ vmOptions.runtimeVersion }}</span
+                >
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">JVM:</span>
@@ -100,7 +137,7 @@ const flags = vmOptions.flags.join(" ")
             </div>
           </div>
         </UCard>
-        <UCard class="min-h-64 min-w-[40%] m-8 p-6" >
+        <UCard class="min-h-64 min-w-[40%] m-8 p-6">
           <div class="min-h-64 w-full gap-4 rounded-lg">
             <div class="flex flex-row gap-4 items-center text-2xl font-bold">
               <FontAwesomeIcon :icon="faServer" class="text-primary" />
@@ -109,22 +146,32 @@ const flags = vmOptions.flags.join(" ")
             <div class="flex flex-col gap-1 items-start mt-4">
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">Build:</span>
-                <span class="text-dimmed">{{ v3.versions["Primary Version"] }}</span>
+                <span class="text-dimmed">{{
+                  v3.versions["Primary Version"]
+                }}</span>
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">API:</span>
-                <span class="text-dimmed">{{ v3.versions["Bukkit Version"] ?? v3.versions["Velocity Version"] }}</span>
+                <span class="text-dimmed">{{
+                  v3.versions["Bukkit Version"] ??
+                  v3.versions["Velocity Version"]
+                }}</span>
               </div>
-              <div v-if="v3.versions["Minecraft Version"]" class="flex flex-row items-center gap-2">
+              <div
+                v-if="v3.versions['Minecraft Version']"
+                class="flex flex-row items-center gap-2"
+              >
                 <span class="text-default text-lg font-bold">Version:</span>
-                <span class="text-dimmed">{{ v3.versions["Minecraft Version"] }}</span>
+                <span class="text-dimmed">{{
+                  v3.versions["Minecraft Version"]
+                }}</span>
               </div>
             </div>
           </div>
         </UCard>
       </div>
     </div>
-    <UCard class="min-h-64 w-fit m-8 p-6" >
+    <UCard class="min-h-64 w-fit m-8 p-6">
       <div class="flex flex-col w-full gap-4 rounded-lg">
         <div class="flex flex-row gap-4 items-center text-2xl font-bold">
           <FontAwesomeIcon :icon="faTerminal" class="text-primary" />
@@ -136,6 +183,4 @@ const flags = vmOptions.flags.join(" ")
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
