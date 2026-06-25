@@ -89,7 +89,7 @@ categories.set("builtin:thread:peakcount", {
   value: { name: "Max Threads Lifetime", color: "#4DFFC0" },
 });
 categories.set("builtin:thread:schedulercount", {
-  value: { name: "Craft Scheduler Threads", color: "#80FF88" },
+  value: { name: "Craft Async Scheduler Threads", color: "#80FF88" },
 });
 categories.set("builtin:thread:foliaschedulercount", {
   value: { name: "Folia Async Scheduler Threads", color: "#80FF88" },
@@ -167,7 +167,7 @@ titles.set("builtin:gc:generic", "Generic GC Pauses");
 titles.set("builtin:gc:major", "Major GC Pauses");
 titles.set("builtin:thread:startedcount", "Threads Started");
 titles.set("builtin:thread:peakcount", "Max Threads Lifetime");
-titles.set("builtin:thread:schedulercount", "Craft Scheduler Threads");
+titles.set("builtin:thread:schedulercount", "Craft Async Scheduler Threads");
 titles.set(
   "builtin:thread:foliaschedulercount",
   "Folia Async Scheduler Threads",
@@ -257,7 +257,7 @@ const unknownEvents = computed(() =>
             :data="extraMetrics.worldMspt"
             :categories="categoryWorldMspt"
             :height="300"
-            yLabel="MSPT"
+            yLabel="Milliseconds"
           />
         </div>
       </div>
@@ -278,14 +278,14 @@ const unknownEvents = computed(() =>
             :data="extraMetrics.regionTps"
             :categories="categoryRegionTps"
             :height="300"
-            yLabel="TPS"
+            yLabel="Ticks"
           />
           <AreaChart
             class="w-[50vh] md:w-[75vh]"
             :data="extraMetrics.regionMspt"
             :categories="categoryRegionMspt"
             :height="300"
-            yLabel="MSPT"
+            yLabel="Milliseconds"
           />
         </div>
       </div>
