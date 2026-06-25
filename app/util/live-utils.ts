@@ -98,39 +98,22 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
     };
 
     for (const entry of sample.live) {
-      if (
-        !entry.type.startsWith("flare:world") &&
-        !entry.type.startsWith("flare:region")
-      ) {
-        continue;
-      }
-
-      const splits = entry.type.split(":");
-      if (splits.length !== 3) {
-        continue;
-      }
-
-      const tag = splits[1]!;
-      const match = tag.match(/\[(.*?)\]/);
+      const match = entry.type.match(
+        /^flare:(world|region)\[(.*?)\]:(mspt|tps)$/,
+      );
       if (!match) {
         continue;
       }
 
-      const identifier = match[1]!;
+      const [, scope, identifier, metric] = match;
       const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length;
 
-      if (tag.startsWith("world")) {
-        if (entry.type.endsWith("mspt")) {
-          worldMsptRecord[identifier] = avg;
-        }
-      }
-      if (tag.startsWith("region")) {
-        if (entry.type.endsWith("tps")) {
-          regionTpsRecord[identifier] = avg;
-        }
-        if (entry.type.endsWith("mspt")) {
-          regionMsptRecord[identifier] = avg;
-        }
+      if (scope === "world" && metric === "mspt") {
+        worldMsptRecord[identifier!] = avg;
+      } else if (scope === "region" && metric === "tps") {
+        regionTpsRecord[identifier!] = avg;
+      } else if (scope === "region" && metric === "mspt") {
+        regionMsptRecord[identifier!] = avg;
       }
     }
 
