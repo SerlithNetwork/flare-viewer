@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { TimelineFile } from "~/proto/ProfileFile_pb";
-import { groupTimelineSamples } from "~/util/live-utils";
+import {
+  filterWorldAndRegionSamples,
+  groupTimelineSamples,
+} from "~/util/live-utils";
 import type { LiveSummary } from "~/types/timeline";
 
 const { timelineSamples } = defineProps<{ timelineSamples: TimelineFile[] }>();
@@ -35,6 +38,9 @@ const knownKeys = [
 
 const summary: ComputedRef<LiveSummary> = computed(() =>
   groupTimelineSamples(timelineSamples),
+);
+const extraMetrics = computed(() =>
+  filterWorldAndRegionSamples(timelineSamples),
 );
 
 const categories = new Map<
@@ -189,6 +195,53 @@ const unknownEvents = computed(() =>
             :categories="categories.get('airplane:mspt')!"
             :height="300"
             :yLabel="labels.get('airplane:mspt')!"
+          />
+        </div>
+      </div>
+    </UCard>
+    <UCard
+      v-if="extraMetrics.worldMspt.length > 0"
+      class="flex flex-col w-full shadow-sm"
+    >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold"
+          >World Performance Metrics</span
+        >
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart
+            class="w-[50vh] md:w-[75vh]"
+            :data="extraMetrics.worldMspt"
+            :categories="{ value: { name: 'World MSPT', color: '#53DBC7' } }"
+            :height="300"
+            yLabel="MSPT"
+          />
+        </div>
+      </div>
+    </UCard>
+    <UCard
+      v-if="
+        extraMetrics.regionTps.length > 0 && extraMetrics.regionMspt.length > 0
+      "
+      class="flex flex-col w-full shadow-sm"
+    >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold"
+          >Region Performance Metrics</span
+        >
+        <div class="flex flex-wrap justify-around w-full gap-4">
+          <AreaChart
+            class="w-[50vh] md:w-[75vh]"
+            :data="extraMetrics.regionTps"
+            :categories="{ value: { name: 'Region TPS', color: '#53DBC7' } }"
+            :height="300"
+            yLabel="TPS"
+          />
+          <AreaChart
+            class="w-[50vh] md:w-[75vh]"
+            :data="extraMetrics.regionMspt"
+            :categories="{ value: { name: 'Region MSPT', color: '#53DBC7' } }"
+            :height="300"
+            yLabel="MSPT"
           />
         </div>
       </div>
