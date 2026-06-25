@@ -113,9 +113,9 @@ const flags = vmOptions.flags.join(" ")
               </div>
               <div class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">API:</span>
-                <span class="text-dimmed">{{ v3.versions["Bukkit Version"] }}</span>
+                <span class="text-dimmed">{{ v3.versions["Bukkit Version"] ?? v3.versions["Velocity Version"] }}</span>
               </div>
-              <div class="flex flex-row items-center gap-2">
+              <div v-if="v3.versions["Minecraft Version"]" class="flex flex-row items-center gap-2">
                 <span class="text-default text-lg font-bold">Version:</span>
                 <span class="text-dimmed">{{ v3.versions["Minecraft Version"] }}</span>
               </div>
