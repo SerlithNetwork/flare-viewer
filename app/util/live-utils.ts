@@ -72,9 +72,10 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
 }
 
 export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
-  const worldMspt = new Map<string, Record<string, number>>();
-  const regionMspt = new Map<string, Record<string, number>>();
-  const regionTps = new Map<string, Record<string, number>>();
+  // Key=(time,worldname,regionname) Value=(timestamp,values)
+  const worldMspt: Record<string, string | number>[] = [];
+  const regionMspt: Record<string, string | number>[] = [];
+  const regionTps: Record<string, string | number>[] = [];
 
   for (const sample of samples) {
     const timeString = new Date(sample.startedAt).toLocaleString("en-US", {
@@ -85,6 +86,9 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
       second: "2-digit",
       hour12: false,
     });
+    const record: Record<string, string | number> = {};
+    record["time"] = timeString;
+
     for (const entry of sample.live) {
       if (
         !entry.type.startsWith("flare:world") &&
@@ -104,15 +108,21 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
         continue;
       }
 
-      const identifier = match[1];
+      const identifier = match[1]!;
+      const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length;
+      record[identifier] = avg;
+
       if (tag.startsWith("world")) {
         if (entry.type.endsWith("mspt")) {
+          worldMspt.push(record);
         }
       }
       if (tag.startsWith("region")) {
         if (entry.type.endsWith("tps")) {
+          regionTps.push(record);
         }
         if (entry.type.endsWith("mspt")) {
+          regionMspt.push(record);
         }
       }
     }
