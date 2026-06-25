@@ -94,6 +94,12 @@ categories.set("builtin:thread:daemoncount", {
 categories.set("builtin:thread:threadcount", {
   value: { name: "Native Threads", color: "#ADFFB2" },
 });
+categories.set("flare:proxy:playercount", {
+  value: { name: "Players", color: "#ADFFB2" },
+});
+categories.set("flare:proxy:servercount", {
+  value: { name: "Servers", color: "#ADFFB2" },
+});
 
 const titles = new Map<string, string>();
 titles.set("airplane:tps", "TPS");
@@ -118,6 +124,8 @@ titles.set(
 );
 titles.set("builtin:thread:daemoncount", "Daemon Threads");
 titles.set("builtin:thread:threadcount", "Native Threads");
+titles.set("flare:proxy:playercount", "Players");
+titles.set("flare:proxy:servercount", "Servers");
 
 const labels = new Map<string, string>();
 labels.set("airplane:tps", "Ticks");
@@ -139,6 +147,8 @@ labels.set("builtin:thread:schedulercount", "Threads");
 labels.set("builtin:thread:foliaschedulercount", "Threads");
 labels.set("builtin:thread:daemoncount", "Threads");
 labels.set("builtin:thread:threadcount", "Threads");
+labels.set("flare:proxy:playercount", "Players");
+labels.set("flare:proxy:servercount", "Servers");
 
 const unknownMetrics = computed(() =>
   summary.value.metrics
@@ -293,13 +303,6 @@ const unknownEvents = computed(() =>
           />
           <AreaChart
             class="w-[50vh] md:w-[75vh]"
-            :data="summary.metrics.get('builtin:thread:schedulercount')!"
-            :categories="categories.get('builtin:thread:schedulercount')!"
-            :height="300"
-            :yLabel="labels.get('builtin:thread:schedulercount')!"
-          />
-          <AreaChart
-            class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('builtin:thread:daemoncount')!"
             :categories="categories.get('builtin:thread:daemoncount')!"
             :height="300"
@@ -318,6 +321,20 @@ const unknownEvents = computed(() =>
             :categories="categories.get('builtin:thread:peakcount')!"
             :height="300"
             :yLabel="labels.get('builtin:thread:peakcount')!"
+          />
+          <AreaChart
+            class="w-[50vh] md:w-[75vh]"
+            :data="summary.metrics.get('builtin:thread:schedulercount')!"
+            :categories="categories.get('builtin:thread:schedulercount')!"
+            :height="300"
+            :yLabel="labels.get('builtin:thread:schedulercount')!"
+          />
+          <AreaChart
+            class="w-[50vh] md:w-[75vh]"
+            :data="summary.metrics.get('builtin:thread:foliaschedulercount')!"
+            :categories="categories.get('builtin:thread:foliaschedulercount')!"
+            :height="300"
+            :yLabel="labels.get('builtin:thread:foliaschedulercount')!"
           />
         </div>
       </div>
