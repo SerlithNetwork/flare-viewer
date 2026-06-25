@@ -86,8 +86,16 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
       second: "2-digit",
       hour12: false,
     });
-    const record: Record<string, string | number> = {};
-    record["time"] = timeString;
+
+    const worldMsptRecord: Record<string, string | number> = {
+      time: timeString,
+    };
+    const regionMsptRecord: Record<string, string | number> = {
+      time: timeString,
+    };
+    const regionTpsRecord: Record<string, string | number> = {
+      time: timeString,
+    };
 
     for (const entry of sample.live) {
       if (
@@ -110,21 +118,30 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
 
       const identifier = match[1]!;
       const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length;
-      record[identifier] = avg;
 
       if (tag.startsWith("world")) {
         if (entry.type.endsWith("mspt")) {
-          worldMspt.push(record);
+          worldMsptRecord[identifier] = avg;
         }
       }
       if (tag.startsWith("region")) {
         if (entry.type.endsWith("tps")) {
-          regionTps.push(record);
+          regionTpsRecord[identifier] = avg;
         }
         if (entry.type.endsWith("mspt")) {
-          regionMspt.push(record);
+          regionMsptRecord[identifier] = avg;
         }
       }
+    }
+
+    if (Object.keys(worldMsptRecord).length > 1) {
+      worldMspt.push(worldMsptRecord);
+    }
+    if (Object.keys(regionTpsRecord).length > 1) {
+      regionTps.push(regionTpsRecord);
+    }
+    if (Object.keys(regionMsptRecord).length > 1) {
+      regionMspt.push(regionMsptRecord);
     }
   }
 
