@@ -298,6 +298,7 @@ const unknownEvents = computed(() =>
             :curve-type="CurveType.Step"
           />
           <AreaChart
+            v-if="summary.events.has('builtin:gc:generic')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.events.get('builtin:gc:generic')!"
             :categories="categories.get('builtin:gc:generic')!"
@@ -306,6 +307,7 @@ const unknownEvents = computed(() =>
             :curve-type="CurveType.Step"
           />
           <AreaChart
+            v-if="summary.events.has('builtin:gc:major')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.events.get('builtin:gc:major')!"
             :categories="categories.get('builtin:gc:major')!"
