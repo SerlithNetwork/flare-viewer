@@ -3,6 +3,7 @@ import type { TableColumn } from "@nuxt/ui";
 import type { FlareProfileData$View } from "~/types/profiling";
 
 const backend = useBackend();
+const ULink = resolveComponent("ULink");
 
 const { data, status, refresh } = backend.fetchProfilerSummaries();
 
@@ -10,6 +11,16 @@ const columns: TableColumn<FlareProfileData$View>[] = [
   {
     accessorKey: "key",
     header: "Key",
+    cell: ({ row }) => {
+      return h(
+        ULink,
+        {
+          to: `/${row.original.key}`,
+          target: "_blank",
+        },
+        [row.original.key],
+      );
+    },
   },
   {
     accessorKey: "server_brand",
