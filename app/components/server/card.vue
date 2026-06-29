@@ -327,7 +327,15 @@ const unknownEvents = computed(() =>
         </div>
       </div>
     </UCard>
-    <UCard class="flex flex-col w-full shadow-sm">
+    <UCard
+      v-if="
+        summary.metrics.has('airplane:world:playercount') ||
+        summary.metrics.has('airplane:world:entitycount') ||
+        summary.metrics.has('airplane:world:blockentitycount') ||
+        summary.metrics.has('airplane:world:chunkcount')
+      "
+      class="flex flex-col w-full shadow-sm"
+    >
       <div class="flex flex-col items-center w-full gap-4">
         <span class="text-default text-3xl font-bold">World Resources</span>
         <div class="flex flex-wrap justify-around w-full gap-4">
@@ -363,6 +371,19 @@ const unknownEvents = computed(() =>
             :height="300"
             :yLabel="labels.get('airplane:world:chunkcount')!"
           />
+        </div>
+      </div>
+    </UCard>
+    <UCard
+      v-if="
+        summary.metrics.has('flare:proxy:playercount') ||
+        summary.metrics.has('flare:proxy:servercount')
+      "
+      class="flex flex-col w-full shadow-sm"
+    >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Proxy Resources</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
           <AreaChart
             v-if="summary.metrics.has('flare:proxy:playercount')"
             class="w-[50vh] md:w-[75vh]"
@@ -448,6 +469,7 @@ const unknownEvents = computed(() =>
             :yLabel="labels.get('builtin:thread:peakcount')!"
           />
           <AreaChart
+            v-if="summary.metrics.has('builtin:thread:schedulercount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('builtin:thread:schedulercount')!"
             :categories="categories.get('builtin:thread:schedulercount')!"
@@ -455,6 +477,7 @@ const unknownEvents = computed(() =>
             :yLabel="labels.get('builtin:thread:schedulercount')!"
           />
           <AreaChart
+            v-if="summary.metrics.has('builtin:thread:foliaschedulercount')"
             class="w-[50vh] md:w-[75vh]"
             :data="summary.metrics.get('builtin:thread:foliaschedulercount')!"
             :categories="categories.get('builtin:thread:foliaschedulercount')!"
