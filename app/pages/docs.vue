@@ -30,27 +30,27 @@ const steps = [
     description:
       "Download the plugin and place it in your /plugins folder. Then restart your server.",
     image:
-      "https://ui.nuxt.com/_ipx/s_654x368/assets/templates/nuxt/chat-dark.png", // FIXME: Placeholder
+      "/assets/airplane.png",
   },
   {
     title: "Link our instance",
     description: `Open the config.yml file in Flare's configuration folder and set the url to our instance at ${url.protocol}//${url.host}`,
     image:
-      "https://ui.nuxt.com/_ipx/s_654x368/assets/templates/nuxt/chat-dark.png", // FIXME: Placeholder
+      "/assets/docs/picture_1.png",
   },
   {
     title: "Add your credentials",
     description:
       "In the same config.yml file, set your credentials provided by this instance's manager.",
     image:
-      "https://ui.nuxt.com/_ipx/s_654x368/assets/templates/nuxt/chat-dark.png", // FIXME: Placeholder
+        "/assets/docs/picture_2.png",
   },
   {
     title: "Start Profiling",
     description:
       "Reload the plugin and start profiling with /flare profiler start",
     image:
-      "https://ui.nuxt.com/_ipx/s_654x368/assets/templates/nuxt/chat-dark.png", // FIXME: Placeholder
+        "/assets/docs/picture_3.gif",
   },
 ];
 </script>
@@ -73,29 +73,102 @@ const steps = [
       }"
     >
       <Motion
-        v-for="(step, index) in steps"
-        :key="step.title"
         :initial="{ opacity: 0, transform: 'translateY(10px)' }"
         :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-        :transition="{ delay: 0.2 * index }"
+        :transition="{ delay: 0.2 }"
         :in-view-options="{ once: true }"
       >
         <UPageCard
-          :title="step.title"
-          :description="step.description"
+          title="Download the Plugin"
+          description="Download the plugin from our repositories."
           to=""
           orientation="horizontal"
           variant="naked"
-          :reverse="index % 2 === 1"
+          :reverse="false"
           class="group"
           :ui="{
             wrapper: 'max-sm:order-last',
           }"
         >
           <img
-            :src="step.image"
-            :alt="step.title"
+            src="/assets/docs/picture_0.png"
+            alt="Download the Plugin"
             class="object-cover w-full rounded-lg"
+          />
+        </UPageCard>
+      </Motion>
+      <Motion
+          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+          :transition="{ delay: 0.4 }"
+          :in-view-options="{ once: true }"
+      >
+        <UPageCard
+          title="Add the plugin to your server"
+          description="Upload the plugin for your platform into your plugins folder"
+          to=""
+          orientation="horizontal"
+          variant="naked"
+          :reverse="true"
+          class="group"
+          :ui="{
+          wrapper: 'max-sm:order-last',
+          }"
+        >
+          <img
+            src="/assets/docs/picture_1.png"
+            alt="Add the plugin to your server"
+            class="object-cover w-full rounded-lg"
+          />
+        </UPageCard>
+      </Motion>
+      <Motion
+          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+          :transition="{ delay: 0.6 }"
+          :in-view-options="{ once: true }"
+      >
+        <UPageCard
+            title="Link our instance"
+            :description="`Open the config.yml file in Flare's configuration folder, add your token and set the url to our instance at ${url.protocol}//${url.host}`"
+            to=""
+            orientation="horizontal"
+            variant="naked"
+            :reverse="false"
+            class="group"
+            :ui="{
+            wrapper: 'max-sm:order-last',
+          }"
+        >
+          <img
+              src="/assets/docs/picture_2.png"
+              alt="Link our instance"
+              class="object-cover w-full rounded-lg"
+          />
+        </UPageCard>
+      </Motion>
+      <Motion
+          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+          :transition="{ delay: 0.8 }"
+          :in-view-options="{ once: true }"
+      >
+        <UPageCard
+            title="Start Profiling"
+            description="Reload the plugin and start profiling with /flare profiler start"
+            to=""
+            orientation="horizontal"
+            variant="naked"
+            :reverse="true"
+            class="group"
+            :ui="{
+            wrapper: 'max-sm:order-last',
+          }"
+        >
+          <img
+              src="/assets/docs/picture_3.gif"
+              alt="Start Profiling"
+              class="object-cover w-full rounded-lg"
           />
         </UPageCard>
       </Motion>

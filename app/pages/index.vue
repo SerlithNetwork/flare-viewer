@@ -8,7 +8,7 @@ const links = ref<ButtonProps[]>([
     icon: "i-lucide-plane",
   },
   {
-    label: "Documentation",
+    label: "Start Profiling",
     to: "/docs",
     color: "neutral",
     variant: "subtle",
