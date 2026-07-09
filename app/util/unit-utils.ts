@@ -39,3 +39,7 @@ export function calculatePercentage(part: number, total: number): number {
     }
     return part / total;
 }
+
+export function roundTo2(number: number): number {
+    return Math.round(number * 100) / 100;
+}

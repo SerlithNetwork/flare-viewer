@@ -1,5 +1,6 @@
 import { TimelineFile } from "~/proto/ProfileFile_pb";
 import type { LiveSummary, MetricInstant } from "~/types/timeline";
+import {roundTo2} from "~/util/unit-utils";
 
 export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
   const metrics = new Map<string, MetricInstant[]>();
@@ -33,11 +34,11 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
       if (entry.type.includes("memory")) {
         metrics
           .get(entry.type)!
-          .push({ time: timeString, value: avg / 1073741824 });
+          .push({ time: timeString, value: roundTo2(avg / 1073741824) });
       } else if (entry.type.includes("cpu")) {
-        metrics.get(entry.type)!.push({ time: timeString, value: avg * 1000 });
+        metrics.get(entry.type)!.push({ time: timeString, value: roundTo2(avg * 1000) });
       } else {
-        metrics.get(entry.type)!.push({ time: timeString, value: avg });
+        metrics.get(entry.type)!.push({ time: timeString, value: roundTo2(avg) });
       }
     }
     for (const entry of sample.events) {
