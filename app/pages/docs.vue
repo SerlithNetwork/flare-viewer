@@ -23,36 +23,6 @@ const links = ref<ButtonProps[]>([
     icon: "i-lucide-server",
   },
 ]);
-
-const steps = [
-  {
-    title: "Download the Plugin",
-    description:
-      "Download the plugin and place it in your /plugins folder. Then restart your server.",
-    image:
-      "/assets/airplane.png",
-  },
-  {
-    title: "Link our instance",
-    description: `Open the config.yml file in Flare's configuration folder and set the url to our instance at ${url.protocol}//${url.host}`,
-    image:
-      "/assets/docs/picture_1.png",
-  },
-  {
-    title: "Add your credentials",
-    description:
-      "In the same config.yml file, set your credentials provided by this instance's manager.",
-    image:
-        "/assets/docs/picture_2.png",
-  },
-  {
-    title: "Start Profiling",
-    description:
-      "Reload the plugin and start profiling with /flare profiler start",
-    image:
-        "/assets/docs/picture_3.gif",
-  },
-];
 </script>
 
 <template>
