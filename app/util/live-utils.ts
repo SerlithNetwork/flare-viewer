@@ -113,6 +113,9 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
 
       const [, mode, scope, identifier, metric] = match;
       const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length;
+      if (!Number.isFinite(avg)) {
+        continue;
+      }
 
       if (mode === "perf") {
         if (scope === "world" && metric === "mspt") {
