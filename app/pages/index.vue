@@ -26,7 +26,11 @@ const links = ref<ButtonProps[]>([
       :links="links"
       reverse
     >
-      <img src="~/assets/airplane.png" alt="airplane" />
+      <UColorModeImage
+        light="/flare_light.svg"
+        dark="/flare_dark.svg"
+        width="320"
+      />
     </UPageHero>
   </div>
 </template>

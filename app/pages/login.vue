@@ -69,7 +69,11 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
       >
         <template #leading>
           <div class="flex flex-row items-center justify-center">
-            <img src="/assets/airplane.png" alt="flare" class="size-48" />
+            <UColorModeImage
+              light="/flare_light.svg"
+              dark="/flare_dark.svg"
+              width="160"
+            />
           </div>
         </template>
       </UAuthForm>

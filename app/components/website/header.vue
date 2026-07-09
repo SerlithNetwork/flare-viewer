@@ -1,50 +1,52 @@
 <script setup lang="ts">
+import { useProfilerScreenStore } from "~/store/profiler-screen-store";
+import { useProfilerStatusStore } from "~/store/status-store";
+import type { NavigationMenuItem } from "#ui/components/NavigationMenu.vue";
 
-import {useProfilerScreenStore} from "~/store/profiler-screen-store";
-import {useProfilerStatusStore} from "~/store/status-store";
-import type {NavigationMenuItem} from "#ui/components/NavigationMenu.vue";
-
-const screenStore = useProfilerScreenStore()
-const statusStore = useProfilerStatusStore()
+const screenStore = useProfilerScreenStore();
+const statusStore = useProfilerStatusStore();
 
 const items = computed<NavigationMenuItem[]>(() => [
   {
-    label: 'Profiler',
+    label: "Profiler",
     onSelect() {
-      screenStore.setScreen('profiler')
+      screenStore.setScreen("profiler");
     },
-    active: screenStore.screen === 'profiler'
+    active: screenStore.screen === "profiler",
   },
   {
-    label: 'Configurations',
+    label: "Configurations",
     onSelect() {
-      screenStore.setScreen('config')
+      screenStore.setScreen("config");
     },
-    active: screenStore.screen === 'config'
+    active: screenStore.screen === "config",
   },
   {
-    label: 'Statistics',
+    label: "Statistics",
     onSelect() {
-      screenStore.setScreen('server')
+      screenStore.setScreen("server");
     },
-    active: screenStore.screen === 'server'
+    active: screenStore.screen === "server",
   },
   {
-    label: 'System',
+    label: "System",
     onSelect() {
-      screenStore.setScreen('system')
+      screenStore.setScreen("system");
     },
-    active: screenStore.screen === 'system'
-  }
-])
-
+    active: screenStore.screen === "system",
+  },
+]);
 </script>
 
 <template>
   <UHeader mode="slideover">
     <template #title>
       <div class="flex flex-row items-center gap-4">
-        <img src="../../assets/airplane.png" alt="logo" width="60">
+        <UColorModeImage
+          light="/flare_light.svg"
+          dark="/flare_dark.svg"
+          width="45"
+        />
         <span class="text-2xl text-primary font-bold">Flare</span>
       </div>
     </template>
@@ -56,12 +58,14 @@ const items = computed<NavigationMenuItem[]>(() => [
     </template>
 
     <template #body>
-      <UNavigationMenu v-if="statusStore.status === 'ready'" :items="items" orientation="vertical" class="-mx-2.5" />
+      <UNavigationMenu
+        v-if="statusStore.status === 'ready'"
+        :items="items"
+        orientation="vertical"
+        class="-mx-2.5"
+      />
     </template>
-
   </UHeader>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
