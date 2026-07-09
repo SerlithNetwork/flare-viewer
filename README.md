@@ -54,7 +54,10 @@ Flare viewer is compatible with any platform that provides [Flare](https://githu
    2.1. [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) and forks \
    2.2. [Puffernot](https://github.com/SerlithNetwork/Puffernot)/[Pufferfork](https://github.com/Toffikk/Pufferfork) and forks (recommended)
 
-### License
+### Logo
+The flare logo is a derivative work over the [fireworks](https://github.com/microsoft/fluentui-emoji/blob/62ecdc0d7ca5c6df32148c169556bc8d3782fca4/assets/Fireworks/Flat/fireworks_flat.svg)
+emoji in Microsoft's [fluent ui emoji library](https://github.com/microsoft/fluentui-emoji).
 
+### License
 flare-viewer is free and open source software, released under the AGPL license. \
 Refer to [LICENSE](LICENSE) for details.
