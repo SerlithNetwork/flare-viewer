@@ -105,7 +105,7 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
 
     for (const entry of sample.live) {
       const match = entry.type.match(
-        /^flare:(perf|count):(world|region)\[(.*?)\]:(mspt|tps|regions)$/,
+        /^flare:(perf|count):(world|region)\[(.*?)]:(mspt|tps|regions)$/,
       );
       if (!match) {
         continue;
