@@ -71,7 +71,7 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
           <div class="flex flex-row items-center justify-center">
             <UColorModeImage
               light="/flare_light.svg"
-              dark="/flare_dark.svg"
+              dark="/flare.svg"
               width="160"
             />
           </div>

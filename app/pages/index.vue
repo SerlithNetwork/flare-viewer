@@ -28,7 +28,7 @@ const links = ref<ButtonProps[]>([
     >
       <UColorModeImage
         light="/flare_light.svg"
-        dark="/flare_dark.svg"
+        dark="/flare.svg"
         width="320"
       />
     </UPageHero>

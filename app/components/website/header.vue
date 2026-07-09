@@ -44,7 +44,7 @@ const items = computed<NavigationMenuItem[]>(() => [
       <div class="flex flex-row items-center gap-4">
         <UColorModeImage
           light="/flare_light.svg"
-          dark="/flare_dark.svg"
+          dark="/flare.svg"
           width="45"
         />
         <span class="text-2xl text-primary font-bold">Flare</span>
