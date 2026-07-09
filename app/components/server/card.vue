@@ -127,6 +127,13 @@ const categoryRegionMspt = computed(() =>
     "#53DBC7",
   ),
 );
+const categoryWorldRegions = computed(() =>
+  parseCategoryFromAbstract(
+    extraMetrics.value.worldRegions[0],
+    "World [%s] Regions",
+    "#FF8787",
+  ),
+);
 
 function parseCategoryFromAbstract(
   reference: Record<string, string | number> | undefined,
@@ -332,7 +339,8 @@ const unknownEvents = computed(() =>
         summary.metrics.has('airplane:world:playercount') ||
         summary.metrics.has('airplane:world:entitycount') ||
         summary.metrics.has('airplane:world:blockentitycount') ||
-        summary.metrics.has('airplane:world:chunkcount')
+        summary.metrics.has('airplane:world:chunkcount') ||
+        extraMetrics.worldRegions.length > 0
       "
       class="flex flex-col w-full shadow-sm"
     >
@@ -370,6 +378,14 @@ const unknownEvents = computed(() =>
             :categories="categories.get('airplane:world:chunkcount')!"
             :height="300"
             :yLabel="labels.get('airplane:world:chunkcount')!"
+          />
+          <AreaChart
+            v-if="extraMetrics.worldRegions.length > 0"
+            class="w-[50vh] md:w-[75vh]"
+            :data="extraMetrics.worldRegions"
+            :categories="categoryWorldRegions"
+            :height="300"
+            yLabel="Regions"
           />
         </div>
       </div>

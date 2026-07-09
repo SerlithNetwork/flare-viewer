@@ -16,8 +16,9 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
     });
     for (const entry of sample.live) {
       if (
-        entry.type.startsWith("flare:world") ||
-        entry.type.startsWith("flare:region")
+        entry.type.startsWith("flare:perf:world") ||
+        entry.type.startsWith("flare:perf:region") ||
+        entry.type.startsWith("flare:count:world")
       ) {
         continue;
       }
@@ -73,9 +74,10 @@ export function groupTimelineSamples(samples: TimelineFile[]): LiveSummary {
 
 export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
   // Key=(time,worldname,regionname) Value=(timestamp,values)
-  const worldMspt: Record<string, string | number>[] = [];
-  const regionMspt: Record<string, string | number>[] = [];
-  const regionTps: Record<string, string | number>[] = [];
+  const perfWorldMspt: Record<string, string | number>[] = [];
+  const perfRegionMspt: Record<string, string | number>[] = [];
+  const perfRegionTps: Record<string, string | number>[] = [];
+  const countWorldRegions: Record<string, string | number>[] = [];
 
   for (const sample of samples) {
     const timeString = new Date(sample.startedAt).toLocaleString("en-US", {
@@ -87,50 +89,64 @@ export function filterWorldAndRegionSamples(samples: TimelineFile[]) {
       hour12: false,
     });
 
-    const worldMsptRecord: Record<string, string | number> = {
+    const perfWorldMsptRecord: Record<string, string | number> = {
       time: timeString,
     };
-    const regionMsptRecord: Record<string, string | number> = {
+    const perfRegionMsptRecord: Record<string, string | number> = {
       time: timeString,
     };
-    const regionTpsRecord: Record<string, string | number> = {
+    const perfRegionTpsRecord: Record<string, string | number> = {
+      time: timeString,
+    };
+    const countWorldRegionsRecord: Record<string, string | number> = {
       time: timeString,
     };
 
     for (const entry of sample.live) {
       const match = entry.type.match(
-        /^flare:(world|region)\[(.*?)\]:(mspt|tps)$/,
+        /^flare:(perf|count):(world|region)\[(.*?)\]:(mspt|tps|regions)$/,
       );
       if (!match) {
         continue;
       }
 
-      const [, scope, identifier, metric] = match;
+      const [, mode, scope, identifier, metric] = match;
       const avg = entry.data.reduce((a, b) => a + b, 0) / entry.data.length;
 
-      if (scope === "world" && metric === "mspt") {
-        worldMsptRecord[identifier!] = avg;
-      } else if (scope === "region" && metric === "tps") {
-        regionTpsRecord[identifier!] = avg;
-      } else if (scope === "region" && metric === "mspt") {
-        regionMsptRecord[identifier!] = avg;
+      if (mode === "perf") {
+        if (scope === "world" && metric === "mspt") {
+          perfWorldMsptRecord[identifier!] = avg;
+        } else if (scope === "region" && metric === "tps") {
+          perfRegionTpsRecord[identifier!] = avg;
+        } else if (scope === "region" && metric === "mspt") {
+          perfRegionMsptRecord[identifier!] = avg;
+        }
+      } else if (mode === "count") {
+        if (scope === "world" && metric === "regions") {
+          countWorldRegionsRecord[identifier!] = Math.round(avg);
+        }
       }
     }
 
-    if (Object.keys(worldMsptRecord).length > 1) {
-      worldMspt.push(worldMsptRecord);
+    if (Object.keys(perfWorldMsptRecord).length > 1) {
+      perfWorldMspt.push(perfWorldMsptRecord);
     }
-    if (Object.keys(regionTpsRecord).length > 1) {
-      regionTps.push(regionTpsRecord);
+    if (Object.keys(perfRegionTpsRecord).length > 1) {
+      perfRegionTps.push(perfRegionTpsRecord);
     }
-    if (Object.keys(regionMsptRecord).length > 1) {
-      regionMspt.push(regionMsptRecord);
+    if (Object.keys(perfRegionMsptRecord).length > 1) {
+      perfRegionMspt.push(perfRegionMsptRecord);
+    }
+    if (Object.keys(countWorldRegionsRecord).length > 1) {
+      countWorldRegions.push(countWorldRegionsRecord);
     }
   }
 
   return {
-    worldMspt,
-    regionMspt,
-    regionTps,
+    worldMspt: perfWorldMspt,
+    regionMspt: perfRegionMspt,
+    regionTps: perfRegionTps,
+
+    worldRegions: countWorldRegions,
   };
 }
