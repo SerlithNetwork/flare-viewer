@@ -2,18 +2,56 @@
 services:
 
   # Viewer
-  paste:
-    image: ghcr.io/serlithnetwork/flare-viewer
+  flare:
+    image: ghcr.io/serlithnetwork/flare-viewer:latest
+    restart: unless-stopped
+    container_name: flare
+    expose:
+      - "3000"
+    networks:
+      - web
 
   # Backend
   jet:
-    image: ghcr.io/serlithnetwork/jet
-    ports:
-      - "9420:9420"
-      - "9430:9430"
+    image: ghcr.io/serlithnetwork/jet:latest
+    container_name: jet
+    restart: unless-stopped
+    expose:
+      - "9420"
     volumes:
-      - pictures:/opt/jet/pictures
-      - config:/opt/jet/config
+      - jet_pictures:/opt/jet/pictures
+      - jet_config:/opt/jet/config
+    environment:
+      JET_MAX_REQUEST_SIZE: "500KB"
+      JET_DATABASE_URL: "r2dbc:postgresql://database:5432/flare"
+      JET_DATABASE_USER: "flare"
+      JET_DATABASE_PASSWORD: "<database-password>"
+      JET_MANAGER_USERNAME: "admin"
+      JET_MANAGER_PASSWORD: "<admin-password>"
+      JET_CORS_ALLOWED_ORIGINS: "https://flare.serlith.net"
+    networks:
+      - "web"
+
+  # PostgreSQL Database
+  database:
+    image: postgres
+    restart: always
+    container_name: postgres
+    expose:
+      - "5432"
+    networks:
+      - web
+    volumes:
+      - database_data:/var/lib/postgresql
+    environment:
+      POSTGRES_DATA: "/var/lib/postgresql"
+      POSTGRES_PASSWORD: "<database-password>"
 
 volumes:
-  data: {}
+  jet_pictures: {}
+  jet_config: {}
+  database_data: {}
+
+networks:
+  web:
+    external: false

@@ -1,0 +1,33 @@
+
+flare.serlith.net {
+
+    handle /create {
+        rewrite * /api/v1/profiling/create
+        reverse_proxy jet:9420
+    }
+
+    handle /license {
+        rewrite * /api/v1/profiling/license
+        reverse_proxy jet:9420
+    }
+
+    handle /api/v1/flare/thumbnail/* {
+        reverse_proxy jet:9420
+    }
+
+    @profiling {
+        method POST
+        path_regexp flare_keys ^/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+(/timeline)?$
+    }
+    handle @profiling {
+        rewrite /api/v1/profiling{uri}
+        reverse_proxy jet:9420
+    }
+
+    reverse_proxy flare:3000
+
+}
+
+jet.serlith.net {
+    reverse_proxy jet:9420
+}
