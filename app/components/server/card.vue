@@ -34,6 +34,15 @@ const knownKeys = [
 
   "flare:proxy:playercount",
   "flare:proxy:servercount",
+
+  "flare:fidorial:region:tps_min",
+  "flare:fidorial:region:tps_avg",
+  "flare:fidorial:region:tps_max",
+  "flare:fidorial:region:mspt_min",
+  "flare:fidorial:region:mspt_avg",
+  "flare:fidorial:region:mspt_max",
+  "flare:fidorial:region:queued",
+  "flare:fidorial:region:count",
 ];
 
 const summary: ComputedRef<LiveSummary> = computed(() =>
@@ -105,6 +114,30 @@ categories.set("flare:proxy:playercount", {
 });
 categories.set("flare:proxy:servercount", {
   value: { name: "Servers", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:tps_min", {
+  value: { name: "TPS Min", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:tps_avg", {
+  value: { name: "TPS Average", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:tps_max", {
+  value: { name: "TPS Max", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:mspt_min", {
+  value: { name: "MSPT Min", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:mspt_avg", {
+  value: { name: "MSPT Average", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:mspt_max", {
+  value: { name: "MSPT Max", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:queued", {
+  value: { name: "Regions Queued", color: "#FF8787" },
+});
+categories.set("flare:fidorial:region:count", {
+  value: { name: "Region Count", color: "#FF8787" },
 });
 const categoryWorldMspt = computed(() =>
   parseCategoryFromAbstract(
@@ -183,6 +216,14 @@ titles.set("builtin:thread:daemoncount", "Daemon Threads");
 titles.set("builtin:thread:threadcount", "Native Threads");
 titles.set("flare:proxy:playercount", "Players");
 titles.set("flare:proxy:servercount", "Servers");
+titles.set("flare:fidorial:region:tps_min", "TPS Min");
+titles.set("flare:fidorial:region:tps_avg", "TPS Average");
+titles.set("flare:fidorial:region:tps_max", "TPS Max");
+titles.set("flare:fidorial:region:mspt_min", "MSPT Min");
+titles.set("flare:fidorial:region:mspt_avg", "MSPT Average");
+titles.set("flare:fidorial:region:mspt_max", "MSPT Max");
+titles.set("flare:fidorial:region:queued", "Regions Queued");
+titles.set("flare:fidorial:region:count", "Region Count");
 
 const labels = new Map<string, string>();
 labels.set("airplane:tps", "Ticks");
@@ -191,10 +232,10 @@ labels.set("builtin:stat:memory_used", "GB");
 labels.set("builtin:stat:memory_total", "GB");
 labels.set("builtin:stat:cpu_process", "Usage %");
 labels.set("builtin:stat:cpu", "Usage %");
-titles.set("airplane:world:playercount", "Players");
-titles.set("airplane:world:entitycount", "Entities");
-titles.set("airplane:world:chunkcount", "Chunks Loaded");
-titles.set("airplane:world:blockentitycount", "Block Entities");
+labels.set("airplane:world:playercount", "Players");
+labels.set("airplane:world:entitycount", "Entities");
+labels.set("airplane:world:chunkcount", "Chunks Loaded");
+labels.set("airplane:world:blockentitycount", "Block Entities");
 labels.set("builtin:gc:minor", "Milliseconds");
 labels.set("builtin:gc:generic", "Milliseconds");
 labels.set("builtin:gc:major", "Milliseconds");
@@ -206,6 +247,14 @@ labels.set("builtin:thread:daemoncount", "Threads");
 labels.set("builtin:thread:threadcount", "Threads");
 labels.set("flare:proxy:playercount", "Players");
 labels.set("flare:proxy:servercount", "Servers");
+labels.set("flare:fidorial:region:tps_min", "TPS");
+labels.set("flare:fidorial:region:tps_avg", "TPS");
+labels.set("flare:fidorial:region:tps_max", "TPS");
+labels.set("flare:fidorial:region:mspt_min", "MSPT");
+labels.set("flare:fidorial:region:mspt_avg", "MSPT");
+labels.set("flare:fidorial:region:mspt_max", "MSPT");
+labels.set("flare:fidorial:region:Queued", "Regions");
+labels.set("flare:fidorial:region:count", "Regions");
 
 const unknownMetrics = computed(() =>
   summary.value.metrics
@@ -415,6 +464,92 @@ const unknownEvents = computed(() =>
             :categories="categories.get('flare:proxy:servercount')!"
             :height="300"
             :yLabel="labels.get('flare:proxy:servercount')!"
+          />
+        </div>
+      </div>
+    </UCard>
+    <UCard
+        v-if="
+        summary.metrics.has('flare:fidorial:region:tps_min') ||
+        summary.metrics.has('flare:fidorial:region:tps_avg') ||
+        summary.metrics.has('flare:fidorial:region:tps_max') ||
+        summary.metrics.has('flare:fidorial:region:mspt_min') ||
+        summary.metrics.has('flare:fidorial:region:mspt_avg') ||
+        summary.metrics.has('flare:fidorial:region:mspt_max') ||
+        summary.metrics.has('flare:fidorial:region:queued') ||
+        summary.metrics.has('flare:fidorial:region:count')
+      "
+        class="flex flex-col w-full shadow-sm"
+    >
+      <div class="flex flex-col items-center w-full gap-4">
+        <span class="text-default text-3xl font-bold">Proxy Resources</span>
+        <div class="flex flex-wrap justify-around w-full gap-4">
+
+          <!-- FIXME: Ideally I'd like to merge min/avg/max into a single chart -->
+
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:tps_min')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:tps_min')!"
+              :categories="categories.get('flare:fidorial:region:tps_min')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:tps_min')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:tps_avg')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:tps_avg')!"
+              :categories="categories.get('flare:fidorial:region:tps_avg')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:tps_avg')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:tps_max')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:tps_max')!"
+              :categories="categories.get('flare:fidorial:region:tps_max')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:tps_max')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:mspt_min')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:mspt_min')!"
+              :categories="categories.get('flare:fidorial:region:mspt_min')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:mspt_min')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:mspt_avg')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:mspt_avg')!"
+              :categories="categories.get('flare:fidorial:region:mspt_avg')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:mspt_avg')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:mspt_max')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:mspt_max')!"
+              :categories="categories.get('flare:fidorial:region:mspt_max')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:mspt_max')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:queued')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:queued')!"
+              :categories="categories.get('flare:fidorial:region:queued')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:queued')!"
+          />
+          <AreaChart
+              v-if="summary.metrics.has('flare:fidorial:region:count')"
+              class="w-[50vh] md:w-[75vh]"
+              :data="summary.metrics.get('flare:fidorial:region:count')!"
+              :categories="categories.get('flare:fidorial:region:count')!"
+              :height="300"
+              :yLabel="labels.get('flare:fidorial:region:count')!"
           />
         </div>
       </div>
