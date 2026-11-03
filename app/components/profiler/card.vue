@@ -70,15 +70,21 @@ function onThreadSelected(thread: ThreadAccumulator) {
         </div>
         <USelectMenu v-model="selectedPlugins" multiple :items="sortedPlugins" icon="i-lucide-list-filter" placeholder="Filter by Plugin" class="h-10 w-full md:w-64" />
       </div>
-      <div v-if="timeThreads.size === 0 || memoryThreads.size === 0" class="flex flex-col gap-1" >
+      <div v-if="timeThreads.size === 0 && memoryThreads.size === 0" class="flex flex-col gap-1" >
         <USkeleton v-for="i in 20" :key="i" class="h-6 w-full" />
       </div>
       <div v-else class="flex flex-col items-start w-full rounded-lg">
-        <UContextMenu v-if="profilerType === 'time'" :items="items" v-for="thread in sortedTimeThreads" :key="thread.name" @update:open="onThreadSelected(thread)" >
-          <ProfilerThread :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
+        <UContextMenu v-if="profilerType === 'time'" :items="items" >
+          <template v-if="sortedTimeThreads.length == 0">
+            <UPageHero title="No data" description="Maybe check on the Memory tab?" class="w-full" />
+          </template>
+          <ProfilerThread v-else v-for="thread in sortedTimeThreads" :key="thread.name" @update:open="onThreadSelected(thread)" :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
         </UContextMenu>
-        <UContextMenu v-else-if="profilerType === 'memory'" :items="items" v-for="thread in sortedMemoryThreads" :key="thread.name" @update:open="onThreadSelected(thread)" >
-          <ProfilerThread :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
+        <UContextMenu v-else-if="profilerType === 'memory'" :items="items" >
+          <template v-if="sortedMemoryThreads.length == 0">
+            <UPageHero title="No data" description="Maybe check on the CPU tab?" class="w-full" />
+          </template>
+          <ProfilerThread v-else v-for="thread in sortedMemoryThreads" :key="thread.name" @update:open="onThreadSelected(thread)"  :mode="profilerType" :thread="thread" :dictionary="dictionary" :plugins="selectedPluginsRaw" />
         </UContextMenu>
       </div>
     </div>
